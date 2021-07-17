@@ -1,0 +1,87 @@
+﻿@model List<BlockCompany>
+
+<script>
+    // 這個函數用來將 Entity Code 轉回中文
+    function decodeEntities(encodedString) {
+        var textArea = document.createElement('textarea');
+        textArea.innerHTML = encodedString;
+        return textArea.value;
+    }
+    var serverMessage = decodeEntities('@TempData["message"]');
+    if (serverMessage.length > 0) {
+        alert(serverMessage);
+    }
+</script>
+
+<script>
+    function DeleteData(idOfData) {
+        var result = confirm("確定要刪除這筆資料?");
+        if (result) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete", "BlockCompany")',
+                data: { id: idOfData }
+            })
+            .done(function (message) {
+                alert(message);
+                if (message == "刪除成功") {
+                    self.location.reload();
+                }
+            });
+        }
+    }
+</script>
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">檢視所有封鎖的公司</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        封鎖的公司列表&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button class="btn btn-primary" onclick="location.href='@Url.Action("Create","BlockCompany")'">新增封鎖公司</button>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>公司名稱</th>
+                                        <th>封鎖理由</th>
+                                        <th>操作選項</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var blockCompany in Model)
+                                    {
+                                        <tr class="gradeA">
+                                            <td>@blockCompany.CompanyName</td>
+                                            <td>@blockCompany.BlockReason</td>
+                                            <td class="center-block">
+                                                <button class="btn btn-success" onclick="location.href='@Url.Action("Edit", "BlockCompany", new { id = blockCompany.Id })'">修改</button>
+                                                <button class="btn btn-danger" onclick="DeleteData(@blockCompany.Id)">刪除</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->

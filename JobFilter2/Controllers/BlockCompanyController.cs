@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
 {
-    public class BlockJobItemController : Controller
+    public class BlockCompanyController : Controller
     {
         private readonly JobFilterContext _context;
 
-        public BlockJobItemController(JobFilterContext context)
+        public BlockCompanyController(JobFilterContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.BlockJobItems.ToListAsync());
+            return View(await _context.BlockCompanies.ToListAsync());
         }
 
         public IActionResult Create()
@@ -33,17 +33,17 @@ namespace JobFilter2.Controllers
         public async Task<IActionResult> Create(IFormCollection PostData)
         {
             // 取出各欄位的值
-            string jobCode = PostData["jobCode"].ToString() ?? null;
+            string companyName = PostData["companyName"].ToString() ?? null;
             string blockReason = PostData["blockReason"].ToString() ?? null;
 
             // 新增封鎖工作
-            BlockJobItem blockJobItem = new BlockJobItem
+            BlockCompany blockCompany = new BlockCompany
             {
-                JobCode = jobCode,
+                CompanyName = companyName,
                 BlockReason = blockReason,
             };
 
-            _context.BlockJobItems.Add(blockJobItem);
+            _context.BlockCompanies.Add(blockCompany);
             await _context.SaveChangesAsync();
 
             TempData["message"] = "新增成功";
@@ -59,16 +59,16 @@ namespace JobFilter2.Controllers
                 return NotFound();
             }
 
-            var blockJobItem = await _context.BlockJobItems.FirstOrDefaultAsync(u => u.Id == id);
+            var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
 
-            if (blockJobItem == null)
+            if (blockCompany == null)
             {
                 return NotFound();
             }
 
             #endregion
 
-            return View(blockJobItem);
+            return View(blockCompany);
         }
 
         [HttpPost]
@@ -77,20 +77,20 @@ namespace JobFilter2.Controllers
         {
             // 取出各欄位的值
             int id = int.Parse(PostData["Id"].ToString());
-            string jobCode = PostData["jobCode"].ToString() ?? null;
+            string companyName = PostData["companyName"].ToString() ?? null;
             string blockReason = PostData["blockReason"].ToString() ?? null;
 
             // 取得該筆資料
-            var blockJobItem = await _context.BlockJobItems.FirstOrDefaultAsync(u => u.Id == id);
-            if (blockJobItem == null)
+            var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
+            if (blockCompany == null)
             {
                 TempData["message"] = "修改失敗，此筆資料已被刪除";
                 return RedirectToAction("Edit", new { id });
             }
 
             // 修改該筆資料
-            blockJobItem.JobCode = jobCode;
-            blockJobItem.BlockReason = blockReason;
+            blockCompany.CompanyName = companyName;
+            blockCompany.BlockReason = blockReason;
             await _context.SaveChangesAsync();
 
             TempData["message"] = "修改成功";
@@ -107,9 +107,9 @@ namespace JobFilter2.Controllers
                 return "刪除失敗，查無這筆資料!";
             }
 
-            var blockJobItem = _context.BlockJobItems.FirstOrDefault(u => u.Id == id);
+            var blockCompany = _context.BlockCompanies.FirstOrDefault(u => u.Id == id);
 
-            if (blockJobItem == null)
+            if (blockCompany == null)
             {
                 return "刪除失敗，查無這筆資料!";
             }
@@ -117,7 +117,7 @@ namespace JobFilter2.Controllers
             #endregion
 
             // 刪除用戶並寫入DB
-            _context.BlockJobItems.Remove(blockJobItem);
+            _context.BlockCompanies.Remove(blockCompany);
             _context.SaveChanges();
             return "刪除成功";
         }
