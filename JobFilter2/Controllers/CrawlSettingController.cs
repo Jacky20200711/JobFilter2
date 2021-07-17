@@ -1,7 +1,9 @@
 ﻿using JobFilter2.Models;
+using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace JobFilter2.Controllers
     public class CrawlSettingController : Controller
     {
         private readonly JobFilterContext _context;
+        private readonly CrawlService crawlService = new CrawlService();
 
         public CrawlSettingController(JobFilterContext context)
         {
@@ -124,6 +127,29 @@ namespace JobFilter2.Controllers
             _context.Remove(crawlSetting);
             _context.SaveChanges();
             return "刪除成功";
+        }
+
+        public IActionResult DoCrawl(int? id)
+        {
+            #region 檢查此筆資料是否存在
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var crawlSetting = _context.CrawlSettings.FirstOrDefault(u => u.Id == id);
+
+            if (crawlSetting == null)
+            {
+                return NotFound();
+            }
+
+            #endregion
+
+            List<JobItem> jobItems = crawlService.GetTargetItems(crawlSetting);
+
+            return View("JobItems", jobItems);
         }
     }
 }

@@ -8,7 +8,7 @@
 4.點選地址時，可以自動到 GoogleMap 做搜尋  
 5.新增封鎖工作的功能  
 6.改用 DB-First 來重新設計資料庫  
-7.爬取所有分頁  
+7.固定爬取10個分頁  
 &emsp;  
 # 使用技術  
 1.使用 HttpClient 爬取網頁  
@@ -24,6 +24,7 @@ dotnet add package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation --version 3
 dotnet add package Microsoft.AspNetCore.Session --version 2.2.0  
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.7  
 dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.7  
+dotnet add package AngleSharp --version 0.16.0  
 &emsp;  
 # DB Schema  
 CREATE DATABASE [JobFilter2];  

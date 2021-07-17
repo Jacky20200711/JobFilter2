@@ -1,0 +1,58 @@
+﻿@model List<JobItem>
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">檢視解析完畢的工作</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        解析完畢的工作列表
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th style="white-space: nowrap;">職位名稱</th>
+                                        <th style="white-space: nowrap;">薪資範圍</th>
+                                        <th style="white-space: nowrap;">公司名稱</th>
+                                        <th style="white-space: nowrap;">公司地址</th>
+                                        <th style="white-space: nowrap;">操作選項</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var jobItem in Model)
+                                    {
+                                        <tr class="gradeA">
+                                            <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
+                                            <td>@jobItem.Salary</td>
+                                            <td><a href="https://www.qollie.com/search?keyword=@jobItem.Company&kind=company&from=normal" target="_blank">@jobItem.Company</a></td>
+                                            <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
+                                            <td class="center-block" style="white-space: nowrap;">
+                                                <button class="btn btn-primary" onclick="location.href='@Url.Action("??", "CrawlSetting", new { id = 1 })'">封鎖工作</button>
+                                                <button class="btn btn-success" onclick="location.href='@Url.Action("??", "CrawlSetting", new { id = 1 })'">封鎖公司</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
