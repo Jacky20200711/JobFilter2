@@ -28,10 +28,7 @@ namespace JobFilter2.Controllers
 
         public IActionResult Create(string Company = null)
         {
-            if (Company != null)
-            {
-                ViewBag.Company = Company;
-            }
+            ViewBag.Company = Company;
 
             return View();
         }
@@ -55,9 +52,10 @@ namespace JobFilter2.Controllers
             await _context.SaveChangesAsync();
 
             // 刷新SESSION儲存的工作項目
-            List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(HttpContext.Session.GetString("jobItems"));
-            if(jobItems != null)
+            string jobItemsStr = HttpContext.Session.GetString("jobItems");
+            if (jobItemsStr != null)
             {
+                List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(HttpContext.Session.GetString("jobItems"));
                 jobItems = crawlService.GetUnblockedItems(_context, jobItems);
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
             }
@@ -108,14 +106,6 @@ namespace JobFilter2.Controllers
             blockCompany.CompanyName = companyName;
             blockCompany.BlockReason = blockReason;
             await _context.SaveChangesAsync();
-
-            // 刷新SESSION儲存的工作項目
-            List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(HttpContext.Session.GetString("jobItems"));
-            if (jobItems != null)
-            {
-                jobItems = crawlService.GetUnblockedItems(_context, jobItems);
-                HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
-            }
 
             TempData["message"] = "修改成功";
             return RedirectToAction("Index");
