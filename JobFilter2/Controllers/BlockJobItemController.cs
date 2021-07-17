@@ -43,7 +43,7 @@ namespace JobFilter2.Controllers
                 BlockReason = blockReason,
             };
 
-            _context.BlockJobItems.Add(blockJobItem);
+            _context.Add(blockJobItem);
             await _context.SaveChangesAsync();
 
             TempData["message"] = "新增成功";
@@ -117,7 +117,7 @@ namespace JobFilter2.Controllers
             #endregion
 
             // 刪除用戶並寫入DB
-            _context.BlockJobItems.Remove(blockJobItem);
+            _context.Remove(blockJobItem);
             _context.SaveChanges();
             return "刪除成功";
         }

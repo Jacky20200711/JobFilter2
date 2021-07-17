@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
 {
-    public class BlockCompanyController : Controller
+    public class CrawlSettingController : Controller
     {
         private readonly JobFilterContext _context;
 
-        public BlockCompanyController(JobFilterContext context)
+        public CrawlSettingController(JobFilterContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.BlockCompanies.ToListAsync());
+            return View(await _context.CrawlSettings.ToListAsync());
         }
 
         public IActionResult Create()
@@ -33,17 +33,19 @@ namespace JobFilter2.Controllers
         public async Task<IActionResult> Create(IFormCollection PostData)
         {
             // 取出各欄位的值
-            string companyName = PostData["companyName"].ToString() ?? null;
-            string blockReason = PostData["blockReason"].ToString() ?? null;
+            string targetUrl = PostData["targetUrl"].ToString() ?? null;
+            string seniority = PostData["seniority"].ToString() ?? null;
+            int minSalary = int.Parse(PostData["minSalary"].ToString());
 
-            // 新增封鎖工作
-            BlockCompany blockCompany = new BlockCompany
+            // 新增爬蟲設定
+            CrawlSetting crawlSetting = new CrawlSetting
             {
-                CompanyName = companyName,
-                BlockReason = blockReason,
+                TargetUrl = targetUrl,
+                MinSalary = minSalary,
+                Seniority = seniority,
             };
 
-            _context.Add(blockCompany);
+            _context.Add(crawlSetting);
             await _context.SaveChangesAsync();
 
             TempData["message"] = "新增成功";
@@ -59,16 +61,16 @@ namespace JobFilter2.Controllers
                 return NotFound();
             }
 
-            var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
+            var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
 
-            if (blockCompany == null)
+            if (crawlSetting == null)
             {
                 return NotFound();
             }
 
             #endregion
 
-            return View(blockCompany);
+            return View(crawlSetting);
         }
 
         [HttpPost]
@@ -77,20 +79,22 @@ namespace JobFilter2.Controllers
         {
             // 取出各欄位的值
             int id = int.Parse(PostData["Id"].ToString());
-            string companyName = PostData["companyName"].ToString() ?? null;
-            string blockReason = PostData["blockReason"].ToString() ?? null;
+            int minSalary = int.Parse(PostData["minSalary"].ToString());
+            string targetUrl = PostData["targetUrl"].ToString() ?? null;
+            string seniority = PostData["seniority"].ToString() ?? null;
 
             // 取得該筆資料
-            var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
-            if (blockCompany == null)
+            var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
+            if (crawlSetting == null)
             {
                 TempData["message"] = "修改失敗，此筆資料已被刪除";
                 return RedirectToAction("Edit", new { id });
             }
 
             // 修改該筆資料
-            blockCompany.CompanyName = companyName;
-            blockCompany.BlockReason = blockReason;
+            crawlSetting.TargetUrl = targetUrl;
+            crawlSetting.Seniority = seniority;
+            crawlSetting.MinSalary = minSalary;
             await _context.SaveChangesAsync();
 
             TempData["message"] = "修改成功";
@@ -107,9 +111,9 @@ namespace JobFilter2.Controllers
                 return "刪除失敗，查無這筆資料!";
             }
 
-            var blockCompany = _context.BlockCompanies.FirstOrDefault(u => u.Id == id);
+            var crawlSetting = _context.CrawlSettings.FirstOrDefault(u => u.Id == id);
 
-            if (blockCompany == null)
+            if (crawlSetting == null)
             {
                 return "刪除失敗，查無這筆資料!";
             }
@@ -117,7 +121,7 @@ namespace JobFilter2.Controllers
             #endregion
 
             // 刪除用戶並寫入DB
-            _context.Remove(blockCompany);
+            _context.Remove(crawlSetting);
             _context.SaveChanges();
             return "刪除成功";
         }
