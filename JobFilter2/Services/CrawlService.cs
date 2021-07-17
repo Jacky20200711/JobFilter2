@@ -25,7 +25,7 @@ namespace JobFilter2.Services
 
                 if (JobLink != null && JobAddress != null && JobSalary != null)
                 {
-                    
+                    string Code = item.GetAttribute("data-job-no");
                     string Link = "https:" + JobLink.GetAttribute("href");
                     string Title = JobLink.TextContent;
                     string Company = JobAddress.TextContent.Trim();
@@ -34,6 +34,7 @@ namespace JobFilter2.Services
 
                     jobItems.Add(new JobItem
                     {
+                        Code = Code,
                         Link = Link,
                         Title = Title,
                         Company = Company,
@@ -74,6 +75,39 @@ namespace JobFilter2.Services
             }
 
             return jobItems;
+        }
+
+        public List<JobItem> GetUnblockedItems(JobFilterContext context, List<JobItem> jobItems)
+        {
+            var blockJobItems = context.BlockJobItems.ToList();
+            var blockCompanys = context.BlockCompanies.ToList();
+
+            HashSet<string> blockJobCodeSet = new HashSet<string>();
+            HashSet<string> blockCompanySet = new HashSet<string>();
+
+            // 取得已封鎖的工作代碼
+            foreach (var b in blockJobItems)
+            {
+                blockJobCodeSet.Add(b.JobCode);
+            }
+
+            // 取得已封鎖的公司名稱
+            foreach (var b in blockCompanys)
+            {
+                blockCompanySet.Add(b.CompanyName);
+            }
+
+            // 取出沒有被過濾掉的項目
+            List<JobItem> new_jobitems = new List<JobItem>();
+            foreach (var jobItem in jobItems)
+            {
+                if(!blockJobCodeSet.Contains(jobItem.Code) && !blockCompanySet.Contains(jobItem.Company))
+                {
+                    new_jobitems.Add(jobItem);
+                }
+            }
+
+            return new_jobitems;
         }
     }
 }

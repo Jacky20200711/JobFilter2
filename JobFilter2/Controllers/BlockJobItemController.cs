@@ -1,7 +1,9 @@
 ﻿using JobFilter2.Models;
+using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace JobFilter2.Controllers
     public class BlockJobItemController : Controller
     {
         private readonly JobFilterContext _context;
+        private readonly CrawlService crawlService = new CrawlService();
 
         public BlockJobItemController(JobFilterContext context)
         {
@@ -23,8 +26,13 @@ namespace JobFilter2.Controllers
             return View(await _context.BlockJobItems.ToListAsync());
         }
 
-        public IActionResult Create()
+        public IActionResult Create(string JobCode = null)
         {
+            if(JobCode != null)
+            {
+                ViewBag.JobCode = JobCode;
+            }
+
             return View();
         }
 
@@ -45,6 +53,14 @@ namespace JobFilter2.Controllers
 
             _context.Add(blockJobItem);
             await _context.SaveChangesAsync();
+
+            // 刷新SESSION儲存的工作項目
+            List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(HttpContext.Session.GetString("jobItems"));
+            if (jobItems != null)
+            {
+                jobItems = crawlService.GetUnblockedItems(_context, jobItems);
+                HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
+            }
 
             TempData["message"] = "新增成功";
             return RedirectToAction("Index");
@@ -93,6 +109,14 @@ namespace JobFilter2.Controllers
             blockJobItem.BlockReason = blockReason;
             await _context.SaveChangesAsync();
 
+            // 刷新SESSION儲存的工作項目
+            List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(HttpContext.Session.GetString("jobItems"));
+            if (jobItems != null)
+            {
+                jobItems = crawlService.GetUnblockedItems(_context, jobItems);
+                HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
+            }
+
             TempData["message"] = "修改成功";
             return RedirectToAction("Index");
         }
@@ -116,9 +140,10 @@ namespace JobFilter2.Controllers
 
             #endregion
 
-            // 刪除用戶並寫入DB
+            // 刪除該筆資料
             _context.Remove(blockJobItem);
             _context.SaveChanges();
+            
             return "刪除成功";
         }
     }
