@@ -73,9 +73,9 @@ create table CrawlSetting
 # 點選公司地址，開啟新分頁如下  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_07.PNG?raw=true)  
 &emsp;  
-# 點選封鎖工作，開啟新分頁如下並自動帶入工作代碼  
+# 點選封鎖工作，開啟新分頁並自動帶入工作代碼  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_08.PNG?raw=true)  
 &emsp;  
-# 點選封鎖公司，開啟新分頁如下並自動帶入公司名稱  
+# 點選封鎖公司，開啟新分頁並自動帶入公司名稱  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_09.PNG?raw=true)  
 &emsp;  
