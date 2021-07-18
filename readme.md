@@ -55,27 +55,27 @@ create table CrawlSetting
 # 網站首頁  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_01.PNG?raw=true)  
 &emsp;  
-# 檢視爬蟲的設定列表  
+# 檢視爬蟲的設定  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_02.PNG?raw=true)  
 &emsp;  
 # 修改爬蟲的設定  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_03.PNG?raw=true)  
 &emsp;  
-# 點選爬蟲設定的執行按鈕，爬取並過濾目標頁面  
+# 點選爬蟲列表的執行按鈕，爬取並過濾工作項目  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_04.PNG?raw=true)  
 &emsp;  
-# 點選職位名稱，連結到104的應徵頁面  
+# 點選職位名稱，開啟新分頁如下  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_05.PNG?raw=true)  
 &emsp;  
-# 點選公司名稱，連結到天眼通搜尋後的頁面  
+# 點選公司名稱，開啟新分頁如下  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_06.PNG?raw=true)  
 &emsp;  
-# 點選公司地址，連結到Google地圖搜尋後的頁面  
+# 點選公司地址，開啟新分頁如下  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_07.PNG?raw=true)  
 &emsp;  
-# 點選封鎖工作，連結到其新增頁面並自動帶入工作代碼  
+# 點選封鎖工作，開啟新分頁如下並自動帶入工作代碼  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_08.PNG?raw=true)  
 &emsp;  
-# 點選封鎖公司，連結到其新增頁面並自動帶入公司名稱  
+# 點選封鎖公司，開啟新分頁如下並自動帶入公司名稱  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_09.PNG?raw=true)  
-&emsp  
+&emsp;  
