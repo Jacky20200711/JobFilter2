@@ -154,7 +154,12 @@ namespace JobFilter2.Controllers
             jobItems = crawlService.GetUnblockedItems(_context, jobItems);
             HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
 
-            return View("JobItems", jobItems);
+            return RedirectToAction("JobItems");
+        }
+
+        public IActionResult JobItems()
+        {
+            return View();
         }
     }
 }
