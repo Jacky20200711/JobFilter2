@@ -36,7 +36,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>最低月薪</label>
-                                        <input class="form-control" name="minSalary" type="number" value=40000 min="40000" max=300000 required>
+                                        <input class="form-control" name="minSalary" type="number" value=40000 min="40000" max=300000 autocomplete="off" required>
                                     </div>
                                     <div class="form-group">
                                         <label>工作年資</label><br>
@@ -56,7 +56,6 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <br>
                                     <button type="submit" class="btn btn-primary">送出</button>
                                     <button type="reset" class="btn btn-success">重設</button>
                                     <a class="btn btn-danger" href="@Url.Action("Index","CrawlSetting")">回上一頁</a>

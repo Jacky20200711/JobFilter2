@@ -32,13 +32,12 @@
                                 <form role="form" asp-controller="BlockJobItem" asp-action="Create">
                                     <div class="form-group">
                                         <label>工作代碼</label>
-                                        <input class="form-control" name="jobCode" maxlength="20" value='@ViewBag.JobCode' required>
+                                        <input class="form-control" name="jobCode" maxlength="20" value='@ViewBag.JobCode' autocomplete="off" equired>
                                     </div>
                                     <div class="form-group">
                                         <label>封鎖理由</label>
-                                        <input class="form-control" name="blockReason" maxlength="20" required>
+                                        <input class="form-control" name="blockReason" maxlength="20" autocomplete="off" required>
                                     </div>
-                                    <br>
                                     <button type="submit" class="btn btn-primary">送出</button>
                                     <button type="reset" class="btn btn-success">重設</button>
                                     <a class="btn btn-danger" href="@Url.Action("Index","BlockJobItem")">回上一頁</a>

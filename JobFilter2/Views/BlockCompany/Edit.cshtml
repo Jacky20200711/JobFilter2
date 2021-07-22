@@ -35,13 +35,12 @@
                                     <input type="hidden" name="id" value=@Model.Id>
                                     <div class="form-group">
                                         <label>公司名稱</label>
-                                        <input class="form-control" name="companyName" value='@Model.CompanyName' maxlength="50" required>
+                                        <input class="form-control" name="companyName" value='@Model.CompanyName' maxlength="50" autocomplete="off" required>
                                     </div>
                                     <div class="form-group">
                                         <label>封鎖理由</label>
-                                        <input class="form-control" name="blockReason" value='@Model.BlockReason' maxlength="50" required>
+                                        <input class="form-control" name="blockReason" value='@Model.BlockReason' maxlength="50" autocomplete="off" required>
                                     </div>
-                                    <br>
                                     <button type="submit" class="btn btn-primary">送出</button>
                                     <button type="reset" class="btn btn-success">重設</button>
                                     <a class="btn btn-danger" href="@Url.Action("Index","BlockCompany")">回上一頁</a>
