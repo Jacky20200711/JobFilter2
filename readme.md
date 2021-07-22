@@ -34,14 +34,14 @@ create table BlockJobItem
 (  
 &nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
 &nbsp;&nbsp;&nbsp;&nbsp;JobCode nvarchar(20) NOT NULL,  
-&nbsp;&nbsp;&nbsp;&nbsp;BlockReason varchar(20) NOT NULL,  
+&nbsp;&nbsp;&nbsp;&nbsp;BlockReason nvarchar(20) NOT NULL,  
 );  
 &emsp;  
 create table BlockCompany  
 (  
 &nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
 &nbsp;&nbsp;&nbsp;&nbsp;CompanyName nvarchar(50) NOT NULL,  
-&nbsp;&nbsp;&nbsp;&nbsp;BlockReason varchar(20) NOT NULL,  
+&nbsp;&nbsp;&nbsp;&nbsp;BlockReason nvarchar(20) NOT NULL,  
 );  
 &emsp;  
 create table CrawlSetting  
