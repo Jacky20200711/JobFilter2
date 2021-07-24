@@ -1,4 +1,17 @@
-﻿<div id="page-wrapper">
+﻿<script>
+    // 這個函數用來將 Entity Code 轉回中文
+    function decodeEntities(encodedString) {
+        var textArea = document.createElement('textarea');
+        textArea.innerHTML = encodedString;
+        return textArea.value;
+    }
+    var serverMessage = decodeEntities('@TempData["message"]');
+    if (serverMessage.length > 0) {
+        alert(serverMessage);
+    }
+</script>
+
+<div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12"></div>

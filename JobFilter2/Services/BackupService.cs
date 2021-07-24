@@ -13,6 +13,8 @@ namespace JobFilter2.Services
 {
     public class BackupService
     {
+        #region 令匯入的時候忽略Id屬性
+
         // 讀取的時候忽略ID屬性
         private class CrawlSettingMap : ClassMap<CrawlSetting>
         {
@@ -42,6 +44,8 @@ namespace JobFilter2.Services
             }
         }
 
+        #endregion
+
         public void Export(JobFilterContext _context, string exportPath)
         {
             // 切換路徑到目標資料夾
@@ -52,15 +56,17 @@ namespace JobFilter2.Services
             List<BlockJobItem> DataList2 = _context.BlockJobItems.ToList();
             List<BlockCompany> DataList3 = _context.BlockCompanies.ToList();
 
-            // 將備份資料寫入CSV檔案
+            // 寫入CSV檔案(爬蟲設定)
             using var writer1 = new StreamWriter("CrawlSettings.csv", false, Encoding.UTF8);
             using var csvWriter1 = new CsvWriter(writer1, CultureInfo.InvariantCulture);
             csvWriter1.WriteRecords(DataList1);
 
+            // 寫入CSV檔案(封鎖工作)
             using var writer2 = new StreamWriter("BlockJobItems.csv", false, Encoding.UTF8);
             using var csvWriter2 = new CsvWriter(writer2, CultureInfo.InvariantCulture);
             csvWriter2.WriteRecords(DataList2);
 
+            // 寫入CSV檔案(封鎖公司)
             using var writer3 = new StreamWriter("BlockCompanies.csv", false, Encoding.UTF8);
             using var csvWriter3 = new CsvWriter(writer3, CultureInfo.InvariantCulture);
             csvWriter3.WriteRecords(DataList3);
@@ -68,7 +74,33 @@ namespace JobFilter2.Services
 
         public void Import(JobFilterContext _context, string importPath)
         {
+            string fPath1 = importPath + "\\CrawlSettings.csv";
+            string fPath2 = importPath + "\\BlockJobItems.csv";
+            string fPath3 = importPath + "\\BlockCompanies.csv";
 
+            // 讀取爬蟲設定
+            using var reader1 = new StreamReader(fPath1, Encoding.UTF8);
+            var csvReader1 = new CsvReader(reader1, CultureInfo.InvariantCulture);
+            csvReader1.Context.RegisterClassMap<CrawlSettingMap>();
+            var DataList1 = csvReader1.GetRecords<CrawlSetting>().ToList();
+
+            // 讀取封鎖工作
+            using var reader2 = new StreamReader(fPath2, Encoding.UTF8);
+            var csvReader2 = new CsvReader(reader2, CultureInfo.InvariantCulture);
+            csvReader2.Context.RegisterClassMap<BlockJobItemMap>();
+            var DataList2 = csvReader2.GetRecords<BlockJobItem>().ToList();
+
+            // 讀取封鎖公司
+            using var reader3 = new StreamReader(fPath3, Encoding.UTF8);
+            var csvReader3 = new CsvReader(reader3, CultureInfo.InvariantCulture);
+            csvReader3.Context.RegisterClassMap<BlockCompanyMap>();
+            var DataList3 = csvReader3.GetRecords<BlockCompany>().ToList();
+
+            // 將讀取完畢的資料匯入DB
+            _context.AddRange(DataList1);
+            _context.AddRange(DataList2);
+            _context.AddRange(DataList3);
+            _context.SaveChanges();
         }
     }
 }
