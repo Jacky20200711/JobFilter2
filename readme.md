@@ -15,6 +15,7 @@
 3.使用 async / await 提升爬取頁面的效率  
 4.使用 EntityFrameworkCore 存取資料庫  
 5.使用 Session 儲存過濾後的工作項目  
+6.使用 CsvHelper 做資料的備份與還原  
 &emsp;  
 # 開發環境  
 Win10(家用版) + Visual Studio 2019 + .NET Core 3.1 MVC + SQL Server 2014 Express  
@@ -25,6 +26,7 @@ dotnet add package Microsoft.AspNetCore.Session --version 2.2.0
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.7  
 dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.7  
 dotnet add package AngleSharp --version 0.16.0  
+dotnet add package CsvHelper --version 27.1.1  
 &emsp;  
 # DB Schema  
 CREATE DATABASE [JobFilter2];  
