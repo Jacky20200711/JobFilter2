@@ -39,7 +39,25 @@
                                     </div>
                                     <div class="form-group">
                                         <label>封鎖理由</label>
-                                        <input class="form-control" name="blockReason" value='@Model.BlockReason' maxlength="20" autocomplete="off" required>
+                                        @{
+                                            List<string> blockReasons = new List<string>
+                                                                            {
+                                                "技能樹不符合",
+                                                "需要出差外派",
+                                                "看完徵才條件或職缺描述後失去興趣",
+                                                "看職缺名稱不順眼",
+                                            };
+                                        }
+                                        <select class="form-control" name="blockReason">
+                                            <option>@Model.BlockReason</option>
+                                            @foreach (string blockReason in blockReasons)
+                                            {
+                                                if (blockReason != Model.BlockReason)
+                                                {
+                                                    <option>@blockReason</option>
+                                                }
+                                            }
+                                        </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary">送出</button>
                                     <button type="reset" class="btn btn-success">重設</button>

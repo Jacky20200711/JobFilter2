@@ -39,7 +39,31 @@
                                     </div>
                                     <div class="form-group">
                                         <label>封鎖理由</label>
-                                        <input class="form-control" name="blockReason" value='@Model.BlockReason' maxlength="50" autocomplete="off" required>
+                                        @{ 
+                                            List<string> blockReasons = new List<string>
+                                            {
+                                                "人力派遣",
+                                                "技能樹不符合",
+                                                "交通不方便",
+                                                "看完天眼通或PTT的評論後失去興趣",
+                                                "面過後失去興趣",
+                                                "福利寫太爛",
+                                                "對這個領域或制度沒有興趣",
+                                                "公司人數太少",
+                                                "需要背景調查",
+                                                "看公司名稱不順眼",
+                                            };
+                                        }
+                                        <select class="form-control" name="blockReason">
+                                            <option>@Model.BlockReason</option>
+                                            @foreach (string blockReason in blockReasons)
+                                            {
+                                                if (blockReason != Model.BlockReason)
+                                                {
+                                                    <option>@blockReason</option>
+                                                }
+                                            }
+                                        </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary">送出</button>
                                     <button type="reset" class="btn btn-success">重設</button>
