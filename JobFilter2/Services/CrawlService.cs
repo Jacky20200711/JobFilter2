@@ -1,10 +1,7 @@
 ﻿using JobFilter2.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using AngleSharp;
 using AngleSharp.Dom;
 
 namespace JobFilter2.Services
@@ -13,6 +10,8 @@ namespace JobFilter2.Services
     {
         private void GetTargetJobs(IDocument document, List<JobItem> jobItems)
         {
+            if (document == null) return;
+
             // 取出夾帶工作訊息的標籤(每一個工作項目都被包含在一對 article 的標籤)
             var itemsCssSelector = document.QuerySelectorAll("article");
 
@@ -55,9 +54,13 @@ namespace JobFilter2.Services
             }
 
             // 等待爬蟲結束任務
+            int loop = 0;
             while (crawlers.Any(c => c.GetDomTree() == null))
             {
                 Thread.Sleep(200);
+
+                // 如果等太久則結束爬取
+                if (loop++ == 25) break;
             }
         }
 

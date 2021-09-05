@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -149,6 +148,12 @@ namespace JobFilter2.Controllers
 
             // 取得爬下來的頁面中，所有的工作項目
             List<JobItem> jobItems = crawlService.GetTargetItems(crawlSetting);
+
+            if(jobItems.Count == 0)
+            {
+                TempData["message"] = "搜尋失敗，請檢查104網站是否運作正常，或者嘗試調整爬蟲的設定";
+                return RedirectToRoute( new { controller = "Home", action = "Index" });
+            }
 
             // 檢查DB的黑名單，過濾已封鎖的工作項目
             jobItems = crawlService.GetUnblockedItems(_context, jobItems);
