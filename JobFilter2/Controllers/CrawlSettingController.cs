@@ -50,7 +50,6 @@ namespace JobFilter2.Controllers
             _context.Add(crawlSetting);
             await _context.SaveChangesAsync();
 
-            TempData["message"] = "新增成功";
             return RedirectToAction("Index");
         }
 

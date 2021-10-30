@@ -49,6 +49,7 @@ namespace JobFilter2.Controllers
 
             _context.Add(blockCompany);
             await _context.SaveChangesAsync();
+            TempData["message"] = "新增成功";
 
             // 刷新SESSION儲存的工作項目
             string jobItemsStr = HttpContext.Session.GetString("jobItems");
@@ -57,9 +58,9 @@ namespace JobFilter2.Controllers
                 List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(HttpContext.Session.GetString("jobItems"));
                 jobItems = crawlService.GetUnblockedItems(_context, jobItems);
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
+                return RedirectToRoute(new { controller = "CrawlSetting", action = "JobItems" }); // 返回過濾結果
             }
 
-            TempData["message"] = "新增成功";
             return RedirectToAction("Index");
         }
 

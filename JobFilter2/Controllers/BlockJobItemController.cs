@@ -25,16 +25,8 @@ namespace JobFilter2.Controllers
             return View(await _context.BlockJobItems.ToListAsync());
         }
 
-        public IActionResult Create(string JobCode = null)
-        {
-            ViewBag.JobCode = JobCode;
-
-            return View();
-        }
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormCollection PostData)
+        public async Task<string> Create(IFormCollection PostData)
         {
             // 取出各欄位的值
             string jobCode = PostData["jobCode"].ToString() ?? null;
@@ -60,7 +52,7 @@ namespace JobFilter2.Controllers
             }
 
             TempData["message"] = "新增成功";
-            return RedirectToAction("Index");
+            return "封鎖成功";
         }
 
         public async Task<IActionResult> Edit(int? id)

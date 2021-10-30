@@ -1,4 +1,3 @@
-@using Newtonsoft.Json;
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
@@ -58,10 +57,6 @@
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#" onclick="return false;" id="navbar-top-links-left">JobFilterSystem</a>
-            </div>
-
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -72,19 +67,20 @@
             <!-- Top Navigation: Left Menu -->
             <ul class="nav navbar-nav navbar-left navbar-top-links">
                 <li><a href="@Url.Action("Index","Home")" id="navbar-top-links-left"><i class="fa fa-home fa-fw"></i> 返回首頁</a></li>
-                <li style="background-color: red; border-radius: 4px; height: 40px; margin-top: 6px; margin-left: 16px; font-weight:600;"><a href="https://www.qollie.com/" target="_blank" id="navbar-top-links-middle">天眼通</a></li>
+                <li><a href="@Url.Action("JobItems","CrawlSetting")" id="navbar-top-links-left"><i class="fa fa-home fa-fw"></i> 過濾結果</a></li>
+                <li style="background-color: red; border-radius: 4px; height: 40px; margin-top: 6px; margin-left: 34px; font-weight:600;"><a href="https://www.qollie.com/" target="_blank" id="navbar-top-links-middle">天眼通</a></li>
                 <li style="background-color: forestgreen; border-radius: 4px; height: 40px; margin-top: 6px; margin-left: 6px; font-weight: 600;"><a href="https://briian.com/ptt-search.htm" target="_blank" id="navbar-top-links-middle">批踢踢</a></li>
                 <li style="background-color: orange; border-radius: 4px; height: 40px; margin-top: 6px; margin-left: 6px; font-weight: 600;"><a href="https://tw.piliapp.com/mrt-taiwan/taipei/" target="_blank" id="navbar-top-links-middle">捷運圖</a></li>
             </ul>
 
             <!-- Top Navigation: Right Menu -->
-            <ul class="nav navbar-right navbar-top-links">
+            @*<ul class="nav navbar-right navbar-top-links">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:white;">
                         <i class="fa fa-user fa-fw"></i> @loginName <b class="caret"></b>
                     </a>
                 </li>
-            </ul>
+            </ul>*@
 
             <!-- 左側的目錄 -->
             <div class="navbar-default sidebar" role="navigation">
@@ -103,7 +99,7 @@
                                     <a href="@Url.Action("Import", "Backup")"><i class="fa fa-edit fa-fw"></i>匯入備份</a>
                                 </li>
                             </ul>
-                            
+
                         </li>
                     </ul>
                 </div>
