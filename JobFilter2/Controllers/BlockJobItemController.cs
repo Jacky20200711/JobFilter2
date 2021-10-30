@@ -51,7 +51,6 @@ namespace JobFilter2.Controllers
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
             }
 
-            TempData["message"] = "新增成功";
             return "封鎖成功";
         }
 
