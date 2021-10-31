@@ -111,7 +111,7 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public string Delete(int? id)
+        public async Task<string> Delete(int? id)
         {
             #region 檢查此筆資料是否存在
 
@@ -120,7 +120,7 @@ namespace JobFilter2.Controllers
                 return "刪除失敗，查無這筆資料!";
             }
 
-            var blockCompany = _context.BlockCompanies.FirstOrDefault(u => u.Id == id);
+            var blockCompany = await _context.BlockCompanies.FindAsync(id);
 
             if (blockCompany == null)
             {
@@ -129,9 +129,9 @@ namespace JobFilter2.Controllers
 
             #endregion
 
-            // 刪除該筆資料
+            // 更新DB
             _context.Remove(blockCompany);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return "刪除成功";
         }

@@ -106,7 +106,7 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public string Delete(int? id)
+        public async Task<string> Delete(int? id)
         {
             #region 檢查此筆資料是否存在
 
@@ -115,7 +115,7 @@ namespace JobFilter2.Controllers
                 return "刪除失敗，查無這筆資料!";
             }
 
-            var crawlSetting = _context.CrawlSettings.FirstOrDefault(u => u.Id == id);
+            var crawlSetting = await _context.CrawlSettings.FindAsync(id);
 
             if (crawlSetting == null)
             {
@@ -124,9 +124,10 @@ namespace JobFilter2.Controllers
 
             #endregion
 
-            // 刪除用戶並寫入DB
+            // 更新DB
             _context.Remove(crawlSetting);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
             return "刪除成功";
         }
 
