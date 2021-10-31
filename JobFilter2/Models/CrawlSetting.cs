@@ -11,5 +11,6 @@ namespace JobFilter2.Models
         public string TargetUrl { get; set; }
         public int MinSalary { get; set; }
         public string Seniority { get; set; }
+        public string Remark { get; set; }
     }
 }

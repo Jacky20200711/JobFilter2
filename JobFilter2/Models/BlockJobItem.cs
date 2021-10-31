@@ -9,6 +9,5 @@ namespace JobFilter2.Models
     {
         public int Id { get; set; }
         public string JobCode { get; set; }
-        public string BlockReason { get; set; }
     }
 }

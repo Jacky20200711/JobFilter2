@@ -23,15 +23,13 @@ namespace JobFilter2.Controllers
         [HttpPost]
         public async Task<string> Create(IFormCollection PostData)
         {
-            // 取出各欄位的值
+            // 取出參數
             string jobCode = PostData["jobCode"].ToString() ?? null;
-            string blockReason = PostData["blockReason"].ToString() ?? null;
 
             // 新增封鎖工作
             BlockJobItem blockJobItem = new BlockJobItem
             {
                 JobCode = jobCode,
-                BlockReason = blockReason,
             };
 
             _context.Add(blockJobItem);

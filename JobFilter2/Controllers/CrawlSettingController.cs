@@ -35,6 +35,7 @@ namespace JobFilter2.Controllers
         public async Task<IActionResult> Create(IFormCollection PostData)
         {
             // 取出各欄位的值
+            string remark = PostData["remark"].ToString() ?? null;
             string targetUrl = PostData["targetUrl"].ToString() ?? null;
             string seniority = PostData["seniority"].ToString() ?? null;
             int minSalary = int.Parse(PostData["minSalary"].ToString());
@@ -42,6 +43,7 @@ namespace JobFilter2.Controllers
             // 新增爬蟲設定
             CrawlSetting crawlSetting = new CrawlSetting
             {
+                Remark = remark,
                 TargetUrl = targetUrl,
                 MinSalary = minSalary,
                 Seniority = seniority,
@@ -81,6 +83,7 @@ namespace JobFilter2.Controllers
             // 取出各欄位的值
             int id = int.Parse(PostData["Id"].ToString());
             int minSalary = int.Parse(PostData["minSalary"].ToString());
+            string remark = PostData["remark"].ToString() ?? null;
             string targetUrl = PostData["targetUrl"].ToString() ?? null;
             string seniority = PostData["seniority"].ToString() ?? null;
 
@@ -88,11 +91,11 @@ namespace JobFilter2.Controllers
             var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
             if (crawlSetting == null)
             {
-                TempData["message"] = "修改失敗，此筆資料已被刪除";
-                return RedirectToAction("Edit", new { id });
+                return NotFound();
             }
 
             // 修改該筆資料
+            crawlSetting.Remark = remark;
             crawlSetting.TargetUrl = targetUrl;
             crawlSetting.Seniority = seniority;
             crawlSetting.MinSalary = minSalary;

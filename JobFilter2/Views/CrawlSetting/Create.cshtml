@@ -31,6 +31,10 @@
                             <div class="col-lg-6">
                                 <form role="form" asp-controller="CrawlSetting" asp-action="Create">
                                     <div class="form-group">
+                                        <label>設定說明</label>
+                                        <input class="form-control" name="remark" maxlength="20">
+                                    </div>
+                                    <div class="form-group">
                                         <label>目標網址</label>
                                         <textarea class="form-control" name="targetUrl" rows="4" maxlength="400" required></textarea>
                                     </div>

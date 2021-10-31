@@ -39,8 +39,7 @@ namespace JobFilter2.Models
 
                 entity.Property(e => e.BlockReason)
                     .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                    .HasMaxLength(20);
 
                 entity.Property(e => e.CompanyName)
                     .IsRequired()
@@ -51,11 +50,6 @@ namespace JobFilter2.Models
             {
                 entity.ToTable("BlockJobItem");
 
-                entity.Property(e => e.BlockReason)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.JobCode)
                     .IsRequired()
                     .HasMaxLength(20);
@@ -64,6 +58,8 @@ namespace JobFilter2.Models
             modelBuilder.Entity<CrawlSetting>(entity =>
             {
                 entity.ToTable("CrawlSetting");
+
+                entity.Property(e => e.Remark).HasMaxLength(20);
 
                 entity.Property(e => e.Seniority)
                     .IsRequired()
