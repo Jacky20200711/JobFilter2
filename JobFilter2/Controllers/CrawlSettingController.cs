@@ -149,7 +149,7 @@ namespace JobFilter2.Controllers
 
             #endregion
 
-            // 取得爬下來的頁面中，所有的工作項目
+            // 爬取目標頁面 & 提取工作列表
             List<JobItem> jobItems = crawlService.GetTargetItems(crawlSetting);
 
             if(jobItems.Count == 0)
@@ -158,7 +158,7 @@ namespace JobFilter2.Controllers
                 return RedirectToRoute( new { controller = "Home", action = "Index" });
             }
 
-            // 檢查DB的黑名單，過濾已封鎖的工作項目
+            // 檢查DB的黑名單，過濾掉封鎖的項目
             jobItems = crawlService.GetUnblockedItems(_context, jobItems);
             HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
 

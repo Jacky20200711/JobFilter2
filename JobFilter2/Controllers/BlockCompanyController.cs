@@ -28,7 +28,6 @@ namespace JobFilter2.Controllers
         public IActionResult Create(string Company = null)
         {
             ViewBag.Company = Company;
-
             return View();
         }
 

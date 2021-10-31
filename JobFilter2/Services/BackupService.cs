@@ -96,11 +96,13 @@ namespace JobFilter2.Services
             csvReader3.Context.RegisterClassMap<BlockCompanyMap>();
             var DataList3 = csvReader3.GetRecords<BlockCompany>().ToList();
 
-            // 將讀取完畢的資料匯入DB
+            // 匯入DB
+            using var transaction = _context.Database.BeginTransaction();
             _context.AddRange(DataList1);
             _context.AddRange(DataList2);
             _context.AddRange(DataList3);
             _context.SaveChanges();
+            transaction.Commit();
         }
     }
 }
