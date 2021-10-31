@@ -36,7 +36,6 @@ create table BlockJobItem
 (  
 &nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
 &nbsp;&nbsp;&nbsp;&nbsp;JobCode nvarchar(20) NOT NULL,  
-&nbsp;&nbsp;&nbsp;&nbsp;BlockReason nvarchar(20) NOT NULL,  
 );  
 &emsp;  
 create table BlockCompany  
@@ -52,6 +51,7 @@ create table CrawlSetting
 &nbsp;&nbsp;&nbsp;&nbsp;TargetUrl nvarchar(400) NOT NULL,  
 &nbsp;&nbsp;&nbsp;&nbsp;MinSalary int NOT NULL,  
 &nbsp;&nbsp;&nbsp;&nbsp;Seniority nvarchar(10) NOT NULL,  
+&nbsp;&nbsp;&nbsp;&nbsp;Remark nvarchar(20),  
 );  
 &emsp;  
 # 網站首頁  

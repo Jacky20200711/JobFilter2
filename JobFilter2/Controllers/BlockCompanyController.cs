@@ -98,8 +98,7 @@ namespace JobFilter2.Controllers
             var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
             if (blockCompany == null)
             {
-                TempData["message"] = "修改失敗，此筆資料已被刪除";
-                return RedirectToAction("Edit", new { id });
+                return NotFound();
             }
 
             // 修改該筆資料
