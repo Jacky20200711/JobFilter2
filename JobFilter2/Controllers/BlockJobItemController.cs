@@ -20,11 +20,6 @@ namespace JobFilter2.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.BlockJobItems.ToListAsync());
-        }
-
         [HttpPost]
         public async Task<string> Create(IFormCollection PostData)
         {
@@ -52,79 +47,6 @@ namespace JobFilter2.Controllers
             }
 
             return "封鎖成功";
-        }
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            #region 檢查此筆資料是否存在，若不存在則跳轉到錯誤頁面
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var blockJobItem = await _context.BlockJobItems.FirstOrDefaultAsync(u => u.Id == id);
-
-            if (blockJobItem == null)
-            {
-                return NotFound();
-            }
-
-            #endregion
-
-            return View(blockJobItem);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(IFormCollection PostData)
-        {
-            // 取出各欄位的值
-            int id = int.Parse(PostData["Id"].ToString());
-            string jobCode = PostData["jobCode"].ToString() ?? null;
-            string blockReason = PostData["blockReason"].ToString() ?? null;
-
-            // 取得該筆資料
-            var blockJobItem = await _context.BlockJobItems.FirstOrDefaultAsync(u => u.Id == id);
-            if (blockJobItem == null)
-            {
-                TempData["message"] = "修改失敗，此筆資料已被刪除";
-                return RedirectToAction("Edit", new { id });
-            }
-
-            // 修改該筆資料
-            blockJobItem.JobCode = jobCode;
-            blockJobItem.BlockReason = blockReason;
-            await _context.SaveChangesAsync();
-
-            TempData["message"] = "修改成功";
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public string Delete(int? id)
-        {
-            #region 檢查此筆資料是否存在
-
-            if (id == null)
-            {
-                return "刪除失敗，查無這筆資料!";
-            }
-
-            var blockJobItem = _context.BlockJobItems.FirstOrDefault(u => u.Id == id);
-
-            if (blockJobItem == null)
-            {
-                return "刪除失敗，查無這筆資料!";
-            }
-
-            #endregion
-
-            // 刪除該筆資料
-            _context.Remove(blockJobItem);
-            _context.SaveChanges();
-            
-            return "刪除成功";
         }
     }
 }
