@@ -1,6 +1,7 @@
 using JobFilter2.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,13 @@ namespace JobFilter2
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseSession();
+            app.UseSession(new SessionOptions()
+            {
+                Cookie = new CookieBuilder()
+                {
+                    Name = ".AspNetCore.Session.JobFilter2"
+                }
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
