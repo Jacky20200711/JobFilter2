@@ -1,4 +1,6 @@
-﻿<script>
+﻿@using JobFilter2.Services
+
+<script>
     // 這個函數用來將 Entity Code 轉回中文
     function decodeEntities(encodedString) {
         var textArea = document.createElement('textarea');
@@ -37,18 +39,18 @@
                                     <div class="form-group">
                                         <label>封鎖理由</label>
                                         <select class="form-control" name="blockReason">
-                                            <option>接案或派遣</option>
-                                            <option>技能樹不符合</option>
-                                            <option>交通不方便</option>
-                                            <option>看完評論後失去興趣</option>
-                                            <option>看完徵才條件或職缺描述後失去興趣</option>
-                                            <option>看完面試說明或親自面過後失去興趣</option>
-                                            <option>公司人數太少</option>
+                                            @{
+                                                foreach (var reason in Utility.BlockReason)
+                                                {
+                                                    <option>@reason</option>
+                                                }
+                                            }
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary">送出</button>
                                     <button type="reset" class="btn btn-success">重設</button>
-                                    <a class="btn btn-danger" href="@Url.Action("JobItems","CrawlSetting")">返回過濾結果</a>
+                                    <a class="btn btn-danger" href="@Url.Action("Index","BlockCompany")">返回封鎖列表</a>
+                                    <a class="btn" href="@Url.Action("JobItems","CrawlSetting")" style="background-color:mediumpurple; color:white;">返回過濾結果</a>
                                 </form>
                             </div>
                             <!-- /.col-lg-6 (nested) -->

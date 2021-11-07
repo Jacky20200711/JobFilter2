@@ -1,4 +1,5 @@
 ﻿@model BlockCompany
+@using JobFilter2.Services
 
 <script>
     // 這個函數用來將 Entity Code 轉回中文
@@ -39,9 +40,9 @@
                                     </div>
                                     <div class="form-group">
                                         <label>封鎖理由</label>
-                                        @{ 
+                                        @{
                                             List<string> blockReasons = new List<string>
-                                            {
+                                                                                                            {
                                                 "接案或派遣",
                                                 "技能樹不符合",
                                                 "交通不方便",
@@ -53,18 +54,18 @@
                                         }
                                         <select class="form-control" name="blockReason">
                                             <option>@Model.BlockReason</option>
-                                            @foreach (string blockReason in blockReasons)
+                                            @foreach (string reason in Utility.BlockReason)
                                             {
-                                                if (blockReason != Model.BlockReason)
+                                                if (reason != Model.BlockReason)
                                                 {
-                                                    <option>@blockReason</option>
+                                                    <option>@reason</option>
                                                 }
                                             }
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary">送出</button>
                                     <button type="reset" class="btn btn-success">重設</button>
-                                    <a class="btn btn-danger" href="@Url.Action("Index","BlockCompany")">回上一頁</a>
+                                    <a class="btn btn-danger" href="@Url.Action("Index","BlockCompany")">返回封鎖列表</a>
                                 </form>
                             </div>
                             <!-- /.col-lg-6 (nested) -->
