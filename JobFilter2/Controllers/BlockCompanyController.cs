@@ -22,7 +22,7 @@ namespace JobFilter2.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.BlockCompanies.ToListAsync());
+            return View(await _context.BlockCompanies.OrderByDescending(c => c.Id).ToListAsync());
         }
 
         public IActionResult Create(string Company = null)
