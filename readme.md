@@ -2,19 +2,18 @@
 針對自己舊專案 JobFilter 的爬蟲功能和操作介面進行改版。  
 &emsp;  
 # 改版重點  
-1.前端套版 & 大幅修改操作介面  
-2.使用比較簡潔、優雅的語法來解析工作內容  
-3.點選公司名稱時，可以自動到天眼通做搜尋  
-4.點選地址時，可以自動到 Google 地圖做搜尋  
-5.新增封鎖工作的功能  
-6.改用 DB-First 來重新設計資料庫  
+1.大幅修改並簡化操作介面  
+2.點選公司名稱時，可以自動到天眼通做搜尋  
+3.點選地址時，可以自動到 Google 地圖做搜尋  
+4.新增封鎖工作的功能  
+5.改用 DB-First 重新設計資料庫  
 &emsp;  
 # 使用技術  
 1.使用 HttpClient 爬取網頁  
 2.使用 AngleSharp 解析網頁  
 3.使用 async / await 提升爬取頁面的效率  
 4.使用 EntityFrameworkCore 存取資料庫  
-5.使用 Session 儲存過濾後的工作項目  
+5.使用 Session 暫存過濾後的工作  
 6.使用 CsvHelper 做資料的備份與還原  
 &emsp;  
 # 開發環境  
@@ -31,6 +30,8 @@ dotnet add package NLog --version 4.7.10
 dotnet add package NLog.Web.AspNetCore --version 4.13.0-readme-preview  
 &emsp;  
 # DB Schema  
+CREATE DATABASE [JobFilter2];  
+&emsp;
 create table BlockJobItem  
 (  
 &nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
