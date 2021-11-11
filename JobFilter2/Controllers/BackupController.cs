@@ -2,6 +2,7 @@
 using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.IO;
 
 namespace JobFilter2.Controllers
@@ -10,10 +11,12 @@ namespace JobFilter2.Controllers
     {
         private readonly JobFilterContext _context;
         private readonly BackupService backupService = new BackupService();
+        private readonly ILogger<BackupController> _logger;
 
-        public BackupController(JobFilterContext context)
+        public BackupController(JobFilterContext context, ILogger<BackupController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public IActionResult Export()

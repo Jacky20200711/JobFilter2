@@ -27,11 +27,10 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.7
 dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.7  
 dotnet add package AngleSharp --version 0.16.0  
 dotnet add package CsvHelper --version 27.1.1  
+dotnet add package NLog --version 4.7.10  
+dotnet add package NLog.Web.AspNetCore --version 4.13.0-readme-preview  
 &emsp;  
 # DB Schema  
-CREATE DATABASE [JobFilter2];  
-USE [JobFilter2];  
-&emsp;  
 create table BlockJobItem  
 (  
 &nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  

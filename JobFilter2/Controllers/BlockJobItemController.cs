@@ -3,6 +3,7 @@ using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace JobFilter2.Controllers
     {
         private readonly JobFilterContext _context;
         private readonly CrawlService crawlService = new CrawlService();
+        private readonly ILogger<BlockJobItemController> _logger;
 
-        public BlockJobItemController(JobFilterContext context)
+        public BlockJobItemController(JobFilterContext context, ILogger<BlockJobItemController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpPost]
