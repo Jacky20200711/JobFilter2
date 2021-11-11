@@ -39,6 +39,13 @@ namespace JobFilter2.Controllers
             string companyName = PostData["companyName"].ToString() ?? null;
             string blockReason = PostData["blockReason"].ToString() ?? null;
 
+            // 檢查長度
+            if(companyName.Length > 50)
+            {
+                TempData["message"] = "新增失敗，公司名稱超過長度限制";
+                return RedirectToRoute(new { controller = "CrawlSetting", action = "JobItems" });
+            }
+
             // 新增封鎖工作
             BlockCompany blockCompany = new BlockCompany
             {
