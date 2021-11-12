@@ -31,7 +31,7 @@ dotnet add package NLog.Web.AspNetCore --version 4.13.0-readme-preview
 &emsp;  
 # DB Schema  
 CREATE DATABASE [JobFilter2];  
-&emsp;
+&emsp;  
 create table BlockJobItem  
 (  
 &nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
