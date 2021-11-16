@@ -39,11 +39,11 @@ namespace JobFilter2.Controllers
         public async Task<IActionResult> Create(IFormCollection PostData)
         {
             // 取出各欄位的值
-            string companyName = PostData["companyName"].ToString() ?? null;
+            string company = PostData["companyName"].ToString() ?? null;
             string blockReason = PostData["blockReason"].ToString() ?? null;
 
             // 檢查長度
-            if(companyName.Length > 50)
+            if(company.Length > 50)
             {
                 TempData["message"] = "新增失敗，公司名稱超過長度限制";
                 return RedirectToRoute(new { controller = "CrawlSetting", action = "JobItems" });
@@ -52,7 +52,7 @@ namespace JobFilter2.Controllers
             // 新增封鎖工作
             BlockCompany blockCompany = new BlockCompany
             {
-                CompanyName = companyName,
+                CompanyName = company,
                 BlockReason = blockReason,
             };
 
@@ -65,7 +65,7 @@ namespace JobFilter2.Controllers
             if (jobItemsStr != null)
             {
                 List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
-                jobItems = crawlService.GetUnblockedItems(_context, jobItems);
+                jobItems = crawlService.GetUpdateList(jobItems, company, blockType:"company");
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
                 return RedirectToRoute(new { controller = "CrawlSetting", action = "JobItems" }); // 返回過濾結果
             }

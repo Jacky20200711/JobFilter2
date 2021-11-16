@@ -80,6 +80,9 @@ namespace JobFilter2.Services
             return jobItems;
         }
 
+        /// <summary>
+        /// 根據DB資訊來過濾工作項目
+        /// </summary>
         public List<JobItem> GetUnblockedItems(JobFilterContext context, List<JobItem> jobItems)
         {
             var blockJobItems = context.BlockJobItems.ToList();
@@ -115,6 +118,37 @@ namespace JobFilter2.Services
             foreach(var item in jobDict)
             {
                 new_jobitems.Add(item.Value);
+            }
+
+            return new_jobitems;
+        }
+
+        /// <summary>
+        /// 排除掉指定的工作項目或公司名稱
+        /// </summary>
+        public List<JobItem> GetUpdateList(List<JobItem> jobItems, string target, string blockType)
+        {
+            List<JobItem> new_jobitems = new List<JobItem>();
+
+            if (blockType == "jobCode")
+            {
+                foreach (var jobItem in jobItems)
+                {
+                    if(jobItem.Code != target)
+                    {
+                        new_jobitems.Add(jobItem);
+                    }
+                }
+            }
+            else if(blockType == "company")
+            {
+                foreach (var jobItem in jobItems)
+                {
+                    if (jobItem.Company != target)
+                    {
+                        new_jobitems.Add(jobItem);
+                    }
+                }
             }
 
             return new_jobitems;

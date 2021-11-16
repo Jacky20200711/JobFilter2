@@ -44,6 +44,7 @@ namespace JobFilter2.Controllers
             {
                 List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
                 jobItems = crawlService.GetUnblockedItems(_context, jobItems);
+                jobItems = crawlService.GetUpdateList(jobItems, jobCode, blockType: "jobCode");
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
             }
 
