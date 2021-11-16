@@ -100,14 +100,21 @@ namespace JobFilter2.Services
                 blockCompanySet.Add(b.CompanyName);
             }
 
-            // 取出沒有被過濾掉的項目
-            List<JobItem> new_jobitems = new List<JobItem>();
+            // 取出沒有被過濾掉的項目(有些工作偶爾會重複，若遇到 jobCode 重複則直接覆蓋舊的)
+            Dictionary<string, JobItem> jobDict = new Dictionary<string, JobItem>();
             foreach (var jobItem in jobItems)
             {
                 if(!blockJobCodeSet.Contains(jobItem.Code) && !blockCompanySet.Contains(jobItem.Company))
                 {
-                    new_jobitems.Add(jobItem);
+                    jobDict[jobItem.Code] = jobItem;
                 }
+            }
+
+            // 取出已過濾且未重複的工作
+            List<JobItem> new_jobitems = new List<JobItem>();
+            foreach(var item in jobDict)
+            {
+                new_jobitems.Add(item.Value);
             }
 
             return new_jobitems;

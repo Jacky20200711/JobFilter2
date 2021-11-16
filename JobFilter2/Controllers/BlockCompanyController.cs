@@ -64,7 +64,7 @@ namespace JobFilter2.Controllers
             string jobItemsStr = HttpContext.Session.GetString("jobItems");
             if (jobItemsStr != null)
             {
-                List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(HttpContext.Session.GetString("jobItems"));
+                List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
                 jobItems = crawlService.GetUnblockedItems(_context, jobItems);
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
                 return RedirectToRoute(new { controller = "CrawlSetting", action = "JobItems" }); // 返回過濾結果
