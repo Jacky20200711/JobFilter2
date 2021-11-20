@@ -55,10 +55,10 @@ create table CrawlSetting
 # 網站首頁  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_01.PNG?raw=true)  
 &emsp;  
-# 修改爬蟲設定  
+# 爬蟲列表  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_02.PNG?raw=true)  
 &emsp;  
-# 執行爬蟲後，呈現的工作列表  
+# 執行爬蟲之後，過濾完畢的工作列表  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_03.PNG?raw=true)  
 &emsp;  
 # 點選職位名稱，開啟新分頁如下  
