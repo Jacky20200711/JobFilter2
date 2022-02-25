@@ -54,13 +54,9 @@ namespace JobFilter2.Services
             }
 
             // 等待爬蟲結束任務
-            int loop = 0;
-            while (crawlers.Any(c => c.GetDomTree() == null))
+            while (crawlers.Any(c => !c.isMissionCompleted))
             {
                 Thread.Sleep(200);
-
-                // 如果等太久則結束爬取
-                if (loop++ == 25) break;
             }
         }
 
@@ -74,7 +70,7 @@ namespace JobFilter2.Services
             List<JobItem> jobItems = new List<JobItem>();
             foreach(var crawler in crawlers)
             {
-                GetTargetJobs(crawler.GetDomTree(), jobItems);
+                GetTargetJobs(crawler.domTree, jobItems);
             }
 
             return jobItems;

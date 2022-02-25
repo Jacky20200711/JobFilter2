@@ -6,3 +6,4 @@ bin/
 
 JobFilter2/Properties/PublishProfiles/FolderProfile.pubxml
 JobFilter2/Properties/PublishProfiles/FolderProfile.pubxml.user
+JobFilter2/.config/dotnet-tools.json
