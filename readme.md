@@ -39,7 +39,7 @@ create table BlockJobItem
 create table BlockCompany  
 (  
 &nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
-&nbsp;&nbsp;&nbsp;&nbsp;CompanyName nvarchar(50) NOT NULL,  
+&nbsp;&nbsp;&nbsp;&nbsp;CompanyName nvarchar(100) NOT NULL,  
 &nbsp;&nbsp;&nbsp;&nbsp;BlockReason nvarchar(20) NOT NULL,  
 );  
 &emsp;  

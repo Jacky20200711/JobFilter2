@@ -43,7 +43,7 @@ namespace JobFilter2.Controllers
             string blockReason = PostData["blockReason"].ToString() ?? null;
 
             // 檢查長度
-            if(company.Length > 50)
+            if(company.Length > 100)
             {
                 TempData["message"] = "新增失敗，公司名稱超過長度限制";
                 return RedirectToRoute(new { controller = "CrawlSetting", action = "JobItems" });
@@ -102,6 +102,13 @@ namespace JobFilter2.Controllers
             int id = int.Parse(PostData["Id"].ToString());
             string companyName = PostData["companyName"].ToString() ?? null;
             string blockReason = PostData["blockReason"].ToString() ?? null;
+
+            // 檢查長度
+            if (companyName.Length > 100)
+            {
+                TempData["message"] = "修改失敗，公司名稱超過長度限制";
+                return RedirectToAction("Edit", new { id });
+            }
 
             // 取得該筆資料
             var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
