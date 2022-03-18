@@ -76,15 +76,14 @@ namespace JobFilter2.Controllers
         /// <summary>
         /// 這個函數主要是用來測試匯入功能(為了方便觀察，所以匯入DB前先刪除DB資料)
         /// </summary>
-        public IActionResult DeleteAll()
+        public IActionResult ClearBlock()
         {
             using var transaction = _context.Database.BeginTransaction();
-            _context.RemoveRange(_context.CrawlSettings);
             _context.RemoveRange(_context.BlockCompanies);
             _context.RemoveRange(_context.BlockJobItems);
             _context.SaveChanges();
             transaction.Commit();
-            TempData["message"] = "刪除成功";
+            TempData["message"] = "封鎖紀錄已清空";
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
     }
