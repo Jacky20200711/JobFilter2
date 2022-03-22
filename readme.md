@@ -1,5 +1,6 @@
 # 專案目標  
 針對自己舊專案 JobFilter 的爬蟲功能和操作介面進行改版。  
+https://github.com/Jacky20200711/JobFilter  
 &emsp;  
 # 改版重點  
 1.大幅修改操作介面，以及簡化操作流程  
@@ -10,7 +11,7 @@
 1.使用 HttpClient 爬取網頁  
 2.使用 AngleSharp 解析網頁  
 3.使用 async / await 提升爬取頁面的效率  
-4.使用 EntityFrameworkCore 存取資料庫  
+4.使用 EFCore 存取資料庫  
 5.使用 Session 暫存過濾後的工作  
 6.使用 CsvHelper 做資料的備份與還原  
 &emsp;  
@@ -58,12 +59,15 @@ create table CrawlSetting
 # 爬蟲列表  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_02.PNG?raw=true)  
 &emsp;  
-# 執行爬蟲之後，過濾完畢的工作列表  
+# 執行爬蟲之後，呈現過濾後的工作列表  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_03.PNG?raw=true)  
 &emsp;  
-# 點選職位名稱，開啟新分頁如下  
+# 點選職位名稱，會開啟該職缺的詳細頁面  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_04.PNG?raw=true)  
 &emsp;  
-# 點選公司地址，開啟新分頁如下  
+# 點選公司名稱，會自動到天眼通查詢評論  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_05.PNG?raw=true)  
 &emsp;  
+# 點選公司地址，會開啟 Google 地圖  
+![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_06.PNG?raw=true)  
+&emsp; 
