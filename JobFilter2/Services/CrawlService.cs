@@ -46,8 +46,8 @@ namespace JobFilter2.Services
 
         private void GetTargetPages(List<Crawler> crawlers, CrawlSetting crawlSetting)
         {
-            // 固定爬取十個分頁
-            for(int i = 1; i <= 10; i++)
+            // 固定爬取的分頁數量
+            for(int i = 1; i <= 15; i++)
             {
                 crawlers.Add(new Crawler());
                 _ = crawlers.Last().LoadPage(crawlSetting, i);
