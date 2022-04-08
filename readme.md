@@ -20,7 +20,6 @@ https://github.com/Jacky20200711/JobFilter
 Win10(家用版) + Visual Studio 2019 + .NET Core 3.1 MVC + SQL Server 2014 Express  
 &emsp;  
 # 安裝套件  
-dotnet add package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation --version 3.1.15  
 dotnet add package Microsoft.AspNetCore.Session --version 2.2.0  
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.7  
 dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.7  
