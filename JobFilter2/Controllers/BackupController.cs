@@ -72,19 +72,5 @@ namespace JobFilter2.Controllers
             TempData["message"] = "匯入成功";
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
-
-        /// <summary>
-        /// 這個函數主要是用來測試匯入功能(為了方便觀察，所以匯入DB前先刪除DB資料)
-        /// </summary>
-        public IActionResult ClearBlock()
-        {
-            using var transaction = _context.Database.BeginTransaction();
-            _context.RemoveRange(_context.BlockCompanies);
-            _context.RemoveRange(_context.BlockJobItems);
-            _context.SaveChanges();
-            transaction.Commit();
-            TempData["message"] = "封鎖紀錄已清空";
-            return RedirectToRoute(new { controller = "Home", action = "Index" });
-        }
     }
 }

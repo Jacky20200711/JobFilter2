@@ -83,7 +83,7 @@
                                             <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
                                             <td class="center-block" style="white-space: nowrap;">
                                                 <a class="btn btn-primary" id="@jobItem.Code" onclick="DeleteData('@jobItem.Code')">封鎖工作</a>
-                                                <a class="btn btn-success" href="@Url.Action("Create", "BlockCompany", new { Company = jobItem.Company })">封鎖公司</a>
+                                                <a class="btn btn-success" target="_blank" href="@Url.Action("Create", "BlockCompany", new { Company = jobItem.Company })">封鎖公司</a>
                                             </td>
                                         </tr>
                                     }
