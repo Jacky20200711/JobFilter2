@@ -68,7 +68,7 @@
                                             <td>@crawlSetting.MinSalary</td>
                                             <td>@crawlSetting.Seniority</td>
                                             <td class="center-block">
-                                                <button class="btn btn-primary" style="background-color:purple;" onclick="location.href='@Url.Action("DoCrawl", "CrawlSetting", new { id = crawlSetting.Id })'">執行</button>
+                                                <button class="btn btn-primary" style="background-color:purple;" onclick="location.href='@Url.Action("DoCrawl", "CrawlSetting", new { id = crawlSetting.Id })'">爬取工作</button>
                                                 <button class="btn btn-success" onclick="location.href='@Url.Action("Edit", "CrawlSetting", new { id = crawlSetting.Id })'">修改</button>
                                                 <button class="btn btn-danger" onclick="DeleteData(@crawlSetting.Id)">刪除</button>
                                             </td>
