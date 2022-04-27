@@ -3,15 +3,15 @@
 https://github.com/Jacky20200711/JobFilter  
 &emsp;  
 # 改版重點  
-1.修改操作介面、簡化操作流程  
-2.拿掉排除關鍵字的功能(改以封鎖工作來取代)  
-3.將資料庫規劃從 Code-First 換成 DB-First  
-4.爬取的分頁數量提高到15頁  
+1.修改操作介面  
+2.簡化操作流程  
+3.去除排除關鍵字的功能(改用封鎖工作的功能來取代)  
+4.將資料庫規劃從 Code-First 換成 DB-First  
 &emsp;  
 # 使用技術  
 1.使用 HttpClient 爬取網頁  
 2.使用 AngleSharp 解析網頁  
-3.使用 async / await 提升爬取頁面的效率  
+3.使用 async / await 提升爬蟲的效率  
 4.使用 EFCore 存取資料庫  
 5.使用 Session 暫存過濾後的工作  
 6.使用 CsvHelper 做資料的備份與還原  
