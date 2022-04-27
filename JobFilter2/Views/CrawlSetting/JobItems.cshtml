@@ -1,5 +1,6 @@
 ﻿@using Newtonsoft.Json;
 @using Microsoft.AspNetCore.Http
+@using JobFilter2.Services
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
     List<JobItem> jobItems = new List<JobItem>();
@@ -45,6 +46,38 @@
     }
 </script>
 
+<script>
+    function CheckBeforeBlock(seletor_id, companyName, jobCode) {
+        // 取得封鎖理由
+        let blockReason = document.getElementById(seletor_id).value;
+        // 令 selector 保持顯示這幾個字
+        document.getElementById(seletor_id).value = "封鎖公司";
+        // 若沒有選擇理由則返回
+        if(blockReason == "封鎖公司" || blockReason == "------請選擇理由------"){
+            return;
+        }
+        var result = confirm("封鎖公司 : " + companyName + "\n" + "封鎖理由 : " + blockReason + "\n" + "確定要封鎖這間公司?");
+        if (result) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Create", "BlockCompany")',
+                data: { companyName: companyName, blockReason: blockReason }
+            })
+            .done(function (message) {
+                if (message == "封鎖成功") {
+                    document.getElementById(seletor_id).disabled = true;
+                    // 令封鎖工作的按鈕連帶失效、淡出
+                    document.getElementById(jobCode).style.pointerEvents = "none";
+                    document.getElementById(jobCode).style.opacity = "0.5";
+                }
+                else{
+                    alert("資料庫忙碌中，請稍後再試");
+                }
+            });
+        }
+    }
+</script>
+
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
@@ -76,6 +109,7 @@
                                 <tbody>
                                     @foreach (var jobItem in jobItems)
                                     {
+                                        string seletor_id = Guid.NewGuid().ToString();
                                         <tr class="gradeA">
                                             <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
                                             <td>@jobItem.Salary</td>
@@ -83,7 +117,16 @@
                                             <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
                                             <td class="center-block" style="white-space: nowrap;">
                                                 <a class="btn btn-primary" id="@jobItem.Code" onclick="DeleteData('@jobItem.Code')">封鎖工作</a>
-                                                <a class="btn btn-success" href="@Url.Action("Create", "BlockCompany", new { Company = jobItem.Company })">封鎖公司</a>
+                                                <select id="@seletor_id" onchange="CheckBeforeBlock('@seletor_id', '@jobItem.Company', '@jobItem.Code')" style="width:90px; height:36px;">
+                                                    <option>封鎖公司</option>
+                                                    <option>------請選擇理由------</option>
+                                                    @{
+                                                        foreach (var reason in Utility.BlockReason)
+                                                        {
+                                                            <option>@reason</option>
+                                                        }
+                                                    }
+                                                </select>
                                             </td>
                                         </tr>
                                     }

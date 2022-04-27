@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
@@ -25,7 +27,16 @@ namespace JobFilter2.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.BlockCompanies.OrderByDescending(c => c.Id).ToListAsync());
+            try
+            {
+                var data = await _context.BlockCompanies.OrderByDescending(c => c.Id).ToListAsync();
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Content("<h2>資料庫忙碌中，請稍後再試</h2>", "text/html", Encoding.UTF8);
+            }
         }
 
         public IActionResult Create(string Company = null)
@@ -35,121 +46,145 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormCollection PostData)
+        public async Task<string> Create(IFormCollection PostData)
         {
-            // 取出各欄位的值
-            string company = PostData["companyName"].ToString() ?? null;
-            string blockReason = PostData["blockReason"].ToString() ?? null;
-
-            // 檢查長度
-            if(company.Length > 100)
+            try
             {
-                TempData["message"] = "新增失敗，公司名稱超過長度限制";
-                return RedirectToRoute(new { controller = "CrawlSetting", action = "JobItems" });
+                // 取出各欄位的值
+                string company = PostData["companyName"].ToString() ?? null;
+                string blockReason = PostData["blockReason"].ToString() ?? null;
+
+                // 檢查長度
+                if (company.Length > 100)
+                {
+                    return "封鎖失敗，公司名稱過長!";
+                }
+
+                // 新增封鎖工作
+                BlockCompany blockCompany = new BlockCompany
+                {
+                    CompanyName = company,
+                    BlockReason = blockReason,
+                };
+
+                _context.Add(blockCompany);
+                await _context.SaveChangesAsync();
+
+                // 刷新SESSION儲存的工作項目
+                string jobItemsStr = HttpContext.Session.GetString("jobItems");
+                if (jobItemsStr != null)
+                {
+                    List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
+                    jobItems = crawlService.GetUpdateList(jobItems, company, blockType: "company");
+                    HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
+                }
+
+                return "封鎖成功";
             }
-
-            // 新增封鎖工作
-            BlockCompany blockCompany = new BlockCompany
+            catch(Exception ex)
             {
-                CompanyName = company,
-                BlockReason = blockReason,
-            };
-
-            _context.Add(blockCompany);
-            await _context.SaveChangesAsync();
-            TempData["message"] = "新增成功";
-
-            // 刷新SESSION儲存的工作項目
-            string jobItemsStr = HttpContext.Session.GetString("jobItems");
-            if (jobItemsStr != null)
-            {
-                List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
-                jobItems = crawlService.GetUpdateList(jobItems, company, blockType:"company");
-                HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
-                return RedirectToRoute(new { controller = "CrawlSetting", action = "JobItems" }); // 返回過濾結果
+                _logger.LogError(ex.ToString());
+                return "封鎖失敗";
             }
-
-            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            #region 檢查此筆資料是否存在，若不存在則跳轉到錯誤頁面
-
-            if (id == null)
+            try
             {
-                return NotFound();
+                #region 檢查此筆資料是否存在，若不存在則跳轉到錯誤頁面
+
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
+
+                if (blockCompany == null)
+                {
+                    return NotFound();
+                }
+
+                #endregion
+                return View(blockCompany);
             }
-
-            var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
-
-            if (blockCompany == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex.ToString());
+                return Content("<h2>資料庫忙碌中，請稍後再試</h2>", "text/html", Encoding.UTF8);
             }
-
-            #endregion
-
-            return View(blockCompany);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(IFormCollection PostData)
         {
-            // 取出各欄位的值
-            int id = int.Parse(PostData["Id"].ToString());
-            string companyName = PostData["companyName"].ToString() ?? null;
-            string blockReason = PostData["blockReason"].ToString() ?? null;
-
-            // 檢查長度
-            if (companyName.Length > 100)
+            try
             {
-                TempData["message"] = "修改失敗，公司名稱超過長度限制";
-                return RedirectToAction("Edit", new { id });
-            }
+                // 取出各欄位的值
+                int id = int.Parse(PostData["Id"].ToString());
+                string companyName = PostData["companyName"].ToString() ?? null;
+                string blockReason = PostData["blockReason"].ToString() ?? null;
 
-            // 取得該筆資料
-            var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
-            if (blockCompany == null)
+                // 檢查長度
+                if (companyName.Length > 100)
+                {
+                    TempData["message"] = "修改失敗，公司名稱超過長度限制";
+                    return RedirectToAction("Edit", new { id });
+                }
+
+                // 取得該筆資料
+                var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
+                if (blockCompany == null)
+                {
+                    return NotFound();
+                }
+
+                // 修改該筆資料
+                blockCompany.CompanyName = companyName;
+                blockCompany.BlockReason = blockReason;
+                await _context.SaveChangesAsync();
+
+                TempData["message"] = "修改成功";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex.ToString());
+                return Content("<h2>資料庫忙碌中，請稍後再試</h2>", "text/html", Encoding.UTF8);
             }
-
-            // 修改該筆資料
-            blockCompany.CompanyName = companyName;
-            blockCompany.BlockReason = blockReason;
-            await _context.SaveChangesAsync();
-
-            TempData["message"] = "修改成功";
-            return RedirectToAction("Index");
         }
 
         [HttpPost]
         public async Task<string> Delete(int? id)
         {
-            #region 檢查此筆資料是否存在
-
-            if (id == null)
+            try
             {
-                return "刪除失敗，查無這筆資料!";
+                #region 檢查此筆資料是否存在
+
+                if (id == null)
+                {
+                    return "刪除失敗，查無這筆資料!";
+                }
+
+                var blockCompany = await _context.BlockCompanies.FindAsync(id);
+
+                if (blockCompany == null)
+                {
+                    return "刪除失敗，查無這筆資料!";
+                }
+
+                #endregion
+                _context.Remove(blockCompany);
+                await _context.SaveChangesAsync();
+                return "刪除成功";
             }
-
-            var blockCompany = await _context.BlockCompanies.FindAsync(id);
-
-            if (blockCompany == null)
+            catch (Exception ex)
             {
-                return "刪除失敗，查無這筆資料!";
+                _logger.LogError(ex.ToString());
+                return "資料庫忙碌中，請稍後再試";
             }
-
-            #endregion
-
-            // 更新DB
-            _context.Remove(blockCompany);
-            await _context.SaveChangesAsync();
-
-            return "刪除成功";
         }
     }
 }
