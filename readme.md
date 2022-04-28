@@ -4,7 +4,7 @@ https://github.com/Jacky20200711/JobFilter
 &emsp;  
 # 改版重點  
 1.修改操作介面  
-2.簡化操作流程  
+2.簡化操作流程(使用AJAX來避免跳頁)  
 3.去除排除關鍵字的功能(改用封鎖工作的功能來取代)  
 4.將資料庫規劃從 Code-First 換成 DB-First  
 &emsp;  
@@ -57,15 +57,9 @@ create table CrawlSetting
 # 爬蟲列表  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_02.PNG?raw=true)  
 &emsp;  
-# 執行爬蟲之後，呈現過濾後的工作列表  
+# 點選[爬取工作]之後，會呈現過濾後的工作列表  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_03.PNG?raw=true)  
 &emsp;  
-# 點選職位名稱，會開啟該職缺的詳細頁面  
+# 點選職位名稱的超連結，會開啟該職缺的104頁面  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_04.PNG?raw=true)  
 &emsp;  
-# 點選公司名稱，會自動到天眼通查詢評論  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_05.PNG?raw=true)  
-&emsp;  
-# 點選公司地址，會開啟 Google 地圖  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_06.PNG?raw=true)  
-&emsp; 
