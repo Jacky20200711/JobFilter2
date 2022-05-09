@@ -3,11 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AngleSharp.Dom;
+using System.Threading.Tasks;
+using NLog;
+using System;
+using AngleSharp;
 
 namespace JobFilter2.Services
 {
     public class CrawlService
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+        public async Task LoadPage(Crawler crawler, CrawlSetting crawlSetting, int currentPage = 1)
+        {
+            int seniority = crawlSetting.Seniority switch
+            {
+                "1年以下" => 1,
+                "1~3年" => 3,
+                "3~5年" => 5,
+                _ => 1,
+            };
+
+            string targetUrl = crawlSetting.TargetUrl + $"&scmin={crawlSetting.MinSalary}&page={currentPage}&jobexp={seniority}";
+
+            try
+            {
+                // 設定逾時
+                crawler.httpClient.Timeout = TimeSpan.FromSeconds(15);
+
+                // 送出請求
+                var responseMessage = await crawler.httpClient.GetAsync(targetUrl);
+
+                // 查看結果
+                if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    // 取得頁面內容
+                    string pageContent = responseMessage.Content.ReadAsStringAsync().Result;
+
+                    // 將頁面內容轉成 domTree 的形式
+                    var config = Configuration.Default;
+                    var context = BrowsingContext.New(config);
+                    crawler.domTree = await context.OpenAsync(res => res.Content(pageContent));
+                }
+                else
+                {
+                    _logger.Error($"錯誤代碼 = {(int)responseMessage.StatusCode} & currentPage = {currentPage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.ToString());
+            }
+            finally
+            {
+                /* 這個變數用來判斷爬蟲是否已經完成工作，
+                 * 所以不論爬蟲執行成功、失敗、或是中途出錯，最後都必須令這個值為 true */
+
+                crawler.isMissionCompleted = true;
+            }
+        }
+
         private void GetTargetJobs(IDocument document, List<JobItem> jobItems)
         {
             if (document == null) return;
@@ -46,14 +101,14 @@ namespace JobFilter2.Services
 
         private void GetTargetPages(List<Crawler> crawlers, CrawlSetting crawlSetting)
         {
-            // 固定爬取的分頁數量
-            for(int i = 1; i <= 15; i++)
+            // 爬取指定的分頁數量
+            for (int i = 1; i <= 15; i++)
             {
                 crawlers.Add(new Crawler());
-                _ = crawlers.Last().LoadPage(crawlSetting, i);
+                _ =  LoadPage(crawlers[^1], crawlSetting, i);
             }
 
-            // 等待爬蟲結束任務
+            // 等待所有爬蟲結束任務
             while (crawlers.Any(c => !c.isMissionCompleted))
             {
                 Thread.Sleep(200);
