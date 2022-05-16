@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NLog;
 using System;
 using AngleSharp;
+using JobFilter2.Models.Entities;
 
 namespace JobFilter2.Services
 {

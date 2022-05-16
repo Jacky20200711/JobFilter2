@@ -1,4 +1,5 @@
 ﻿using JobFilter2.Models;
+using JobFilter2.Models.Entities;
 using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -157,7 +158,7 @@ namespace JobFilter2.Controllers
 
             if(jobItems.Count == 0)
             {
-                TempData["message"] = "搜尋失敗，請檢查104網站是否運作正常，或者嘗試調整爬蟲的設定";
+                TempData["message"] = "搜尋失敗，請檢查104網站是否運作正常，或者調整爬蟲的設定!";
                 return RedirectToRoute( new { controller = "Home", action = "Index" });
             }
 

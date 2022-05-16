@@ -1,4 +1,5 @@
 ﻿using JobFilter2.Models;
+using JobFilter2.Models.Entities;
 using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

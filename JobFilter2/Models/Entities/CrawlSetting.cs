@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace JobFilter2.Models
+namespace JobFilter2.Models.Entities
 {
     public partial class CrawlSetting
     {

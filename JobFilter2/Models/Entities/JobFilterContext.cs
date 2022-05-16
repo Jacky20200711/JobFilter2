@@ -1,4 +1,5 @@
 ﻿using System;
+using JobFilter2.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
