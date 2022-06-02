@@ -23,9 +23,14 @@
                 data: { id: idOfData }
             })
             .done(function (message) {
-                alert(message);
                 if (message == "刪除成功") {
-                    self.location.reload();
+                    document.getElementById("delete_" + idOfData).disabled = true;
+                    // 令修改按鈕連帶失效、淡出
+                    document.getElementById("edit_" + idOfData).style.pointerEvents = "none";
+                    document.getElementById("edit_" + idOfData).style.opacity = "0.5";
+                }
+                else{
+                    alert("資料庫異常，請聯絡相關人員!");
                 }
             });
         }
@@ -67,8 +72,8 @@
                                                 <td>@blockCompany.CompanyName</td>
                                                 <td>@blockCompany.BlockReason</td>
                                                 <td class="center-block">
-                                                    <button class="btn btn-success" onclick="location.href='@Url.Action("Edit", "BlockCompany", new { id = blockCompany.Id })'">修改</button>
-                                                    <button class="btn btn-danger" onclick="DeleteData(@blockCompany.Id)">刪除</button>
+                                                    <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="location.href='@Url.Action("Edit", "BlockCompany", new { id = blockCompany.Id })'">修改</button>
+                                                    <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id)">刪除</button>
                                                 </td>
                                             </tr>
                                         }
