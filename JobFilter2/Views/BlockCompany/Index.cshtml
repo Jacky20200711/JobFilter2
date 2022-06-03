@@ -1,4 +1,5 @@
 ﻿@model List<JobFilter2.Models.Entities.BlockCompany>
+@using JobFilter2.Services
 
 <script>
     // 這個函數用來將 Entity Code 轉回中文
@@ -28,6 +29,38 @@
                     // 令修改按鈕連帶失效、淡出
                     document.getElementById("edit_" + idOfData).style.pointerEvents = "none";
                     document.getElementById("edit_" + idOfData).style.opacity = "0.5";
+                }
+                else{
+                    alert("資料庫異常，請聯絡相關人員!");
+                }
+            });
+        }
+    }
+</script>
+
+<script>
+    function EditBlockReason(data_id) {
+        let selector_id = "edit_" + data_id;
+        let reason_id = "reason_" + data_id;
+        // 取得選擇的理由
+        let new_reason = document.getElementById(selector_id).value;
+        // 令 selector 保持顯示這幾個字
+        document.getElementById(selector_id).value = "修改理由";
+        // 若沒有選擇理由則返回
+        if(new_reason == "修改理由" || new_reason == "------請選擇理由------"){
+            return;
+        }
+        var result = confirm("確定要修改?");
+        if (result) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Edit", "BlockCompany")',
+                data: { id: data_id, new_reason: new_reason }
+            })
+            .done(function (message) {
+                if (message == "修改成功") {
+                    // 修改頁面顯示的封鎖理由
+                    document.getElementById(reason_id).innerText = new_reason;
                 }
                 else{
                     alert("資料庫異常，請聯絡相關人員!");
@@ -67,28 +100,32 @@
                                         foreach (var blockCompany in Model)
                                         {
                                             sequence++;
-                                            <tr class="gradeA">
-                                                <td style="display:none;">@sequence</td>
-                                                <td>@blockCompany.CompanyName</td>
-                                                <td>@blockCompany.BlockReason</td>
-                                                <td class="center-block">
-                                                    <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="location.href='@Url.Action("Edit", "BlockCompany", new { id = blockCompany.Id })'">修改</button>
-                                                    <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id)">刪除</button>
-                                                </td>
-                                            </tr>
+                                                <tr class="gradeA">
+                                                    <td style="display:none;">@sequence</td>
+                                                    <td>@blockCompany.CompanyName</td>
+                                                    <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
+                                                    <td class="center-block">
+                                                        <select id="edit_@blockCompany.Id" onchange="EditBlockReason(@blockCompany.Id)" style="width:90px; height:36px;">
+                                                            <option>修改理由</option>
+                                                            <option>------請選擇理由------</option>
+                                                            @{
+                                                            foreach (var reason in Utility.BlockReason)
+                                                            {
+                                                                        <option>@reason</option>
+                                                            }
+                                                            }
+                                                        </select>
+                                                        <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id)">刪除</button>
+                                                    </td>
+                                                </tr>
                                         }
                                     }
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel -->
             </div>
-            <!-- /.col-lg-12 -->
         </div>
     </div>
-    <!-- /.container-fluid -->
 </div>
-<!-- /#page-wrapper -->

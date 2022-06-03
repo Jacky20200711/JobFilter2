@@ -89,71 +89,42 @@ namespace JobFilter2.Controllers
             }
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        [HttpPost]
+        public async Task<string> Edit(int? id, string new_reason)
         {
             try
             {
-                #region 檢查此筆資料是否存在，若不存在則跳轉到錯誤頁面
+                #region 檢查此筆資料是否存在
 
                 if (id == null)
                 {
-                    return NotFound();
+                    return "id異常!";
                 }
 
-                var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
+                var data = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
 
-                if (blockCompany == null)
+                if (data == null)
                 {
-                    return NotFound();
+                    return "資料不存在!";
                 }
 
                 #endregion
-                return View(blockCompany);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.ToString());
-                return Content("<h2>資料庫異常，請聯絡相關人員!</h2>", "text/html", Encoding.UTF8);
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(IFormCollection PostData)
-        {
-            try
-            {
-                // 取出各欄位的值
-                int id = int.Parse(PostData["Id"].ToString());
-                string companyName = PostData["companyName"].ToString() ?? null;
-                string blockReason = PostData["blockReason"].ToString() ?? null;
 
                 // 檢查長度
-                if (companyName.Length > 100)
+                if (new_reason.Length > 20)
                 {
-                    TempData["message"] = "修改失敗，公司名稱超過長度限制";
-                    return RedirectToAction("Edit", new { id });
-                }
-
-                // 取得該筆資料
-                var blockCompany = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
-                if (blockCompany == null)
-                {
-                    return NotFound();
+                    return "修改失敗，封鎖理由的長度異常!";
                 }
 
                 // 修改該筆資料
-                blockCompany.CompanyName = companyName;
-                blockCompany.BlockReason = blockReason;
+                data.BlockReason = new_reason;
                 await _context.SaveChangesAsync();
-
-                TempData["message"] = "修改成功";
-                return RedirectToAction("Index");
+                return "修改成功";
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return Content("<h2>資料庫異常，請聯絡相關人員!</h2>", "text/html", Encoding.UTF8);
+                return "資料庫異常，請聯絡相關人員!";
             }
         }
 
