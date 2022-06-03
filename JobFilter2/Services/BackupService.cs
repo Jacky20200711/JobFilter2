@@ -2,6 +2,8 @@
 using CsvHelper.Configuration;
 using JobFilter2.Models;
 using JobFilter2.Models.Entities;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -104,25 +106,36 @@ namespace JobFilter2.Services
                 csvReader3.Context.RegisterClassMap<BlockCompanyMap>();
                 var DataList3 = csvReader3.GetRecords<BlockCompany>().ToList();
 
-                // 匯入DB
-                using var transaction = _context.Database.BeginTransaction();
+                // 整理資料內容，等等會用 SQL 做多筆的資料匯入
+                List<string> insert_CrawlSetting = new List<string>();
+                List<string> insert_BlockJobItem = new List<string>();
+                List<string> insert_BlockCompany = new List<string>();
                 foreach (var data in DataList1)
                 {
-                    _context.Add(data);
-                    _context.SaveChanges();
+                    // 對可能會出現單、雙引號的欄位做字元過濾
+                    string targetUrl = data.TargetUrl.Replace("\'", "").Replace("\"","");
+                    string seniority = data.Seniority.Replace("\'", "").Replace("\"", "");
+                    string remark = data.Remark.Replace("\'", "").Replace("\"", "");
+                    insert_CrawlSetting.Add($"(\'{targetUrl}\',\'{data.MinSalary}\',\'{seniority}\',\'{remark}\')");
                 }
+
                 foreach (var data in DataList2)
                 {
-                    _context.Add(data);
-                    _context.SaveChanges();
+                    insert_BlockJobItem.Add($"(\'{data.JobCode}\')");
                 }
+
                 foreach (var data in DataList3)
                 {
-                    _context.Add(data);
-                    _context.SaveChanges();
+                    // 對可能會出現單、雙引號的欄位做字元過濾
+                    string company_name = data.CompanyName.Replace("\'", "").Replace("\"", "");
+                    string block_reason = data.BlockReason.Replace("\'", "").Replace("\"", "");
+                    insert_BlockCompany.Add($"(\'{company_name}\',\'{block_reason}\')");
                 }
-                _context.SaveChanges();
-                transaction.Commit();
+
+                // 多筆資料匯入
+                _context.Database.ExecuteSqlRaw($"INSERT INTO CrawlSetting VALUES {string.Join(",", insert_CrawlSetting)}");
+                _context.Database.ExecuteSqlRaw($"INSERT INTO BlockJobItem VALUES {string.Join(",", insert_BlockJobItem)}");
+                _context.Database.ExecuteSqlRaw($"INSERT INTO BlockCompany VALUES {string.Join(",", insert_BlockCompany)}");
             }
             catch (Exception)
             {
