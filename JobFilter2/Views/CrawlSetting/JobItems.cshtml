@@ -47,11 +47,11 @@
 </script>
 
 <script>
-    function CheckBeforeBlock(seletor_id, companyName, jobCode) {
+    function CheckBeforeBlock(selector_id, companyName, jobCode) {
         // 取得封鎖理由
-        let blockReason = document.getElementById(seletor_id).value;
+        let blockReason = document.getElementById(selector_id).value;
         // 令 selector 保持顯示這幾個字
-        document.getElementById(seletor_id).value = "封鎖公司";
+        document.getElementById(selector_id).value = "封鎖公司";
         // 若沒有選擇理由則返回
         if(blockReason == "封鎖公司" || blockReason == "------請選擇理由------"){
             return;
@@ -65,7 +65,7 @@
             })
             .done(function (message) {
                 if (message == "封鎖成功") {
-                    document.getElementById(seletor_id).disabled = true;
+                    document.getElementById(selector_id).disabled = true;
                     // 令封鎖工作的按鈕連帶失效、淡出
                     document.getElementById(jobCode).style.pointerEvents = "none";
                     document.getElementById(jobCode).style.opacity = "0.5";
@@ -106,7 +106,7 @@
                                 <tbody>
                                     @foreach (var jobItem in jobItems)
                                     {
-                                        string seletor_id = Guid.NewGuid().ToString();
+                                        string selector_id = Guid.NewGuid().ToString();
                                         <tr class="gradeA">
                                             <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
                                             <td>@jobItem.Salary</td>
@@ -114,7 +114,7 @@
                                             <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
                                             <td class="center-block" style="white-space: nowrap;">
                                                 <a class="btn btn-primary" id="@jobItem.Code" onclick="DeleteData('@jobItem.Code')">封鎖工作</a>
-                                                <select id="@seletor_id" onchange="CheckBeforeBlock('@seletor_id', '@jobItem.Company', '@jobItem.Code')" style="width:90px; height:36px;">
+                                                <select id="@selector_id" onchange="CheckBeforeBlock('@selector_id', '@jobItem.Company', '@jobItem.Code')" style="width:90px; height:36px;">
                                                     <option>封鎖公司</option>
                                                     <option>------請選擇理由------</option>
                                                     @{
