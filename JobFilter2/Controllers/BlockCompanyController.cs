@@ -36,7 +36,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return Content("<h2>資料庫異常，請聯絡相關人員!</h2>", "text/html", Encoding.UTF8);
+                return Content("<h2>操作失敗，資料庫異常!</h2>", "text/html", Encoding.UTF8);
             }
         }
 
@@ -124,7 +124,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return "資料庫異常，請聯絡相關人員!";
+                return "操作失敗，資料庫異常!";
             }
         }
 
@@ -155,7 +155,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return "資料庫異常，請聯絡相關人員!";
+                return "操作失敗，資料庫異常!";
             }
         }
     }

@@ -11,12 +11,10 @@ namespace JobFilter2.Controllers
     {
         private readonly JobFilterContext _context;
         private readonly BackupService backupService = new BackupService();
-        private readonly ILogger<BackupController> _logger;
 
-        public BackupController(JobFilterContext context, ILogger<BackupController> logger)
+        public BackupController(JobFilterContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         public IActionResult Export()
@@ -39,10 +37,8 @@ namespace JobFilter2.Controllers
             }
 
             // 讀取DB並將資料匯出到目標資料夾
-            backupService.Export(_context, exportPath);
-
-            // 完成後返回首頁
-            TempData["message"] = "匯出成功";
+            bool isExportSuccess = backupService.Export(_context, exportPath);
+            TempData["message"] = isExportSuccess ? "匯出成功" : "操作失敗，資料庫異常!";
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
@@ -66,10 +62,8 @@ namespace JobFilter2.Controllers
             }
 
             // 讀取CSV檔案並將資料匯入到DB
-            backupService.Import(_context, importPath);
-
-            // 完成後返回首頁
-            TempData["message"] = "匯入成功";
+            bool isImportSuccess = backupService.Import(_context, importPath);
+            TempData["message"] = isImportSuccess ? "匯入成功" : "操作失敗，資料庫異常!";
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
     }

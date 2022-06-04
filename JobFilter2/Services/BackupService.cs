@@ -2,8 +2,8 @@
 using CsvHelper.Configuration;
 using JobFilter2.Models;
 using JobFilter2.Models.Entities;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,6 +15,8 @@ namespace JobFilter2.Services
 {
     public class BackupService
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         #region 令匯入的時候忽略Id屬性
 
         // 讀取的時候忽略ID屬性
@@ -48,7 +50,7 @@ namespace JobFilter2.Services
 
         #endregion
 
-        public void Export(JobFilterContext _context, string exportPath)
+        public bool Export(JobFilterContext _context, string exportPath)
         {
             try
             {
@@ -74,13 +76,16 @@ namespace JobFilter2.Services
                 using var writer3 = new StreamWriter("BlockCompanies.csv", false, Encoding.UTF8);
                 using var csvWriter3 = new CsvWriter(writer3, CultureInfo.InvariantCulture);
                 csvWriter3.WriteRecords(DataList3);
+                return true;
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                _logger.Error($"匯出失敗，資料庫異常\n{ex}");
+                return false;
             }
         }
 
-        public void Import(JobFilterContext _context, string importPath)
+        public bool Import(JobFilterContext _context, string importPath)
         {
             try
             {
@@ -136,9 +141,12 @@ namespace JobFilter2.Services
                 _context.Database.ExecuteSqlRaw($"INSERT INTO CrawlSetting VALUES {string.Join(",", insert_CrawlSetting)}");
                 _context.Database.ExecuteSqlRaw($"INSERT INTO BlockJobItem VALUES {string.Join(",", insert_BlockJobItem)}");
                 _context.Database.ExecuteSqlRaw($"INSERT INTO BlockCompany VALUES {string.Join(",", insert_BlockCompany)}");
+                return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.Error($"匯入失敗，資料庫異常\n{ex}");
+                return false;
             }
         }
     }
