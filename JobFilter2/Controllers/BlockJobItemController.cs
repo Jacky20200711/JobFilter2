@@ -3,11 +3,9 @@ using JobFilter2.Models.Entities;
 using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
@@ -36,6 +34,7 @@ namespace JobFilter2.Controllers
                 JobCode = jobCode,
             };
 
+            // 更新DB
             _context.Add(blockJobItem);
             await _context.SaveChangesAsync();
 
