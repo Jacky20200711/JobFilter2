@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
@@ -26,7 +27,8 @@ namespace JobFilter2.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CrawlSettings.ToListAsync());
+            var data = await _context.CrawlSettings.ToListAsync();
+            return View(data);
         }
 
         public IActionResult Create()
@@ -61,18 +63,18 @@ namespace JobFilter2.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            #region 檢查此筆資料是否存在，若不存在則跳轉到錯誤頁面
+            #region 檢查此筆資料是否存在
 
             if (id == null)
             {
-                return NotFound();
+                return Content("<h2>資料id錯誤!</h2>", "text/html", Encoding.UTF8);
             }
 
             var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
 
             if (crawlSetting == null)
             {
-                return NotFound();
+                return Content("<h2>資料不存在!</h2>", "text/html", Encoding.UTF8);
             }
 
             #endregion
@@ -84,7 +86,7 @@ namespace JobFilter2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(IFormCollection PostData)
         {
-            // 取出各欄位的值
+            // 提取欄位內容
             int id = int.Parse(PostData["Id"].ToString());
             int minSalary = int.Parse(PostData["minSalary"].ToString());
             string remark = PostData["remark"].ToString() ?? null;
@@ -95,7 +97,7 @@ namespace JobFilter2.Controllers
             var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
             if (crawlSetting == null)
             {
-                return NotFound();
+                return Content("<h2>資料不存在!</h2>", "text/html", Encoding.UTF8);
             }
 
             // 修改該筆資料
@@ -128,7 +130,7 @@ namespace JobFilter2.Controllers
 
             #endregion
 
-            // 更新DB
+            // 刪除資料並更新DB
             _context.Remove(crawlSetting);
             await _context.SaveChangesAsync();
 
@@ -141,14 +143,14 @@ namespace JobFilter2.Controllers
 
             if (id == null)
             {
-                return NotFound();
+                return Content("<h2>資料id錯誤!</h2>", "text/html", Encoding.UTF8);
             }
 
             var crawlSetting = _context.CrawlSettings.FirstOrDefault(u => u.Id == id);
 
             if (crawlSetting == null)
             {
-                return NotFound();
+                return Content("<h2>資料不存在!</h2>", "text/html", Encoding.UTF8);
             }
 
             #endregion
@@ -158,11 +160,11 @@ namespace JobFilter2.Controllers
 
             if(jobItems.Count == 0)
             {
-                TempData["message"] = "搜尋失敗，請檢查104網站是否運作正常，或者調整爬蟲的設定!";
+                TempData["message"] = "請檢查104網站是否運作正常，或是調整爬蟲的設定!";
                 return RedirectToRoute( new { controller = "Home", action = "Index" });
             }
 
-            // 檢查DB的黑名單，過濾掉封鎖的項目
+            // 根據DB的黑名單，剔除不想看到的工作
             jobItems = crawlService.GetUnblockedItems(_context, jobItems);
             HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
 
