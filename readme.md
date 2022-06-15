@@ -4,9 +4,9 @@ https://github.com/Jacky20200711/JobFilter
 &emsp;  
 # 改版重點  
 1.修改操作介面  
-2.簡化操作流程(使用AJAX來避免跳頁)  
+2.簡化操作流程(將部分的操作改用Ajax來避免跳頁)  
 3.去除排除關鍵字的功能(改用封鎖工作的功能來取代)  
-4.將資料庫規劃從 Code-First 換成 DB-First  
+4.改用 DB-First 規劃資料庫  
 &emsp;  
 # 使用技術  
 1.使用 HttpClient 爬取網頁  
