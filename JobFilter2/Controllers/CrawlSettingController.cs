@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -114,27 +115,33 @@ namespace JobFilter2.Controllers
         [HttpPost]
         public async Task<string> Delete(int? id)
         {
-            #region 檢查此筆資料是否存在
-
-            if (id == null)
+            try
             {
-                return "刪除失敗，查無這筆資料!";
+                #region 檢查此筆資料是否存在
+
+                if (id == null)
+                {
+                    return "操作失敗";
+                }
+
+                var crawlSetting = await _context.CrawlSettings.FindAsync(id);
+
+                if (crawlSetting == null)
+                {
+                    return "操作失敗";
+                }
+
+                #endregion
+                _context.Remove(crawlSetting);
+                await _context.SaveChangesAsync();
+                TempData["message"] = "刪除成功";
+                return "刪除成功";
             }
-
-            var crawlSetting = await _context.CrawlSettings.FindAsync(id);
-
-            if (crawlSetting == null)
+            catch (Exception)
             {
-                return "刪除失敗，查無這筆資料!";
+                TempData["message"] = "刪除失敗";
+                return "刪除失敗";
             }
-
-            #endregion
-
-            // 刪除資料並更新DB
-            _context.Remove(crawlSetting);
-            await _context.SaveChangesAsync();
-
-            return "刪除成功";
         }
 
         public IActionResult DoCrawl(int? id)
@@ -161,7 +168,7 @@ namespace JobFilter2.Controllers
             if(jobItems.Count == 0)
             {
                 TempData["message"] = "操作失敗";
-                return RedirectToRoute( new { controller = "Home", action = "Index" });
+                return RedirectToAction("Index");
             }
 
             // 根據DB的黑名單，剔除不想看到的工作

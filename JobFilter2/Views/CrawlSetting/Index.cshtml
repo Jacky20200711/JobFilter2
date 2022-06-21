@@ -40,7 +40,6 @@
                     data: { id: idOfData }
                 })
                 .done(function (message) {
-                    Swal.fire(message);
                     if (message == "刪除成功") {
                         self.location.reload();
                     }
