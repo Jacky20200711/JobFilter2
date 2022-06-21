@@ -20,29 +20,55 @@
     }
     var serverMessage = decodeEntities('@TempData["message"]');
     if (serverMessage.length > 0) {
-        alert(serverMessage);
+        Swal.fire({
+            title : serverMessage,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        });
     }
 </script>
 
 <script>
     function DeleteData(jobCode) {
-        var result = confirm("確定要封鎖這筆工作?");
-        if (result) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Create", "BlockJobItem")',
-                data: { jobCode: jobCode }
-            })
-            .done(function (message) {
-                if (message == "封鎖成功") {
-                    document.getElementById(jobCode).style.pointerEvents = "none";
-                    document.getElementById(jobCode).style.opacity = "0.5";
-                }
-                else{
-                    alert("操作失敗，資料庫異常!");
-                }
-            });
-        }
+        Swal.fire({
+            title: "確定要封鎖?",
+            showCancelButton: true,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create", "BlockJobItem")',
+                    data: { jobCode: jobCode }
+                })
+                .done(function (message) {
+                    if (message == "封鎖成功") {
+                        document.getElementById(jobCode).style.pointerEvents = "none";
+                        document.getElementById(jobCode).style.opacity = "0.5";
+                    }
+                    else{
+                        Swal.fire({
+                            title : "操作失敗",
+                            customClass: {
+                                title: 'swal-title-font-size',
+                                closeButton: 'swal-button-font-size',
+                                confirmButton: 'swal-button-font-size',
+                                cancelButton: 'swal-button-font-size'
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 </script>
 
@@ -56,25 +82,43 @@
         if(blockReason == "封鎖公司" || blockReason == "------請選擇理由------"){
             return;
         }
-        var result = confirm("封鎖公司 : " + companyName + "\n" + "封鎖理由 : " + blockReason + "\n" + "確定要封鎖這間公司?");
-        if (result) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Create", "BlockCompany")',
-                data: { companyName: companyName, blockReason: blockReason }
-            })
-            .done(function (message) {
-                if (message == "封鎖成功") {
-                    document.getElementById(selector_id).disabled = true;
-                    // 令封鎖工作的按鈕連帶失效、淡出
-                    document.getElementById(jobCode).style.pointerEvents = "none";
-                    document.getElementById(jobCode).style.opacity = "0.5";
-                }
-                else{
-                    alert("操作失敗，資料庫異常!");
-                }
-            });
-        }
+        Swal.fire({
+            title: "確定要封鎖?",
+            showCancelButton: true,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create", "BlockCompany")',
+                    data: { companyName: companyName, blockReason: blockReason }
+                })
+                .done(function (message) {
+                    if (message == "封鎖成功") {
+                        document.getElementById(selector_id).disabled = true;
+                        // 令封鎖工作的按鈕連帶失效、淡出
+                        document.getElementById(jobCode).style.pointerEvents = "none";
+                        document.getElementById(jobCode).style.opacity = "0.5";
+                    }
+                    else{
+                        Swal.fire({
+                            title : "操作失敗",
+                            customClass: {
+                                title: 'swal-title-font-size',
+                                closeButton: 'swal-button-font-size',
+                                confirmButton: 'swal-button-font-size',
+                                cancelButton: 'swal-button-font-size'
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 </script>
 

@@ -7,7 +7,15 @@
     }
     var serverMessage = decodeEntities('@TempData["message"]');
     if (serverMessage.length > 0) {
-        alert(serverMessage);
+        Swal.fire({
+            title : serverMessage,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        });
     }
 </script>
 

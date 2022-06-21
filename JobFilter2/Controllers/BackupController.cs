@@ -32,13 +32,13 @@ namespace JobFilter2.Controllers
             // 檢查此資料夾路徑是否存在
             if (!Directory.Exists(exportPath))
             {
-                TempData["message"] = "匯出失敗，此資料夾路徑不存在!";
+                TempData["message"] = "操作失敗";
                 return View();
             }
 
             // 讀取DB並將資料匯出到目標資料夾
             bool isExportSuccess = backupService.Export(_context, exportPath);
-            TempData["message"] = isExportSuccess ? "匯出成功" : "操作失敗，資料庫異常!";
+            TempData["message"] = isExportSuccess ? "匯出成功" : "操作失敗";
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
@@ -57,13 +57,13 @@ namespace JobFilter2.Controllers
             // 檢查此資料夾路徑是否存在
             if (!Directory.Exists(importPath))
             {
-                TempData["message"] = "匯入失敗，此資料夾路徑不存在!";
+                TempData["message"] = "操作失敗";
                 return View();
             }
 
             // 讀取CSV檔案並將資料匯入到DB
             bool isImportSuccess = backupService.Import(_context, importPath);
-            TempData["message"] = isImportSuccess ? "匯入成功" : "操作失敗，資料庫異常!";
+            TempData["message"] = isImportSuccess ? "匯入成功" : "操作失敗";
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
     }

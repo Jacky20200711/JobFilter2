@@ -9,26 +9,44 @@
     }
     var serverMessage = decodeEntities('@TempData["message"]');
     if (serverMessage.length > 0) {
-        alert(serverMessage);
+        Swal.fire({
+            title : serverMessage,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        });
     }
 </script>
 
 <script>
     function DeleteData(idOfData) {
-        var result = confirm("確定要刪除這筆資料?");
-        if (result) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Delete", "CrawlSetting")',
-                data: { id: idOfData }
-            })
-            .done(function (message) {
-                alert(message);
-                if (message == "刪除成功") {
-                    self.location.reload();
-                }
-            });
-        }
+        Swal.fire({
+            title: "確定要刪除?",
+            showCancelButton: true,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "CrawlSetting")',
+                    data: { id: idOfData }
+                })
+                .done(function (message) {
+                    Swal.fire(message);
+                    if (message == "刪除成功") {
+                        self.location.reload();
+                    }
+                });
+            }
+        });
     }
 </script>
 

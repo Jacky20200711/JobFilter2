@@ -36,7 +36,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return Content("<h2>操作失敗，資料庫異常!</h2>", "text/html", Encoding.UTF8);
+                return Content("<h2>操作失敗</h2>", "text/html", Encoding.UTF8);
             }
         }
 
@@ -58,7 +58,7 @@ namespace JobFilter2.Controllers
                 // 檢查長度
                 if (company.Length > 100)
                 {
-                    return "封鎖失敗，公司名稱過長!";
+                    return "封鎖失敗";
                 }
 
                 // 新增封鎖工作
@@ -113,7 +113,7 @@ namespace JobFilter2.Controllers
                 // 檢查長度
                 if (new_reason.Length > 20)
                 {
-                    return "修改失敗，封鎖理由的長度異常!";
+                    return "修改失敗";
                 }
 
                 // 修改該筆資料
@@ -124,7 +124,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return "操作失敗，資料庫異常!";
+                return "操作失敗";
             }
         }
 
@@ -155,7 +155,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return "操作失敗，資料庫異常!";
+                return "操作失敗";
             }
         }
     }

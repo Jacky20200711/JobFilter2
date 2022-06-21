@@ -97,7 +97,7 @@ namespace JobFilter2.Controllers
             var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
             if (crawlSetting == null)
             {
-                return Content("<h2>資料不存在!</h2>", "text/html", Encoding.UTF8);
+                return Content("<h2>資料不存在</h2>", "text/html", Encoding.UTF8);
             }
 
             // 修改該筆資料
@@ -160,7 +160,7 @@ namespace JobFilter2.Controllers
 
             if(jobItems.Count == 0)
             {
-                TempData["message"] = "請檢查104網站是否運作正常，或是調整爬蟲的設定!";
+                TempData["message"] = "操作失敗";
                 return RedirectToRoute( new { controller = "Home", action = "Index" });
             }
 

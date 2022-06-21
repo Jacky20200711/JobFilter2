@@ -10,31 +10,57 @@
     }
     var serverMessage = decodeEntities('@TempData["message"]');
     if (serverMessage.length > 0) {
-        alert(serverMessage);
+        Swal.fire({
+            title : serverMessage,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        });
     }
 </script>
 
 <script>
     function DeleteData(idOfData) {
-        var result = confirm("確定要刪除這筆資料?");
-        if (result) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Delete", "BlockCompany")',
-                data: { id: idOfData }
-            })
-            .done(function (message) {
-                if (message == "刪除成功") {
-                    document.getElementById("delete_" + idOfData).disabled = true;
-                    // 令修改按鈕連帶失效、淡出
-                    document.getElementById("edit_" + idOfData).style.pointerEvents = "none";
-                    document.getElementById("edit_" + idOfData).style.opacity = "0.5";
-                }
-                else{
-                    alert("操作失敗，資料庫異常!");
-                }
-            });
-        }
+        Swal.fire({
+            title: "確定要刪除?",
+            showCancelButton: true,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Delete", "BlockCompany")',
+                    data: { id: idOfData }
+                })
+                .done(function (message) {
+                    if (message == "刪除成功") {
+                        document.getElementById("delete_" + idOfData).disabled = true;
+                        // 令修改按鈕連帶失效、淡出
+                        document.getElementById("edit_" + idOfData).style.pointerEvents = "none";
+                        document.getElementById("edit_" + idOfData).style.opacity = "0.5";
+                    }
+                    else{
+                        Swal.fire({
+                            title : "操作失敗",
+                            customClass: {
+                                title: 'swal-title-font-size',
+                                closeButton: 'swal-button-font-size',
+                                confirmButton: 'swal-button-font-size',
+                                cancelButton: 'swal-button-font-size'
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 </script>
 
@@ -50,23 +76,41 @@
         if(new_reason == "修改理由" || new_reason == "------請選擇理由------"){
             return;
         }
-        var result = confirm("確定要修改?");
-        if (result) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Edit", "BlockCompany")',
-                data: { id: data_id, new_reason: new_reason }
-            })
-            .done(function (message) {
-                if (message == "修改成功") {
-                    // 修改頁面顯示的封鎖理由
-                    document.getElementById(reason_id).innerText = new_reason;
-                }
-                else{
-                    alert("操作失敗，資料庫異常!");
-                }
-            });
-        }
+        Swal.fire({
+            title: "確定要修改?",
+            showCancelButton: true,
+            customClass: {
+                title: 'swal-title-font-size',
+                closeButton: 'swal-button-font-size',
+                confirmButton: 'swal-button-font-size',
+                cancelButton: 'swal-button-font-size'
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Edit", "BlockCompany")',
+                    data: { id: data_id, new_reason: new_reason }
+                })
+                .done(function (message) {
+                    if (message == "修改成功") {
+                        // 修改頁面顯示的封鎖理由
+                        document.getElementById(reason_id).innerText = new_reason;
+                    }
+                    else{
+                        Swal.fire({
+                            title : "操作失敗",
+                            customClass: {
+                                title: 'swal-title-font-size',
+                                closeButton: 'swal-button-font-size',
+                                confirmButton: 'swal-button-font-size',
+                                cancelButton: 'swal-button-font-size'
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 </script>
 
