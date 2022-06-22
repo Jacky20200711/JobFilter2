@@ -65,28 +65,36 @@
 </script>
 
 <script>
-    function EditBlockReason(data_id) {
-        let selector_id = "edit_" + data_id;
-        let reason_id = "reason_" + data_id;
-        // 取得選擇的理由
-        let new_reason = document.getElementById(selector_id).value;
-        // 令 selector 保持顯示這幾個字
-        document.getElementById(selector_id).value = "修改理由";
-        // 若沒有選擇理由則返回
-        if(new_reason == "修改理由" || new_reason == "------請選擇理由------"){
-            return;
-        }
-        Swal.fire({
-            title: "確定要修改?",
-            showCancelButton: true,
-            customClass: {
-                title: 'swal-title-font-size',
-                closeButton: 'swal-button-font-size',
-                confirmButton: 'swal-button-font-size',
-                cancelButton: 'swal-button-font-size'
-            }
-        }).then(function(result) {
-            if (result.value) {
+    function EditBlockReason(data_id, reason_id) {
+        (async () => {
+            const { value: new_reason } = await Swal.fire({
+                title: '選擇封鎖理由',
+                input: 'select',
+                inputOptions: {
+                    '派遣或駐點': '派遣或駐點',
+                    '交通不方便': '交通不方便',
+                    '技能樹不符合': '技能樹不符合',
+                    '薪水太低': '薪水太低',
+                    '搜尋評論後失去興趣': '搜尋評論後失去興趣',
+                    '上班時間超過9小時': '上班時間超過9小時',
+                    '對招募流程不滿意': '對招募流程不滿意',
+                    '對這類產業沒有興趣': '對這類產業沒有興趣',
+                    '對職缺描述或福利不滿意': '對職缺描述或福利不滿意',
+                    '親自面過後失去興趣': '親自面過後失去興趣',
+                    '投遞履歷後沒有回應': '投遞履歷後沒有回應',
+                    '面試後無聲卡': '面試後無聲卡',
+                    '莫名被發感謝函': '莫名被發感謝函'
+                },
+                showCancelButton: true,
+                customClass: {
+                    title: 'swal-title-font-size',
+                    closeButton: 'swal-button-font-size',
+                    confirmButton: 'swal-button-font-size',
+                    cancelButton: 'swal-button-font-size',
+                    input: 'swal-selector'
+                },
+            })
+            if (new_reason) {
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("Edit", "BlockCompany")',
@@ -110,7 +118,8 @@
                     }
                 });
             }
-        });
+
+        })()
     }
 </script>
 
@@ -141,24 +150,15 @@
                                         foreach (var blockCompany in Model)
                                         {
                                             sequence++;
-                                            <tr class="gradeA">
-                                                <td style="display:none;">@sequence</td>
-                                                <td>@blockCompany.CompanyName</td>
-                                                <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
-                                                <td class="center-block">
-                                                    <select id="edit_@blockCompany.Id" onchange="EditBlockReason(@blockCompany.Id)" style="width:90px; height:36px;">
-                                                        <option>修改理由</option>
-                                                        <option>------請選擇理由------</option>
-                                                        @{
-                                                            foreach (var reason in Utility.BlockReason)
-                                                            {
-                                                                <option>@reason</option>
-                                                            }
-                                                        }
-                                                    </select>
-                                                    <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id)">刪除</button>
-                                                </td>
-                                            </tr>
+                                                        <tr class="gradeA">
+                                                            <td style="display:none;">@sequence</td>
+                                                            <td>@blockCompany.CompanyName</td>
+                                                            <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
+                                                            <td class="center-block">
+                                                                <button class="btn btn-success" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
+                                                                <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id)">刪除</button>
+                                                            </td>
+                                                        </tr>
                                         }
                                     }
                                 </tbody>
