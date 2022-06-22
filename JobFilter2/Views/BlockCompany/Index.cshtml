@@ -150,15 +150,15 @@
                                         foreach (var blockCompany in Model)
                                         {
                                             sequence++;
-                                                        <tr class="gradeA">
-                                                            <td style="display:none;">@sequence</td>
-                                                            <td>@blockCompany.CompanyName</td>
-                                                            <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
-                                                            <td class="center-block">
-                                                                <button class="btn btn-success" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
-                                                                <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id)">刪除</button>
-                                                            </td>
-                                                        </tr>
+                                            <tr class="gradeA">
+                                                <td style="display:none;">@sequence</td>
+                                                <td>@blockCompany.CompanyName</td>
+                                                <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
+                                                <td class="center-block">
+                                                    <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
+                                                    <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id)">刪除</button>
+                                                </td>
+                                            </tr>
                                         }
                                     }
                                 </tbody>
