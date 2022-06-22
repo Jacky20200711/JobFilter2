@@ -73,26 +73,36 @@
 </script>
 
 <script>
-    function CheckBeforeBlock(selector_id, companyName, jobCode) {
-        // 取得封鎖理由
-        let blockReason = document.getElementById(selector_id).value;
-        // 令 selector 保持顯示這幾個字
-        document.getElementById(selector_id).value = "封鎖公司";
-        // 若沒有選擇理由則返回
-        if(blockReason == "封鎖公司" || blockReason == "------請選擇理由------"){
-            return;
-        }
-        Swal.fire({
-            title: "確定要封鎖?",
-            showCancelButton: true,
-            customClass: {
-                title: 'swal-title-font-size',
-                closeButton: 'swal-button-font-size',
-                confirmButton: 'swal-button-font-size',
-                cancelButton: 'swal-button-font-size'
-            }
-        }).then(function(result) {
-            if (result.value) {
+    function BlockCompany(btn_blockCompany, companyName, btn_blockJob) {
+        (async () => {
+            const { value: blockReason } = await Swal.fire({
+                title: '選擇封鎖理由',
+                input: 'select',
+                inputOptions: {
+                    '派遣或駐點': '派遣或駐點',
+                    '交通不方便': '交通不方便',
+                    '技能樹不符合': '技能樹不符合',
+                    '薪水太低': '薪水太低',
+                    '搜尋評論後失去興趣': '搜尋評論後失去興趣',
+                    '上班時間超過9小時': '上班時間超過9小時',
+                    '對招募流程不滿意': '對招募流程不滿意',
+                    '對這類產業沒有興趣': '對這類產業沒有興趣',
+                    '對職缺描述或福利不滿意': '對職缺描述或福利不滿意',
+                    '親自面過後失去興趣': '親自面過後失去興趣',
+                    '投遞履歷後沒有回應': '投遞履歷後沒有回應',
+                    '面試後無聲卡': '面試後無聲卡',
+                    '莫名被發感謝函': '莫名被發感謝函'
+                },
+                showCancelButton: true,
+                customClass: {
+                    title: 'swal-title-font-size',
+                    closeButton: 'swal-button-font-size',
+                    confirmButton: 'swal-button-font-size',
+                    cancelButton: 'swal-button-font-size',
+                    input: 'swal-selector'
+                },
+            })
+            if (blockReason) {
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("Create", "BlockCompany")',
@@ -100,10 +110,10 @@
                 })
                 .done(function (message) {
                     if (message == "封鎖成功") {
-                        document.getElementById(selector_id).disabled = true;
+                        document.getElementById(btn_blockCompany).disabled = true;
                         // 令封鎖工作的按鈕連帶失效、淡出
-                        document.getElementById(jobCode).style.pointerEvents = "none";
-                        document.getElementById(jobCode).style.opacity = "0.5";
+                        document.getElementById(btn_blockJob).style.pointerEvents = "none";
+                        document.getElementById(btn_blockJob).style.opacity = "0.5";
                     }
                     else{
                         Swal.fire({
@@ -118,7 +128,8 @@
                     }
                 });
             }
-        });
+
+        })()
     }
 </script>
 
@@ -157,17 +168,8 @@
                                             <td><a href="https://www.qollie.com/search?keyword=@jobItem.Company&kind=company&from=normal" target="_blank">@jobItem.Company</a></td>
                                             <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
                                             <td class="center-block" style="white-space: nowrap;">
-                                                <a class="btn btn-primary" id="@jobItem.Code" onclick="DeleteData('@jobItem.Code')">封鎖工作</a>
-                                                <select id="@selector_id" onchange="CheckBeforeBlock('@selector_id', '@jobItem.Company', '@jobItem.Code')" style="width:90px; height:36px;">
-                                                    <option>封鎖公司</option>
-                                                    <option>------請選擇理由------</option>
-                                                    @{
-                                                        foreach (var reason in Utility.BlockReason)
-                                                        {
-                                                            <option>@reason</option>
-                                                        }
-                                                    }
-                                                </select>
+                                                <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="DeleteData('@jobItem.Code')">封鎖工作</button>
+                                                <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>
                                             </td>
                                         </tr>
                                     }
