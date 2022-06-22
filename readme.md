@@ -63,16 +63,13 @@ create table CrawlSetting
 # 點選職位名稱的超連結，會開啟該職缺的104頁面  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_04.PNG?raw=true)  
 &emsp;  
-# 選擇封鎖公司的理由  
+# 選擇封鎖公司的理由(下拉式選單)  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_05.PNG?raw=true)  
 &emsp;  
-# 確認是否要封鎖  
+# 將DB的資料匯出成CSV檔案  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_06.PNG?raw=true)  
 &emsp;  
-# 將DB的資料匯出成CSV檔案  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_07.PNG?raw=true)  
-&emsp;  
 # 確認匯出結果  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_08.PNG?raw=true)  
+![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_07.PNG?raw=true)  
 &emsp;  
 
