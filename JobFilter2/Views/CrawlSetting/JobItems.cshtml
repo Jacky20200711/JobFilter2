@@ -149,6 +149,7 @@
                             <table class="table table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
+                                        <th style="display:none;">排版用(不顯示)</th>
                                         <th style="white-space: nowrap;">職位名稱</th>
                                         <th style="white-space: nowrap;">薪資範圍</th>
                                         <th style="white-space: nowrap;">公司名稱</th>
@@ -157,19 +158,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var jobItem in jobItems)
-                                    {
-                                        string selector_id = Guid.NewGuid().ToString();
-                                        <tr class="gradeA">
-                                            <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
-                                            <td>@jobItem.Salary</td>
-                                            <td><a href="https://www.qollie.com/search?keyword=@jobItem.Company&kind=company&from=normal" target="_blank">@jobItem.Company</a></td>
-                                            <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
-                                            <td class="center-block" style="white-space: nowrap;">
-                                                <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">封鎖工作</button>
-                                                <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>
-                                            </td>
-                                        </tr>
+                                    @{
+                                        int sequence = 0;
+                                        foreach (var jobItem in jobItems)
+                                        {
+                                            sequence++;
+                                            string selector_id = Guid.NewGuid().ToString();
+                                            <tr class="gradeA">
+                                                <td style="display:none;">@sequence</td>
+                                                <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
+                                                <td>@jobItem.Salary</td>
+                                                <td><a href="https://www.qollie.com/search?keyword=@jobItem.Company&kind=company&from=normal" target="_blank">@jobItem.Company</a></td>
+                                                <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
+                                                <td class="center-block" style="white-space: nowrap;">
+                                                    <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">封鎖工作</button>
+                                                    <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>
+                                                </td>
+                                            </tr>
+                                        }
                                     }
                                 </tbody>
                             </table>
