@@ -33,7 +33,7 @@
 </script>
 
 <script>
-    function DeleteData(jobCode) {
+    function BlockJob(jobCode, btn_blockJob, btn_blockCompany) {
         Swal.fire({
             title: "確定要封鎖?",
             showCancelButton: true,
@@ -52,8 +52,8 @@
                 })
                 .done(function (message) {
                     if (message == "封鎖成功") {
-                        document.getElementById(jobCode).style.pointerEvents = "none";
-                        document.getElementById(jobCode).style.opacity = "0.5";
+                        document.getElementById(btn_blockCompany).disabled = true;
+                        document.getElementById(btn_blockJob).disabled = true;
                     }
                     else{
                         Swal.fire({
@@ -111,9 +111,7 @@
                 .done(function (message) {
                     if (message == "封鎖成功") {
                         document.getElementById(btn_blockCompany).disabled = true;
-                        // 令封鎖工作的按鈕連帶失效、淡出
-                        document.getElementById(btn_blockJob).style.pointerEvents = "none";
-                        document.getElementById(btn_blockJob).style.opacity = "0.5";
+                        document.getElementById(btn_blockJob).disabled = true;
                     }
                     else{
                         Swal.fire({
@@ -168,7 +166,7 @@
                                             <td><a href="https://www.qollie.com/search?keyword=@jobItem.Company&kind=company&from=normal" target="_blank">@jobItem.Company</a></td>
                                             <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
                                             <td class="center-block" style="white-space: nowrap;">
-                                                <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="DeleteData('@jobItem.Code')">封鎖工作</button>
+                                                <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">封鎖工作</button>
                                                 <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>
                                             </td>
                                         </tr>

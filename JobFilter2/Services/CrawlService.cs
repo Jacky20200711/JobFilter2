@@ -103,7 +103,7 @@ namespace JobFilter2.Services
         private void GetTargetPages(List<Crawler> crawlers, CrawlSetting crawlSetting)
         {
             // 爬取指定的分頁數量
-            for (int i = 1; i <= 15; i++)
+            for (int i = 1; i <= 20; i++)
             {
                 crawlers.Add(new Crawler());
                 _ =  LoadPage(crawlers[^1], crawlSetting, i);
