@@ -23,7 +23,7 @@
 </script>
 
 <script>
-    function DeleteData(idOfData) {
+    function DeleteData(idOfData, btn_edit, btn_delete) {
         Swal.fire({
             title: "確定要刪除?",
             showCancelButton: true,
@@ -42,10 +42,8 @@
                 })
                 .done(function (message) {
                     if (message == "刪除成功") {
-                        document.getElementById("delete_" + idOfData).disabled = true;
-                        // 令修改按鈕連帶失效、淡出
-                        document.getElementById("edit_" + idOfData).style.pointerEvents = "none";
-                        document.getElementById("edit_" + idOfData).style.opacity = "0.5";
+                        document.getElementById(btn_edit).disabled = true;
+                        document.getElementById(btn_delete).disabled = true;
                     }
                     else{
                         Swal.fire({
@@ -156,7 +154,7 @@
                                                 <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
                                                 <td class="center-block">
                                                     <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
-                                                    <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id)">刪除</button>
+                                                    <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id, 'edit_@blockCompany.Id', 'delete_@blockCompany.Id')">刪除</button>
                                                 </td>
                                             </tr>
                                         }
