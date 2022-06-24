@@ -77,7 +77,7 @@
         (async () => {
             const { value: blockReason } = await Swal.fire({
                 title: '選擇封鎖理由',
-                input: 'select',
+                input: 'radio',
                 inputOptions: {
                     '派遣或駐點': '派遣或駐點',
                     '交通不方便': '交通不方便',
@@ -87,19 +87,20 @@
                     '上班時間超過9小時': '上班時間超過9小時',
                     '對招募流程不滿意': '對招募流程不滿意',
                     '對這類產業沒有興趣': '對這類產業沒有興趣',
-                    '對職缺描述或福利不滿意': '對職缺描述或福利不滿意',
+                    '看完徵才條件後失去興趣': '看完徵才條件後失去興趣',
                     '親自面過後失去興趣': '親自面過後失去興趣',
                     '投遞履歷後沒有回應': '投遞履歷後沒有回應',
                     '面試後無聲卡': '面試後無聲卡',
                     '莫名被發感謝函': '莫名被發感謝函'
                 },
+                inputValue: '派遣或駐點',
                 showCancelButton: true,
                 customClass: {
                     title: 'swal-title-font-size',
                     closeButton: 'swal-button-font-size',
                     confirmButton: 'swal-button-font-size',
                     cancelButton: 'swal-button-font-size',
-                    input: 'swal-selector'
+                    input: 'swal-radio'
                 },
             })
             if (blockReason) {
