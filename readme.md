@@ -4,8 +4,8 @@ https://github.com/Jacky20200711/JobFilter
 &emsp;  
 # 改版重點  
 1.修改操作介面  
-2.簡化操作流程(將部分的操作改用Ajax來避免跳頁)  
-3.去除排除關鍵字的功能(改用封鎖工作的功能來取代)  
+2.簡化操作流程(將部分的操作改用ajax來避免跳頁)  
+3.去除排除關鍵字的功能(以封鎖工作來取代)  
 4.改用 DB-First 規劃資料庫  
 &emsp;  
 # 使用技術  
@@ -15,6 +15,7 @@ https://github.com/Jacky20200711/JobFilter
 4.使用 EFCore 存取資料庫  
 5.使用 Session 暫存過濾後的工作  
 6.使用 CsvHelper 做資料的備份與還原  
+7.使用 SweetAlert2 美化彈窗  
 &emsp;  
 # 開發環境  
 Win10(家用版) + Visual Studio 2019 + .NET Core 3.1 MVC + SQL Server 2014 Express  
