@@ -132,6 +132,23 @@
     }
 </script>
 
+<script>
+    function SearchComment(companyName) {
+        var fileLink1 = document.createElement("a");
+        var fileLink2 = document.createElement("a");
+        document.body.appendChild(fileLink1);
+        document.body.appendChild(fileLink2);
+        fileLink1.style = "display:none";
+        fileLink2.style = "display:none";
+        fileLink1.setAttribute('target', '_blank');
+        fileLink2.setAttribute('target', '_blank');
+        fileLink1.href = "https://interview.tw/search?keyword=" + companyName;
+        fileLink2.href = "https://www.qollie.com/search?keyword=" + companyName + "&kind=company&from=normal";
+        fileLink1.click();
+        fileLink2.click();
+    }
+</script>
+
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
@@ -169,7 +186,7 @@
                                                 <td style="display:none;">@sequence</td>
                                                 <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
                                                 <td>@jobItem.Salary</td>
-                                                <td><a href="https://www.qollie.com/search?keyword=@jobItem.Company&kind=company&from=normal" target="_blank">@jobItem.Company</a></td>
+                                                <td><a onclick="SearchComment('@jobItem.Company'); return false;" style="cursor:pointer;">@jobItem.Company</a></td>
                                                 <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
                                                 <td class="center-block" style="white-space: nowrap;">
                                                     <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">封鎖工作</button>
