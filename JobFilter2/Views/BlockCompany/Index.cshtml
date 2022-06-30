@@ -69,18 +69,7 @@
                 title: '選擇封鎖理由',
                 input: 'radio',
                 inputOptions: {
-                    '派遣或駐點': '派遣或駐點',
-                    '交通不方便': '交通不方便',
-                    '技能樹不符合': '技能樹不符合',
-                    '薪水太低': '薪水太低',
-                    '搜尋評論後失去興趣': '搜尋評論後失去興趣',
-                    '上班時間超過9小時': '上班時間超過9小時',
-                    '對招募流程不滿意': '對招募流程不滿意',
-                    '對這類產業沒有興趣': '對這類產業沒有興趣',
-                    '看完徵才條件後失去興趣': '看完徵才條件後失去興趣',
-                    '面過後失去興趣/無聲卡': '面過後失去興趣/無聲卡',
-                    '投遞履歷後沒有回應': '投遞履歷後沒有回應',
-                    '莫名被發感謝函': '莫名被發感謝函'
+                    @Html.Raw(@Utility.BLOCK_REASON)
                 },
                 inputValue: '派遣或駐點',
                 showCancelButton: true,
@@ -148,15 +137,15 @@
                                         foreach (var blockCompany in Model)
                                         {
                                             sequence++;
-                                            <tr class="gradeA">
-                                                <td style="display:none;">@sequence</td>
-                                                <td>@blockCompany.CompanyName</td>
-                                                <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
-                                                <td class="center-block">
-                                                    <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
-                                                    <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id, 'edit_@blockCompany.Id', 'delete_@blockCompany.Id')">刪除</button>
-                                                </td>
-                                            </tr>
+                                                <tr class="gradeA">
+                                                    <td style="display:none;">@sequence</td>
+                                                    <td>@blockCompany.CompanyName</td>
+                                                    <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
+                                                    <td class="center-block">
+                                                        <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
+                                                        <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id, 'edit_@blockCompany.Id', 'delete_@blockCompany.Id')">刪除</button>
+                                                    </td>
+                                                </tr>
                                         }
                                     }
                                 </tbody>
