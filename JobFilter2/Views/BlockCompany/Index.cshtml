@@ -66,7 +66,8 @@
     function EditBlockReason(data_id, reason_id) {
         (async () => {
             const { value: new_reason } = await Swal.fire({
-                title: '選擇封鎖理由',
+                title: '請選擇封鎖理由',
+                width:360,
                 input: 'radio',
                 inputOptions: {
                     @Html.Raw(@Utility.BLOCK_REASON)

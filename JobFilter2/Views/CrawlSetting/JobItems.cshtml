@@ -76,7 +76,8 @@
     function BlockCompany(btn_blockCompany, companyName, btn_blockJob) {
         (async () => {
             const { value: blockReason } = await Swal.fire({
-                title: '選擇封鎖理由',
+                title: '請選擇封鎖理由',
+                width:360,
                 input: 'radio',
                 inputOptions: {
                     @Html.Raw(@Utility.BLOCK_REASON)
