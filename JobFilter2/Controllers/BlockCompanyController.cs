@@ -36,11 +36,12 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return Content("<h2>操作失敗</h2>", "text/html", Encoding.UTF8);
+                TempData["message"] = "操作失敗";
+                return RedirectToRoute(new { controller = "Home", action = "Index" });
             }
         }
 
-        public IActionResult Create(string Company = null)
+        public IActionResult Create(string Company)
         {
             ViewBag.Company = Company;
             return View();
@@ -52,14 +53,8 @@ namespace JobFilter2.Controllers
             try
             {
                 // 取出各欄位的值
-                string company = PostData["companyName"].ToString() ?? null;
-                string blockReason = PostData["blockReason"].ToString() ?? null;
-
-                // 檢查長度
-                if (company.Length > 100)
-                {
-                    return "封鎖失敗";
-                }
+                string company = PostData["companyName"].ToString();
+                string blockReason = PostData["blockReason"].ToString();
 
                 // 新增封鎖工作
                 BlockCompany blockCompany = new BlockCompany
@@ -85,7 +80,7 @@ namespace JobFilter2.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return "封鎖失敗";
+                return "操作失敗";
             }
         }
 
@@ -94,29 +89,7 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                #region 檢查此筆資料是否存在
-
-                if (id == null)
-                {
-                    return "id異常!";
-                }
-
                 var data = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
-
-                if (data == null)
-                {
-                    return "資料不存在!";
-                }
-
-                #endregion
-
-                // 檢查長度
-                if (new_reason.Length > 20)
-                {
-                    return "修改失敗";
-                }
-
-                // 修改該筆資料
                 data.BlockReason = new_reason;
                 await _context.SaveChangesAsync();
                 return "修改成功";
@@ -129,26 +102,12 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Delete(int? id)
+        public async Task<string> Delete(int id)
         {
             try
             {
-                #region 檢查此筆資料是否存在
-
-                if (id == null)
-                {
-                    return "刪除失敗，查無這筆資料!";
-                }
-
-                var blockCompany = await _context.BlockCompanies.FindAsync(id);
-
-                if (blockCompany == null)
-                {
-                    return "刪除失敗，查無這筆資料!";
-                }
-
-                #endregion
-                _context.Remove(blockCompany);
+                BlockCompany data = new BlockCompany() { Id = id };
+                _context.Entry(data).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
                 return "刪除成功";
             }

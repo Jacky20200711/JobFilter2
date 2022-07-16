@@ -43,6 +43,17 @@
                     if (message == "刪除成功") {
                         self.location.reload();
                     }
+                    else{
+                        Swal.fire({
+                            title : "操作失敗",
+                            customClass: {
+                                title: 'swal-title-font-size',
+                                closeButton: 'swal-button-font-size',
+                                confirmButton: 'swal-button-font-size',
+                                cancelButton: 'swal-button-font-size'
+                            }
+                        });
+                    }
                 });
             }
         });

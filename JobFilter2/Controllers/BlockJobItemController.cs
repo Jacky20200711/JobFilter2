@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,29 +26,37 @@ namespace JobFilter2.Controllers
         [HttpPost]
         public async Task<string> Create(IFormCollection PostData)
         {
-            // 取出參數
-            string jobCode = PostData["jobCode"].ToString() ?? null;
-
-            // 新增封鎖工作
-            BlockJobItem blockJobItem = new BlockJobItem
+            try
             {
-                JobCode = jobCode,
-            };
+                // 取出參數
+                string jobCode = PostData["jobCode"].ToString();
 
-            // 更新DB
-            _context.Add(blockJobItem);
-            await _context.SaveChangesAsync();
+                // 新增封鎖工作
+                BlockJobItem blockJobItem = new BlockJobItem
+                {
+                    JobCode = jobCode,
+                };
 
-            // 刷新SESSION儲存的工作項目
-            string jobItemsStr = HttpContext.Session.GetString("jobItems");
-            if (jobItemsStr != null)
-            {
-                List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
-                jobItems = crawlService.GetUpdateList(jobItems, jobCode, blockType: "jobCode");
-                HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
+                // 更新DB
+                _context.Add(blockJobItem);
+                await _context.SaveChangesAsync();
+
+                // 刷新SESSION儲存的工作項目
+                string jobItemsStr = HttpContext.Session.GetString("jobItems");
+                if (jobItemsStr != null)
+                {
+                    List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
+                    jobItems = crawlService.GetUpdateList(jobItems, jobCode, blockType: "jobCode");
+                    HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
+                }
+
+                return "封鎖成功";
             }
-
-            return "封鎖成功";
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return "操作失敗";
+            }
         }
     }
 }

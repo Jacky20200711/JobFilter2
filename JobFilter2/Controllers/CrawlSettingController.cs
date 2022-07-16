@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
@@ -36,7 +35,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                TempData["message"] = "發生錯誤";
+                TempData["message"] = "操作失敗";
                 return RedirectToRoute(new { controller = "Home", action = "Index" });
             }
         }
@@ -55,9 +54,9 @@ namespace JobFilter2.Controllers
                 // 新增爬蟲設定
                 CrawlSetting crawlSetting = new CrawlSetting
                 {
-                    Remark = PostData["remark"].ToString() ?? null,
-                    TargetUrl = PostData["targetUrl"].ToString() ?? null,
-                    Seniority = PostData["seniority"].ToString() ?? null,
+                    Remark = PostData["remark"].ToString(),
+                    TargetUrl = PostData["targetUrl"].ToString(),
+                    Seniority = PostData["seniority"].ToString(),
                     MinSalary = int.Parse(PostData["minSalary"].ToString()),
                 };
 
@@ -68,7 +67,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                TempData["message"] = "發生錯誤";
+                TempData["message"] = "操作失敗";
             }
             return RedirectToAction("Index");
         }
@@ -83,7 +82,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                TempData["message"] = "發生錯誤";
+                TempData["message"] = "操作失敗";
                 return RedirectToAction("Index");
             }
         }
@@ -97,9 +96,9 @@ namespace JobFilter2.Controllers
                 // 提取欄位內容
                 int id = int.Parse(PostData["Id"].ToString());
                 int minSalary = int.Parse(PostData["minSalary"].ToString());
-                string remark = PostData["remark"].ToString() ?? null;
-                string targetUrl = PostData["targetUrl"].ToString() ?? null;
-                string seniority = PostData["seniority"].ToString() ?? null;
+                string remark = PostData["remark"].ToString();
+                string targetUrl = PostData["targetUrl"].ToString();
+                string seniority = PostData["seniority"].ToString();
 
                 // 取得該筆資料
                 var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
@@ -115,7 +114,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                TempData["message"] = "發生錯誤";
+                TempData["message"] = "操作失敗";
             }
             return RedirectToAction("Index");
         }
@@ -134,8 +133,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                TempData["message"] = "刪除失敗";
-                return "刪除失敗";
+                return "操作失敗";
             }
         }
 
@@ -162,7 +160,7 @@ namespace JobFilter2.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                TempData["message"] = "發生錯誤";
+                TempData["message"] = "操作失敗";
                 return RedirectToAction("Index");
             }
         }
