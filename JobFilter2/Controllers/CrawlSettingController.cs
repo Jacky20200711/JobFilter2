@@ -28,8 +28,17 @@ namespace JobFilter2.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var data = await _context.CrawlSettings.ToListAsync();
-            return View(data);
+            try
+            {
+                var data = await _context.CrawlSettings.ToListAsync();
+                return View(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                TempData["message"] = "發生錯誤";
+                return RedirectToRoute(new { controller = "Home", action = "Index" });
+            }
         }
 
         public IActionResult Create()
@@ -41,104 +50,90 @@ namespace JobFilter2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormCollection PostData)
         {
-            // 取出各欄位的值
-            string remark = PostData["remark"].ToString() ?? null;
-            string targetUrl = PostData["targetUrl"].ToString() ?? null;
-            string seniority = PostData["seniority"].ToString() ?? null;
-            int minSalary = int.Parse(PostData["minSalary"].ToString());
-
-            // 新增爬蟲設定
-            CrawlSetting crawlSetting = new CrawlSetting
+            try
             {
-                Remark = remark,
-                TargetUrl = targetUrl,
-                MinSalary = minSalary,
-                Seniority = seniority,
-            };
+                // 新增爬蟲設定
+                CrawlSetting crawlSetting = new CrawlSetting
+                {
+                    Remark = PostData["remark"].ToString() ?? null,
+                    TargetUrl = PostData["targetUrl"].ToString() ?? null,
+                    Seniority = PostData["seniority"].ToString() ?? null,
+                    MinSalary = int.Parse(PostData["minSalary"].ToString()),
+                };
 
-            _context.Add(crawlSetting);
-            await _context.SaveChangesAsync();
-
+                _context.Add(crawlSetting);
+                await _context.SaveChangesAsync();
+                TempData["message"] = "新增成功";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                TempData["message"] = "發生錯誤";
+            }
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            #region 檢查此筆資料是否存在
-
-            if (id == null)
+            try
             {
-                return Content("<h2>資料id錯誤!</h2>", "text/html", Encoding.UTF8);
+                var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
+                return View(crawlSetting);
             }
-
-            var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
-
-            if (crawlSetting == null)
+            catch (Exception ex)
             {
-                return Content("<h2>資料不存在!</h2>", "text/html", Encoding.UTF8);
+                _logger.LogError(ex.ToString());
+                TempData["message"] = "發生錯誤";
+                return RedirectToAction("Index");
             }
-
-            #endregion
-
-            return View(crawlSetting);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(IFormCollection PostData)
         {
-            // 提取欄位內容
-            int id = int.Parse(PostData["Id"].ToString());
-            int minSalary = int.Parse(PostData["minSalary"].ToString());
-            string remark = PostData["remark"].ToString() ?? null;
-            string targetUrl = PostData["targetUrl"].ToString() ?? null;
-            string seniority = PostData["seniority"].ToString() ?? null;
-
-            // 取得該筆資料
-            var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
-            if (crawlSetting == null)
+            try
             {
-                return Content("<h2>資料不存在</h2>", "text/html", Encoding.UTF8);
+                // 提取欄位內容
+                int id = int.Parse(PostData["Id"].ToString());
+                int minSalary = int.Parse(PostData["minSalary"].ToString());
+                string remark = PostData["remark"].ToString() ?? null;
+                string targetUrl = PostData["targetUrl"].ToString() ?? null;
+                string seniority = PostData["seniority"].ToString() ?? null;
+
+                // 取得該筆資料
+                var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
+
+                // 修改該筆資料
+                crawlSetting.Remark = remark;
+                crawlSetting.TargetUrl = targetUrl;
+                crawlSetting.Seniority = seniority;
+                crawlSetting.MinSalary = minSalary;
+                await _context.SaveChangesAsync();
+                TempData["message"] = "修改成功";
             }
-
-            // 修改該筆資料
-            crawlSetting.Remark = remark;
-            crawlSetting.TargetUrl = targetUrl;
-            crawlSetting.Seniority = seniority;
-            crawlSetting.MinSalary = minSalary;
-            await _context.SaveChangesAsync();
-
-            TempData["message"] = "修改成功";
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                TempData["message"] = "發生錯誤";
+            }
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public async Task<string> Delete(int? id)
+        public async Task<string> Delete(int id)
         {
             try
             {
-                #region 檢查此筆資料是否存在
-
-                if (id == null)
-                {
-                    return "操作失敗";
-                }
-
-                var crawlSetting = await _context.CrawlSettings.FindAsync(id);
-
-                if (crawlSetting == null)
-                {
-                    return "操作失敗";
-                }
-
-                #endregion
-                _context.Remove(crawlSetting);
+                CrawlSetting data = new CrawlSetting() { Id = id };
+                _context.Entry(data).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
                 TempData["message"] = "刪除成功";
                 return "刪除成功";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 TempData["message"] = "刪除失敗";
                 return "刪除失敗";
             }
@@ -146,36 +141,30 @@ namespace JobFilter2.Controllers
 
         public IActionResult DoCrawl(int? id)
         {
-            #region 檢查此筆資料是否存在
-
-            if (id == null)
+            try
             {
-                return Content("<h2>資料id錯誤!</h2>", "text/html", Encoding.UTF8);
+                // 爬取目標頁面 & 提取工作列表
+                var crawlSetting = _context.CrawlSettings.FirstOrDefault(u => u.Id == id);
+                List<JobItem> jobItems = crawlService.GetTargetItems(crawlSetting);
+
+                if (jobItems.Count == 0)
+                {
+                    TempData["message"] = "爬取失敗";
+                    return RedirectToAction("Index");
+                }
+
+                // 根據DB的黑名單，剔除不想看到的工作
+                jobItems = crawlService.GetUnblockedItems(_context, jobItems);
+                HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
+
+                return RedirectToAction("JobItems");
             }
-
-            var crawlSetting = _context.CrawlSettings.FirstOrDefault(u => u.Id == id);
-
-            if (crawlSetting == null)
+            catch (Exception ex)
             {
-                return Content("<h2>資料不存在!</h2>", "text/html", Encoding.UTF8);
-            }
-
-            #endregion
-
-            // 爬取目標頁面 & 提取工作列表
-            List<JobItem> jobItems = crawlService.GetTargetItems(crawlSetting);
-
-            if(jobItems.Count == 0)
-            {
-                TempData["message"] = "操作失敗";
+                _logger.LogError(ex.ToString());
+                TempData["message"] = "發生錯誤";
                 return RedirectToAction("Index");
             }
-
-            // 根據DB的黑名單，剔除不想看到的工作
-            jobItems = crawlService.GetUnblockedItems(_context, jobItems);
-            HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
-
-            return RedirectToAction("JobItems");
         }
 
         public IActionResult JobItems()
