@@ -50,7 +50,7 @@ namespace JobFilter2.Services
 
         #endregion
 
-        public bool Export(JobFilterContext _context, string exportPath)
+        public void Export(JobFilterContext _context, string exportPath)
         {
             try
             {
@@ -76,16 +76,14 @@ namespace JobFilter2.Services
                 using var writer3 = new StreamWriter("BlockCompanies.csv", false, Encoding.UTF8);
                 using var csvWriter3 = new CsvWriter(writer3, CultureInfo.InvariantCulture);
                 csvWriter3.WriteRecords(DataList3);
-                return true;
             }
             catch(Exception ex)
             {
-                _logger.Error($"匯出失敗，資料庫異常\n{ex}");
-                return false;
+                throw ex;
             }
         }
 
-        public bool Import(JobFilterContext _context, string importPath)
+        public void Import(JobFilterContext _context, string importPath)
         {
             try
             {
@@ -141,12 +139,10 @@ namespace JobFilter2.Services
                 _context.Database.ExecuteSqlRaw($"INSERT INTO CrawlSetting VALUES {string.Join(",", insert_CrawlSetting)}");
                 _context.Database.ExecuteSqlRaw($"INSERT INTO BlockJobItem VALUES {string.Join(",", insert_BlockJobItem)}");
                 _context.Database.ExecuteSqlRaw($"INSERT INTO BlockCompany VALUES {string.Join(",", insert_BlockCompany)}");
-                return true;
             }
             catch (Exception ex)
             {
-                _logger.Error($"匯入失敗，資料庫異常\n{ex}");
-                return false;
+                throw ex;
             }
         }
     }

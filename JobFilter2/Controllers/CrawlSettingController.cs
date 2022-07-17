@@ -137,12 +137,12 @@ namespace JobFilter2.Controllers
             }
         }
 
-        public IActionResult DoCrawl(int? id)
+        public async Task<IActionResult> DoCrawl(int? id)
         {
             try
             {
-                // 爬取目標頁面 & 提取工作列表
-                var crawlSetting = _context.CrawlSettings.FirstOrDefault(u => u.Id == id);
+                // 爬取目標頁面，提取工作列表
+                var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
                 List<JobItem> jobItems = crawlService.GetTargetItems(crawlSetting);
 
                 if (jobItems.Count == 0)
@@ -151,8 +151,8 @@ namespace JobFilter2.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // 根據DB的黑名單，剔除不想看到的工作
-                jobItems = crawlService.GetUnblockedItems(_context, jobItems);
+                // 根據DB的黑名單，過濾工作列表
+                jobItems = await crawlService.GetUnblockedItems(_context, jobItems);
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
 
                 return RedirectToAction("JobItems");
