@@ -151,7 +151,7 @@ namespace JobFilter2.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // 根據DB的黑名單，過濾工作列表
+                // 根據DB資訊來過濾工作列表
                 jobItems = await crawlService.GetUnblockedItems(_context, jobItems);
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
 

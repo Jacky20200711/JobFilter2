@@ -107,9 +107,9 @@ namespace JobFilter2.Services
         }
 
         /// <summary>
-        /// 此為供 Controller 調用的函數，只要調用這一行，即可取得過濾後的工作列表 
+        /// 爬取目標頁面，提取工作列表 
         /// </summary>
-        /// <returns>過濾完畢的工作列表</returns>
+        /// <returns>提取後的工作列表(尚未經由DB資訊做過濾)</returns>
         public List<JobItem> GetTargetItems(CrawlSetting crawlSetting)
         {
             List<Crawler> crawlers = new List<Crawler>();
@@ -203,7 +203,6 @@ namespace JobFilter2.Services
             // 判斷 User 是要封鎖工作還是封鎖公司
             if (blockType == "jobCode")
             {
-                // 去除擁有指定 jobCode 的工作
                 foreach (var jobItem in jobItems)
                 {
                     if(jobItem.Code != target)
@@ -214,7 +213,6 @@ namespace JobFilter2.Services
             }
             else if(blockType == "company")
             {
-                // 去除擁有指定 company 的工作
                 foreach (var jobItem in jobItems)
                 {
                     if (jobItem.Company != target)
