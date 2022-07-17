@@ -52,26 +52,21 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                // 取出各欄位的值
-                string company = PostData["companyName"].ToString();
-                string blockReason = PostData["blockReason"].ToString();
-
-                // 新增封鎖工作
+                // 新增封鎖公司
                 BlockCompany blockCompany = new BlockCompany
                 {
-                    CompanyName = company,
-                    BlockReason = blockReason,
+                    CompanyName = PostData["companyName"].ToString(),
+                    BlockReason = PostData["blockReason"].ToString(),
                 };
-
                 _context.Add(blockCompany);
                 await _context.SaveChangesAsync();
 
-                // 刷新SESSION儲存的工作項目
+                // 刷新 Session 儲存的工作項目
                 string jobItemsStr = HttpContext.Session.GetString("jobItems");
                 if (jobItemsStr != null)
                 {
                     List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
-                    jobItems = crawlService.GetUpdateList(jobItems, company, blockType: "company");
+                    jobItems = crawlService.GetUpdateList(jobItems, blockCompany.BlockReason, blockType: "company");
                     HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
                 }
 

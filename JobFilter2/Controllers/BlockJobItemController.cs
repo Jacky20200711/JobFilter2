@@ -28,25 +28,20 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                // 取出參數
-                string jobCode = PostData["jobCode"].ToString();
-
-                // 新增封鎖工作
+                // 新增封鎖工作並儲存到DB
                 BlockJobItem blockJobItem = new BlockJobItem
                 {
-                    JobCode = jobCode,
+                    JobCode = PostData["jobCode"].ToString(),
                 };
-
-                // 更新DB
                 _context.Add(blockJobItem);
                 await _context.SaveChangesAsync();
 
-                // 刷新SESSION儲存的工作項目
+                // 刷新 Session 儲存的工作項目
                 string jobItemsStr = HttpContext.Session.GetString("jobItems");
                 if (jobItemsStr != null)
                 {
                     List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
-                    jobItems = crawlService.GetUpdateList(jobItems, jobCode, blockType: "jobCode");
+                    jobItems = crawlService.GetUpdateList(jobItems, blockJobItem.JobCode, blockType: "jobCode");
                     HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
                 }
 

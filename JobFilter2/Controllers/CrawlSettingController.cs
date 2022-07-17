@@ -100,10 +100,8 @@ namespace JobFilter2.Controllers
                 string targetUrl = PostData["targetUrl"].ToString();
                 string seniority = PostData["seniority"].ToString();
 
-                // 取得該筆資料
+                // 撈取並修改目標資料
                 var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
-
-                // 修改該筆資料
                 crawlSetting.Remark = remark;
                 crawlSetting.TargetUrl = targetUrl;
                 crawlSetting.Seniority = seniority;
@@ -144,14 +142,13 @@ namespace JobFilter2.Controllers
                 // 爬取目標頁面，提取工作列表
                 var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
                 List<JobItem> jobItems = crawlService.GetTargetItems(crawlSetting);
-
                 if (jobItems.Count == 0)
                 {
                     TempData["message"] = "爬取失敗";
                     return RedirectToAction("Index");
                 }
 
-                // 根據DB資訊來過濾工作列表
+                // 根據DB資訊來過濾工作列表，並將結果儲存到 Session
                 jobItems = await crawlService.GetUnblockedItems(_context, jobItems);
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
 

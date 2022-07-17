@@ -31,7 +31,7 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                // 取出資料夾路徑
+                // 提取資料夾路徑
                 string exportPath = PostData["exportPath"].ToString();
 
                 // 檢查路徑是否存在
@@ -64,7 +64,7 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                // 取出資料夾路徑
+                // 提取資料夾路徑
                 string importPath = PostData["importPath"].ToString();
 
                 // 檢查路徑是否存在
@@ -74,7 +74,7 @@ namespace JobFilter2.Controllers
                     return View();
                 }
 
-                // 讀取CSV檔案並匯入DB
+                // 從目標資料夾讀取CSV並匯入DB
                 backupService.Import(_context, importPath);
                 TempData["message"] = "匯入成功";
             }
