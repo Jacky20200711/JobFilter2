@@ -20,14 +20,8 @@ namespace JobFilter2.Controllers
             _logger = logger;
         }
 
-        public IActionResult Export()
-        {
-            return View();
-        }
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Export(IFormCollection PostData)
+        public string Export(IFormCollection PostData)
         {
             try
             {
@@ -37,30 +31,22 @@ namespace JobFilter2.Controllers
                 // 檢查路徑是否存在
                 if (!Directory.Exists(exportPath))
                 {
-                    TempData["message"] = "路徑錯誤";
-                    return View();
+                    return "路徑錯誤";
                 }
 
                 // 將DB資料匯出到目標資料夾
                 backupService.Export(_context, exportPath);
-                TempData["message"] = "匯出成功";
+                return "匯出成功";
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                TempData["message"] = "操作失敗";
+                return "操作失敗";
             }
-            return RedirectToRoute(new { controller = "Home", action = "Index" });
-        }
-
-        public IActionResult Import()
-        {
-            return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Import(IFormCollection PostData)
+        public string Import(IFormCollection PostData)
         {
             try
             {
@@ -70,20 +56,18 @@ namespace JobFilter2.Controllers
                 // 檢查路徑是否存在
                 if (!Directory.Exists(importPath))
                 {
-                    TempData["message"] = "路徑錯誤";
-                    return View();
+                    return "路徑錯誤";
                 }
 
                 // 從目標資料夾讀取CSV並匯入DB
                 backupService.Import(_context, importPath);
-                TempData["message"] = "匯入成功";
+                return "匯入成功";
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                TempData["message"] = "操作失敗";
+                return "操作失敗";
             }
-            return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
     }
 }

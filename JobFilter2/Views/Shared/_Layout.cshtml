@@ -103,8 +103,8 @@
                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> 備份還原<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="@Url.Action("Export", "Backup")"><i class="fa fa-edit fa-fw"></i> 匯出備份</a>
-                                    <a href="@Url.Action("Import", "Backup")"><i class="fa fa-edit fa-fw"></i> 匯入備份</a>
+                                    <a onclick="Export();" href="#" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 匯出備份</a>
+                                    <a onclick="Import();" href="#" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 匯入備份</a>
                                 </li>
                             </ul>
 
@@ -139,6 +139,88 @@
                 responsive: true
             });
         });
+    </script>
+    <script>
+        function Export() {
+            (async () => {
+                const { value: inputValue } = await Swal.fire({
+                    title: '匯出路徑如下',
+                    width:600,
+                    html:'<input id="swal-input" class="swal2-input" value="D:\\Desktop\\Profile\\Note\\Job\\JobFilter2" style="font-size:20px;width:400px;">',
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    customClass: {
+                        title: 'swal-title-font-size',
+                        closeButton: 'swal-button-font-size',
+                        confirmButton: 'swal-button-font-size',
+                        cancelButton: 'swal-button-font-size'
+                    },
+                    preConfirm: () => {
+                        return document.getElementById('swal-input').value
+                    }
+                })
+
+                if (inputValue) {
+                    //Swal.fire(inputValue)
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Export", "Backup")',
+                        data: { exportPath: inputValue }
+                    })
+                    .done(function (message) {
+                        Swal.fire({
+                            title : message,
+                            customClass: {
+                                title: 'swal-title-font-size',
+                                closeButton: 'swal-button-font-size',
+                                confirmButton: 'swal-button-font-size',
+                                cancelButton: 'swal-button-font-size'
+                            }
+                        });
+                    });
+                }
+            })()
+        }
+        function Import() {
+            (async () => {
+                const { value: inputValue } = await Swal.fire({
+                    title: '匯入來源如下',
+                    width:600,
+                    html:'<input id="swal-input" class="swal2-input" value="D:\\Desktop\\Profile\\Note\\Job\\JobFilter2" style="font-size:20px;width:400px;">',
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    customClass: {
+                        title: 'swal-title-font-size',
+                        closeButton: 'swal-button-font-size',
+                        confirmButton: 'swal-button-font-size',
+                        cancelButton: 'swal-button-font-size'
+                    },
+                    preConfirm: () => {
+                        return document.getElementById('swal-input').value
+                    }
+                })
+
+                if (inputValue) {
+                    //Swal.fire(inputValue)
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Import", "Backup")',
+                        data: { exportPath: inputValue }
+                    })
+                    .done(function (message) {
+                        Swal.fire({
+                            title : message,
+                            customClass: {
+                                title: 'swal-title-font-size',
+                                closeButton: 'swal-button-font-size',
+                                confirmButton: 'swal-button-font-size',
+                                cancelButton: 'swal-button-font-size'
+                            }
+                        });
+                    });
+                }
+            })()
+        }
     </script>
 </body>
 </html>
