@@ -66,7 +66,7 @@ namespace JobFilter2.Controllers
                 if (jobItemsStr != null)
                 {
                     List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
-                    jobItems = crawlService.GetUpdateList(jobItems, blockCompany.BlockReason, blockType: "company");
+                    jobItems = crawlService.GetUpdateList(jobItems, blockCompany.CompanyName, blockType: "company");
                     HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
                 }
 
