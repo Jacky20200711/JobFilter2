@@ -2,6 +2,7 @@
 using CsvHelper.Configuration;
 using JobFilter2.Models;
 using JobFilter2.Models.Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using System;
@@ -113,32 +114,40 @@ namespace JobFilter2.Services
                 List<string> insert_CrawlSetting = new List<string>();
                 List<string> insert_BlockJobItem = new List<string>();
                 List<string> insert_BlockCompany = new List<string>();
+                List<SqlParameter> sqlParameter_CrawlSetting = new List<SqlParameter>();
+                List<SqlParameter> sqlParameter_BlockJobItem = new List<SqlParameter>();
+                List<SqlParameter> sqlParameter_BlockCompany = new List<SqlParameter>();
+                int no = 0;
+                
                 foreach (var data in DataList1)
                 {
-                    // 對可能會出現單、雙引號的欄位做字元過濾
-                    string targetUrl = data.TargetUrl.Replace("\'", "").Replace("\"","");
-                    string seniority = data.Seniority.Replace("\'", "").Replace("\"", "");
-                    string remark = data.Remark.Replace("\'", "").Replace("\"", "");
-                    insert_CrawlSetting.Add($"(\'{targetUrl}\',\'{data.MinSalary}\',\'{seniority}\',\'{remark}\')");
+                    insert_CrawlSetting.Add($"(@TargetUrl{no},@MinSalary{no},@Seniority{no},@Remark{no})");
+                    sqlParameter_CrawlSetting.Add(new SqlParameter($"@TargetUrl{no}", data.TargetUrl));
+                    sqlParameter_CrawlSetting.Add(new SqlParameter($"@MinSalary{no}", data.MinSalary));
+                    sqlParameter_CrawlSetting.Add(new SqlParameter($"@Seniority{no}", data.Seniority));
+                    sqlParameter_CrawlSetting.Add(new SqlParameter($"@Remark{no}", data.Remark));
+                    no++;
                 }
 
                 foreach (var data in DataList2)
                 {
-                    insert_BlockJobItem.Add($"(\'{data.JobCode}\')");
+                    insert_BlockJobItem.Add($"(@JobCode{no})");
+                    sqlParameter_BlockJobItem.Add(new SqlParameter($"@JobCode{no}", data.JobCode));
+                    no++;
                 }
 
                 foreach (var data in DataList3)
                 {
-                    // 對可能會出現單、雙引號的欄位做字元過濾
-                    string company_name = data.CompanyName.Replace("\'", "").Replace("\"", "");
-                    string block_reason = data.BlockReason.Replace("\'", "").Replace("\"", "");
-                    insert_BlockCompany.Add($"(\'{company_name}\',\'{block_reason}\')");
+                    insert_BlockCompany.Add($"(@CompanyName{no},@BlockReason{no})");
+                    sqlParameter_BlockCompany.Add(new SqlParameter($"@CompanyName{no}", data.CompanyName));
+                    sqlParameter_BlockCompany.Add(new SqlParameter($"@BlockReason{no}", data.BlockReason));
+                    no++;
                 }
 
                 // 多筆資料匯入
-                _context.Database.ExecuteSqlRaw($"INSERT INTO CrawlSetting VALUES {string.Join(",", insert_CrawlSetting)}");
-                _context.Database.ExecuteSqlRaw($"INSERT INTO BlockJobItem VALUES {string.Join(",", insert_BlockJobItem)}");
-                _context.Database.ExecuteSqlRaw($"INSERT INTO BlockCompany VALUES {string.Join(",", insert_BlockCompany)}");
+                _context.Database.ExecuteSqlRaw($"INSERT INTO CrawlSetting VALUES {string.Join(",", insert_CrawlSetting)}", sqlParameter_CrawlSetting);
+                _context.Database.ExecuteSqlRaw($"INSERT INTO BlockJobItem VALUES {string.Join(",", insert_BlockJobItem)}", sqlParameter_BlockJobItem);
+                _context.Database.ExecuteSqlRaw($"INSERT INTO BlockCompany VALUES {string.Join(",", insert_BlockCompany)}", sqlParameter_BlockCompany);
             }
             catch (Exception ex)
             {

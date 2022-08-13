@@ -2,6 +2,7 @@
 using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -68,6 +69,23 @@ namespace JobFilter2.Controllers
                 _logger.LogError(ex.ToString());
                 return "操作失敗";
             }
+        }
+
+        public IActionResult DeleteAll()
+        {
+            try
+            {
+                _context.Database.ExecuteSqlRaw($"DELETE FROM CrawlSetting");
+                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
+                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
+                TempData["message"] = "刪除成功";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                TempData["message"] = "操作失敗";
+            }
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
     }
 }
