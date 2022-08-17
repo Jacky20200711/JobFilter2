@@ -9,11 +9,13 @@ using System;
 using AngleSharp;
 using JobFilter2.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
 
 namespace JobFilter2.Services
 {
     public class CrawlService
     {
+        private static readonly HttpClient httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
@@ -33,17 +35,14 @@ namespace JobFilter2.Services
 
             try
             {
-                // 設定逾時
-                crawler.httpClient.Timeout = TimeSpan.FromSeconds(15);
-
                 // 送出請求
-                var responseMessage = await crawler.httpClient.GetAsync(targetUrl);
+                var responseMessage = await httpClient.GetAsync(targetUrl);
 
                 // 查看結果
                 if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     // 取得頁面內容
-                    string pageContent = responseMessage.Content.ReadAsStringAsync().Result;
+                    string pageContent = await responseMessage.Content.ReadAsStringAsync();
 
                     // 將頁面內容轉成 domTree 的形式
                     var config = Configuration.Default;
