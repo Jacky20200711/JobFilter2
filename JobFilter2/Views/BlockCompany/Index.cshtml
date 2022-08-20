@@ -38,7 +38,7 @@
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("Delete", "BlockCompany")',
-                    data: { id: idOfData }
+                    data: { Id: idOfData }
                 })
                 .done(function (message) {
                     if (message == "刪除成功") {
@@ -86,7 +86,7 @@
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("Edit", "BlockCompany")',
-                    data: { id: data_id, new_reason: new_reason }
+                    data: { Id: data_id, BlockReason: new_reason }
                 })
                 .done(function (message) {
                     if (message == "修改成功") {

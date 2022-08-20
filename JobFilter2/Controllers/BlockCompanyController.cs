@@ -48,16 +48,11 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Create(IFormCollection PostData)
+        public async Task<string> Create(BlockCompany blockCompany)
         {
             try
             {
-                // 新增封鎖公司
-                BlockCompany blockCompany = new BlockCompany
-                {
-                    CompanyName = PostData["companyName"].ToString(),
-                    BlockReason = PostData["blockReason"].ToString(),
-                };
+                // 新增封鎖公司 & 寫入DB
                 _context.Add(blockCompany);
                 await _context.SaveChangesAsync();
 
@@ -80,12 +75,11 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Edit(int? id, string new_reason)
+        public async Task<string> Edit(BlockCompany data)
         {
             try
             {
-                var data = await _context.BlockCompanies.FirstOrDefaultAsync(u => u.Id == id);
-                data.BlockReason = new_reason;
+                _context.Entry(data).Property(p => p.BlockReason).IsModified = true;
                 await _context.SaveChangesAsync();
                 return "修改成功";
             }
@@ -97,11 +91,10 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Delete(int id)
+        public async Task<string> Delete(BlockCompany data)
         {
             try
             {
-                BlockCompany data = new BlockCompany() { Id = id };
                 _context.Entry(data).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
                 return "刪除成功";
