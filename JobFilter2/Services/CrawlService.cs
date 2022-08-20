@@ -111,11 +111,11 @@ namespace JobFilter2.Services
         /// 爬取目標頁面，提取工作列表 
         /// </summary>
         /// <returns>提取後的工作列表(尚未經由DB資訊做過濾)</returns>
-        public List<JobItem> GetTargetItems(CrawlSetting crawlSetting)
+        public async Task<List<JobItem>> GetTargetItems(CrawlSetting crawlSetting)
         {
             List<Crawler> crawlers = new List<Crawler>();
 
-            // 爬取目標分頁
+            // 製造多個爬蟲，爬取目標分頁
             for (int i = 1; i <= 20; i++)
             {
                 crawlers.Add(new Crawler());
@@ -125,10 +125,10 @@ namespace JobFilter2.Services
             // 等待所有爬蟲結束任務
             while (crawlers.Any(c => !c.isMissionCompleted))
             {
-                Thread.Sleep(200);
+                await Task.Delay(200);
             }
 
-            // 提取每一筆工作的資訊
+            // 依序提取各分頁的工作資訊
             List<JobItem> jobItems = new List<JobItem>();
             foreach(var crawler in crawlers)
             {
@@ -147,39 +147,33 @@ namespace JobFilter2.Services
             List<JobItem> new_jobitems = new List<JobItem>();
             try
             {
+                // 取得已封鎖的工作代碼與公司名稱
                 var blockJobItems = await context.BlockJobItems.ToListAsync();
                 var blockCompanys = await context.BlockCompanies.ToListAsync();
 
+                // 將已封鎖的工作代碼和公司名稱，添加到 HashTable 以方便待會比對
                 HashSet<string> blockJobCodeSet = new HashSet<string>();
                 HashSet<string> blockCompanySet = new HashSet<string>();
 
-                // 取得已封鎖的工作代碼
                 foreach (var b in blockJobItems)
                 {
                     blockJobCodeSet.Add(b.JobCode);
                 }
 
-                // 取得已封鎖的公司名稱
                 foreach (var b in blockCompanys)
                 {
                     blockCompanySet.Add(b.CompanyName);
                 }
 
-                // 另存沒有被過濾掉的工作(有些工作偶爾會重複，若遇到 jobCode 重複則直接覆蓋舊的)
-                Dictionary<string, JobItem> jobDict = new Dictionary<string, JobItem>();
+                // 檢查傳入的工作列表，取出沒有被過濾的工作
                 foreach (var jobItem in jobItems)
                 {
                     if (!blockJobCodeSet.Contains(jobItem.Code) && !blockCompanySet.Contains(jobItem.Company))
                     {
-                        jobDict[jobItem.Code] = jobItem;
+                        new_jobitems.Add(jobItem);
                     }
                 }
 
-                // 取出過濾完畢的工作列表
-                foreach (var item in jobDict)
-                {
-                    new_jobitems.Add(item.Value);
-                }
                 return new_jobitems;
             }
             catch (Exception ex)
@@ -209,7 +203,7 @@ namespace JobFilter2.Services
                 // 判斷 User 是要封鎖工作還是封鎖公司
                 if (blockType == "jobCode")
                 {
-                    // 觀察工作列表，取出未被封鎖的項目
+                    // 觀察工作列表，取出未被封鎖的工作項目
                     foreach (var jobItem in jobItems)
                     {
                         if (jobItem.Code != target)
@@ -220,7 +214,7 @@ namespace JobFilter2.Services
                 }
                 else if (blockType == "company")
                 {
-                    // 觀察工作列表，取出未被封鎖的項目
+                    // 觀察工作列表，取出未被封鎖的工作項目
                     foreach (var jobItem in jobItems)
                     {
                         if (jobItem.Company != target)

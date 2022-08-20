@@ -134,10 +134,10 @@ namespace JobFilter2.Controllers
             {
                 // 爬取目標頁面，提取工作列表
                 var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
-                List<JobItem> jobItems = crawlService.GetTargetItems(crawlSetting);
+                List<JobItem> jobItems = await crawlService.GetTargetItems(crawlSetting);
                 if (jobItems.Count == 0)
                 {
-                    TempData["message"] = "爬取失敗";
+                    TempData["message"] = "搜尋到0筆工作";
                     return RedirectToAction("Index");
                 }
 
