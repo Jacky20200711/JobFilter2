@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
@@ -39,12 +38,6 @@ namespace JobFilter2.Controllers
                 TempData["message"] = "操作失敗";
                 return RedirectToRoute(new { controller = "Home", action = "Index" });
             }
-        }
-
-        public IActionResult Create(string Company)
-        {
-            ViewBag.Company = Company;
-            return View();
         }
 
         [HttpPost]
