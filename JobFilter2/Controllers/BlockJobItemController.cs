@@ -24,16 +24,12 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Create(IFormCollection PostData)
+        public async Task<string> Create(BlockJobItem data)
         {
             try
             {
-                // 新增封鎖工作並儲存到DB
-                BlockJobItem blockJobItem = new BlockJobItem
-                {
-                    JobCode = PostData["jobCode"].ToString(),
-                };
-                _context.Add(blockJobItem);
+                // 新增封鎖工作 & 寫入DB
+                _context.Add(data);
                 await _context.SaveChangesAsync();
 
                 // 刷新 Session 儲存的工作項目
@@ -41,7 +37,7 @@ namespace JobFilter2.Controllers
                 if (jobItemsStr != null)
                 {
                     List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
-                    jobItems = crawlService.GetUpdateList(jobItems, blockJobItem.JobCode, blockType: "jobCode");
+                    jobItems = crawlService.GetUpdateList(jobItems, data.JobCode, blockType: "jobCode");
                     HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
                 }
 
