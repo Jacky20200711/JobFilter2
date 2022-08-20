@@ -47,20 +47,12 @@ namespace JobFilter2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormCollection PostData)
+        public async Task<IActionResult> Create(CrawlSetting data)
         {
             try
             {
-                // 新增爬蟲設定
-                CrawlSetting crawlSetting = new CrawlSetting
-                {
-                    Remark = PostData["remark"].ToString(),
-                    TargetUrl = PostData["targetUrl"].ToString(),
-                    Seniority = PostData["seniority"].ToString(),
-                    MinSalary = int.Parse(PostData["minSalary"].ToString()),
-                };
-
-                _context.Add(crawlSetting);
+                // 新增爬蟲設定 & 寫入DB
+                _context.Add(data);
                 await _context.SaveChangesAsync();
                 TempData["message"] = "新增成功";
             }
@@ -76,8 +68,19 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
-                return View(crawlSetting);
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var data = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
+
+                if (data == null)
+                {
+                    return NotFound();
+                }
+
+                return View(data);
             }
             catch (Exception ex)
             {
@@ -89,23 +92,14 @@ namespace JobFilter2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(IFormCollection PostData)
+        public async Task<IActionResult> Edit(CrawlSetting data)
         {
             try
             {
-                // 提取欄位內容
-                int id = int.Parse(PostData["Id"].ToString());
-                int minSalary = int.Parse(PostData["minSalary"].ToString());
-                string remark = PostData["remark"].ToString();
-                string targetUrl = PostData["targetUrl"].ToString();
-                string seniority = PostData["seniority"].ToString();
-
-                // 撈取並修改目標資料
-                var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
-                crawlSetting.Remark = remark;
-                crawlSetting.TargetUrl = targetUrl;
-                crawlSetting.Seniority = seniority;
-                crawlSetting.MinSalary = minSalary;
+                _context.Entry(data).Property(p => p.TargetUrl).IsModified = true;
+                _context.Entry(data).Property(p => p.MinSalary).IsModified = true;
+                _context.Entry(data).Property(p => p.Seniority).IsModified = true;
+                _context.Entry(data).Property(p => p.Remark).IsModified = true;
                 await _context.SaveChangesAsync();
                 TempData["message"] = "修改成功";
             }
@@ -118,11 +112,10 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Delete(int id)
+        public async Task<string> Delete(CrawlSetting data)
         {
             try
             {
-                CrawlSetting data = new CrawlSetting() { Id = id };
                 _context.Entry(data).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
                 TempData["message"] = "刪除成功";

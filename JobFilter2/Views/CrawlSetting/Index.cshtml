@@ -37,7 +37,7 @@
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("Delete", "CrawlSetting")',
-                    data: { id: idOfData }
+                    data: { Id: idOfData }
                 })
                 .done(function (message) {
                     if (message == "刪除成功") {
