@@ -1,13 +1,10 @@
 ﻿using JobFilter2.Models;
 using JobFilter2.Models.Entities;
 using JobFilter2.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,22 +38,16 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Create(BlockCompany blockCompany)
+        public async Task<string> Create(BlockCompany data)
         {
             try
             {
                 // 新增封鎖公司 & 寫入DB
-                _context.Add(blockCompany);
+                _context.Add(data);
                 await _context.SaveChangesAsync();
 
-                // 刷新 Session 儲存的工作項目
-                string jobItemsStr = HttpContext.Session.GetString("jobItems");
-                if (jobItemsStr != null)
-                {
-                    List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
-                    jobItems = crawlService.GetUpdateList(jobItems, blockCompany.CompanyName, blockType: "company");
-                    HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
-                }
+                // 刷新 Session 儲存的工作列表
+                crawlService.UpdateJobList(data.CompanyName, blockType: "company", HttpContext);
 
                 return "封鎖成功";
             }

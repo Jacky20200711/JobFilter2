@@ -10,6 +10,8 @@ using AngleSharp;
 using JobFilter2.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace JobFilter2.Services
 {
@@ -187,41 +189,54 @@ namespace JobFilter2.Services
         }
 
         /// <summary>
-        /// 從目前的工作列表中，排除指定條件的工作項目(當封鎖工作或封鎖公司之後，都會Call這個函數)
+        /// 刷新 Session 儲存的工作列表(當封鎖工作或封鎖公司之後，都會Call這個函數)
         /// </summary>
-        /// <returns>過濾完畢的工作列表</returns>
-        public List<JobItem> GetUpdateList(List<JobItem> jobItems, string target, string blockType)
+        public void UpdateJobList(string target, string blockType, HttpContext httpContext)
         {
             List<JobItem> new_jobitems = new List<JobItem>();
 
-            if(jobItems == null)
+            try
             {
-                return new_jobitems;
-            }
-
-            // 判斷 User 是要封鎖工作還是封鎖公司
-            if (blockType == "jobCode")
-            {
-                foreach (var jobItem in jobItems)
+                // 從 Session 取出工作列表
+                string jobItemsStr = httpContext.Session.GetString("jobItems");
+                if (jobItemsStr == null)
                 {
-                    if(jobItem.Code != target)
+                    return;
+                }
+
+                List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
+
+                // 判斷 User 是要封鎖工作還是封鎖公司
+                if (blockType == "jobCode")
+                {
+                    // 觀察工作列表，取出未被封鎖的項目
+                    foreach (var jobItem in jobItems)
                     {
-                        new_jobitems.Add(jobItem);
+                        if (jobItem.Code != target)
+                        {
+                            new_jobitems.Add(jobItem);
+                        }
                     }
                 }
-            }
-            else if(blockType == "company")
-            {
-                foreach (var jobItem in jobItems)
+                else if (blockType == "company")
                 {
-                    if (jobItem.Company != target)
+                    // 觀察工作列表，取出未被封鎖的項目
+                    foreach (var jobItem in jobItems)
                     {
-                        new_jobitems.Add(jobItem);
+                        if (jobItem.Company != target)
+                        {
+                            new_jobitems.Add(jobItem);
+                        }
                     }
                 }
-            }
 
-            return new_jobitems;
+                // 刷新 Session 儲存的工作列表
+                httpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(new_jobitems));
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
