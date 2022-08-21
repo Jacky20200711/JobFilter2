@@ -51,28 +51,27 @@
                                         <label>最低薪水</label>
                                         <input class="form-control" name="MinSalary" type="number" value=@Model.MinSalary min="40000" max=300000 autocomplete="off" required>
                                     </div>
-                                    <div class="form-group">
-                                        <label>工作年資</label><br>
+                                    <div class="form-group" style="margin-top:25px;">
+                                        <label>工作年資</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                         @{
                                             string isChecked_1 = Model.Seniority == "1年以下" ? "checked" : "";
                                             string isChecked_2 = Model.Seniority == "1~3年" ? "checked" : "";
                                             string isChecked_3 = Model.Seniority == "3~5年" ? "checked" : "";
+                                            string radioStyle = "width:18px;height:18px; cursor:pointer; margin-top:3px;";
+                                            string radioLabelStyle = "margin-left:4px; font-size:14px; margin-top:3px;";
 
-                                            <div class="radio-inline">
-                                                <label>
-                                                    <input type="radio" name="Seniority" id="optionsRadios1" value="1年以下" @isChecked_1>1年以下
-                                                </label>
-                                            </div>
-                                            <div class="radio-inline">
-                                                <label>
-                                                    <input type="radio" name="Seniority" id="optionsRadios2" value="1~3年" @isChecked_2>1~3年
-                                                </label>
-                                            </div>
-                                            <div class="radio-inline">
-                                                <label>
-                                                    <input type="radio" name="Seniority" id="optionsRadios3" value="3~5年" @isChecked_3>3~5年
-                                                </label>
-                                            </div>
+                                            <label class="radio-inline">
+                                                <input type="radio" style="@radioStyle" name="Seniority" value="1年以下" @isChecked_1>
+                                                <label style="@radioLabelStyle">1年以下</label>
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" style="@radioStyle" name="Seniority" value="1~3年" @isChecked_2>
+                                                <label style="@radioLabelStyle">1~3年</label>
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" style="@radioStyle" name="Seniority" value="3~5年" @isChecked_3>
+                                                <label style="@radioLabelStyle">3~5年</label>
+                                            </label>
                                         }
                                     </div>
                                     <button type="submit" class="btn btn-primary">送出</button>
