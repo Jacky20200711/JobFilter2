@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace JobFilter2.Services
 {
@@ -151,19 +152,11 @@ namespace JobFilter2.Services
                 var blockJobItems = await context.BlockJobItems.ToListAsync();
                 var blockCompanys = await context.BlockCompanies.ToListAsync();
 
-                // 將已封鎖的工作代碼和公司名稱，添加到 HashTable 以方便待會比對
+                // 將已封鎖的工作代碼和公司名稱，轉存到 HashTable 以加速搜尋比對
                 HashSet<string> blockJobCodeSet = new HashSet<string>();
                 HashSet<string> blockCompanySet = new HashSet<string>();
-
-                foreach (var b in blockJobItems)
-                {
-                    blockJobCodeSet.Add(b.JobCode);
-                }
-
-                foreach (var b in blockCompanys)
-                {
-                    blockCompanySet.Add(b.CompanyName);
-                }
+                blockJobItems.ForEach(x => blockJobCodeSet.Add(x.JobCode));
+                blockCompanys.ForEach(x => blockCompanySet.Add(x.CompanyName));
 
                 // 檢查傳入的工作列表，取出沒有被過濾的工作
                 foreach (var jobItem in jobItems)
