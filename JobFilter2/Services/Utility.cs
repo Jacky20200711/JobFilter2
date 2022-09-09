@@ -14,7 +14,7 @@ namespace JobFilter2.Services
         /// </summary>
         public static Dictionary<string, string> BLOCK_REASON = new Dictionary<string, string>
         {
-            { "R01", "派遣或駐點" },
+            { "R01", "派遣/駐點/需要出差" },
             { "R02", "交通不方便" },
             { "R03", "技能樹/經驗/條件不符合" },
             { "R04", "薪水太低" },
