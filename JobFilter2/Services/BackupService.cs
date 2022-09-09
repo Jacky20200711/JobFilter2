@@ -92,25 +92,12 @@ namespace JobFilter2.Services
                 string fPath2 = importPath + "\\BlockJobItems.csv";
                 string fPath3 = importPath + "\\BlockCompanies.csv";
 
-                // 讀取爬蟲設定
-                using var reader1 = new StreamReader(fPath1, Encoding.UTF8);
-                var csvReader1 = new CsvReader(reader1, CultureInfo.InvariantCulture);
-                csvReader1.Context.RegisterClassMap<CrawlSettingMap>();
-                var DataList1 = csvReader1.GetRecords<CrawlSetting>().ToList();
+                // 這些變數用來儲存從檔案讀取出來的資料
+                List<CrawlSetting> DataList1 = new List<CrawlSetting>();
+                List<BlockJobItem> DataList2 = new List<BlockJobItem>();
+                List<BlockCompany> DataList3 = new List<BlockCompany>();
 
-                // 讀取封鎖工作
-                using var reader2 = new StreamReader(fPath2, Encoding.UTF8);
-                var csvReader2 = new CsvReader(reader2, CultureInfo.InvariantCulture);
-                csvReader2.Context.RegisterClassMap<BlockJobItemMap>();
-                var DataList2 = csvReader2.GetRecords<BlockJobItem>().ToList();
-
-                // 讀取封鎖公司
-                using var reader3 = new StreamReader(fPath3, Encoding.UTF8);
-                var csvReader3 = new CsvReader(reader3, CultureInfo.InvariantCulture);
-                csvReader3.Context.RegisterClassMap<BlockCompanyMap>();
-                var DataList3 = csvReader3.GetRecords<BlockCompany>().ToList();
-
-                // 整理資料內容，等等會用 SQL 做多筆的資料匯入
+                // 這些變數用來整理資料內容，等等會用 SQL 做多筆的資料匯入
                 List<string> insert_CrawlSetting = new List<string>();
                 List<string> insert_BlockJobItem = new List<string>();
                 List<string> insert_BlockCompany = new List<string>();
@@ -118,36 +105,85 @@ namespace JobFilter2.Services
                 List<SqlParameter> sqlParameter_BlockJobItem = new List<SqlParameter>();
                 List<SqlParameter> sqlParameter_BlockCompany = new List<SqlParameter>();
                 int no = 0;
-                
-                foreach (var data in DataList1)
+
+                // 若備份檔案存在，才會進一步讀取資料
+                if (File.Exists(fPath1))
                 {
-                    insert_CrawlSetting.Add($"(@TargetUrl{no},@MinSalary{no},@Seniority{no},@Remark{no})");
-                    sqlParameter_CrawlSetting.Add(new SqlParameter($"@TargetUrl{no}", data.TargetUrl));
-                    sqlParameter_CrawlSetting.Add(new SqlParameter($"@MinSalary{no}", data.MinSalary));
-                    sqlParameter_CrawlSetting.Add(new SqlParameter($"@Seniority{no}", data.Seniority));
-                    sqlParameter_CrawlSetting.Add(new SqlParameter($"@Remark{no}", data.Remark));
-                    no++;
+                    // 讀取檔案資料並轉成LIST
+                    using var reader1 = new StreamReader(fPath1, Encoding.UTF8);
+                    var csvReader1 = new CsvReader(reader1, CultureInfo.InvariantCulture);
+                    csvReader1.Context.RegisterClassMap<CrawlSettingMap>();
+                    DataList1 = csvReader1.GetRecords<CrawlSetting>().ToList();
+
+                    // 若LIST不為空，才會進一步設定並執行SQL
+                    if(DataList1.Count > 0)
+                    {
+                        // 設定等等要 INSERT 的 SQL 指令
+                        foreach (var data in DataList1)
+                        {
+                            insert_CrawlSetting.Add($"(@TargetUrl{no},@MinSalary{no},@Seniority{no},@Remark{no})");
+                            sqlParameter_CrawlSetting.Add(new SqlParameter($"@TargetUrl{no}", data.TargetUrl));
+                            sqlParameter_CrawlSetting.Add(new SqlParameter($"@MinSalary{no}", data.MinSalary));
+                            sqlParameter_CrawlSetting.Add(new SqlParameter($"@Seniority{no}", data.Seniority));
+                            sqlParameter_CrawlSetting.Add(new SqlParameter($"@Remark{no}", data.Remark));
+                            no++;
+                        }
+
+                        // 執行 SQL 指令
+                        _context.Database.ExecuteSqlRaw($"INSERT INTO CrawlSetting VALUES {string.Join(",", insert_CrawlSetting)}", sqlParameter_CrawlSetting);
+                    }
                 }
 
-                foreach (var data in DataList2)
+                // 若備份檔案存在，才會進一步讀取資料
+                if (File.Exists(fPath2))
                 {
-                    insert_BlockJobItem.Add($"(@JobCode{no})");
-                    sqlParameter_BlockJobItem.Add(new SqlParameter($"@JobCode{no}", data.JobCode));
-                    no++;
+                    // 讀取檔案資料並轉成LIST
+                    using var reader2 = new StreamReader(fPath2, Encoding.UTF8);
+                    var csvReader2 = new CsvReader(reader2, CultureInfo.InvariantCulture);
+                    csvReader2.Context.RegisterClassMap<BlockJobItemMap>();
+                    DataList2 = csvReader2.GetRecords<BlockJobItem>().ToList();
+
+                    // 若LIST不為空，才會進一步設定並執行SQL
+                    if (DataList2.Count > 0)
+                    {
+                        // 設定等等要 INSERT 的 SQL 指令
+                        foreach (var data in DataList2)
+                        {
+                            insert_BlockJobItem.Add($"(@JobCode{no})");
+                            sqlParameter_BlockJobItem.Add(new SqlParameter($"@JobCode{no}", data.JobCode));
+                            no++;
+                        }
+
+                        // 執行 SQL 指令
+                        _context.Database.ExecuteSqlRaw($"INSERT INTO BlockJobItem VALUES {string.Join(",", insert_BlockJobItem)}", sqlParameter_BlockJobItem);
+                    }
                 }
 
-                foreach (var data in DataList3)
+                // 若備份檔案存在，才會進一步讀取資料
+                if (File.Exists(fPath3))
                 {
-                    insert_BlockCompany.Add($"(@CompanyName{no},@BlockReason{no})");
-                    sqlParameter_BlockCompany.Add(new SqlParameter($"@CompanyName{no}", data.CompanyName));
-                    sqlParameter_BlockCompany.Add(new SqlParameter($"@BlockReason{no}", data.BlockReason));
-                    no++;
-                }
+                    // 讀取檔案資料並轉成LIST
+                    using var reader3 = new StreamReader(fPath3, Encoding.UTF8);
+                    var csvReader3 = new CsvReader(reader3, CultureInfo.InvariantCulture);
+                    csvReader3.Context.RegisterClassMap<BlockCompanyMap>();
+                    DataList3 = csvReader3.GetRecords<BlockCompany>().ToList();
 
-                // 多筆資料匯入
-                _context.Database.ExecuteSqlRaw($"INSERT INTO CrawlSetting VALUES {string.Join(",", insert_CrawlSetting)}", sqlParameter_CrawlSetting);
-                _context.Database.ExecuteSqlRaw($"INSERT INTO BlockJobItem VALUES {string.Join(",", insert_BlockJobItem)}", sqlParameter_BlockJobItem);
-                _context.Database.ExecuteSqlRaw($"INSERT INTO BlockCompany VALUES {string.Join(",", insert_BlockCompany)}", sqlParameter_BlockCompany);
+                    // 若LIST不為空，才會進一步設定並執行SQL
+                    if (DataList3.Count > 0)
+                    {
+                        // 設定等等要 INSERT 的 SQL 指令
+                        foreach (var data in DataList3)
+                        {
+                            insert_BlockCompany.Add($"(@CompanyName{no},@BlockReason{no})");
+                            sqlParameter_BlockCompany.Add(new SqlParameter($"@CompanyName{no}", data.CompanyName));
+                            sqlParameter_BlockCompany.Add(new SqlParameter($"@BlockReason{no}", data.BlockReason));
+                            no++;
+                        }
+
+                        // 執行 SQL 指令
+                        _context.Database.ExecuteSqlRaw($"INSERT INTO BlockCompany VALUES {string.Join(",", insert_BlockCompany)}", sqlParameter_BlockCompany);
+                    }
+                }
             }
             catch (Exception ex)
             {
