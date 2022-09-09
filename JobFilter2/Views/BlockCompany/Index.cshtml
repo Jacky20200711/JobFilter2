@@ -70,9 +70,9 @@
                 width:360,
                 input: 'radio',
                 inputOptions: {
-                    @Html.Raw(@Utility.BLOCK_REASON)
+                    @Html.Raw(@Utility.GetRadioItems())
                 },
-                inputValue: '派遣或駐點',
+                inputValue: 'R01', // R01這個值來自於後端定義的封鎖代碼
                 showCancelButton: true,
                 customClass: {
                     title: 'swal-title-font-size',
@@ -88,10 +88,10 @@
                     url: '@Url.Action("Edit", "BlockCompany")',
                     data: { Id: data_id, BlockReason: new_reason }
                 })
-                .done(function (message) {
-                    if (message == "修改成功") {
+                .done(function (result) {
+                    if (result["code"] === 1) {
                         // 修改頁面顯示的封鎖理由
-                        document.getElementById(reason_id).innerText = new_reason;
+                        document.getElementById(reason_id).innerText = result["data"];
                     }
                     else{
                         Swal.fire({
@@ -141,7 +141,7 @@
                                             <tr class="gradeA">
                                                 <td style="display:none;">@sequence</td>
                                                 <td>@blockCompany.CompanyName</td>
-                                                <td id="reason_@blockCompany.Id">@blockCompany.BlockReason</td>
+                                                <td id="reason_@blockCompany.Id">@Utility.BLOCK_REASON[blockCompany.BlockReason]</td>
                                                 <td class="center-block">
                                                     <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
                                                     <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id, 'edit_@blockCompany.Id', 'delete_@blockCompany.Id')">刪除</button>

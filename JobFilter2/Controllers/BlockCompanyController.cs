@@ -59,19 +59,27 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Edit(BlockCompany data)
+        public async Task<Result> Edit(BlockCompany data)
         {
+            Result result = new Result
+            {
+                Code = 0,
+                Message = "操作失敗"
+            };
+
             try
             {
                 _context.Entry(data).Property(p => p.BlockReason).IsModified = true;
                 await _context.SaveChangesAsync();
-                return "修改成功";
+                result.Data = Utility.BLOCK_REASON[data.BlockReason];
+                result.Message = "修改成功";
+                result.Code = 1;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return "操作失敗";
             }
+            return result;
         }
 
         [HttpPost]

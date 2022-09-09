@@ -80,9 +80,9 @@
                 width:360,
                 input: 'radio',
                 inputOptions: {
-                    @Html.Raw(@Utility.BLOCK_REASON)
+                    @Html.Raw(@Utility.GetRadioItems())
                 },
-                inputValue: '派遣或駐點',
+                inputValue: 'R01', // R01這個值來自於後端定義的封鎖代碼
                 showCancelButton: true,
                 customClass: {
                     title: 'swal-title-font-size',
