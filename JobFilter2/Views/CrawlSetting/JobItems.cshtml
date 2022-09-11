@@ -123,30 +123,23 @@
 
 <script>
     function SearchComment(companyName) {
-        var fileLink1 = document.createElement("a");
-        var fileLink2 = document.createElement("a");
-        var fileLink3 = document.createElement("a");
-        var fileLink4 = document.createElement("a");
-        document.body.appendChild(fileLink1);
-        document.body.appendChild(fileLink2);
-        document.body.appendChild(fileLink3);
-        document.body.appendChild(fileLink4);
-        fileLink1.style = "display:none";
-        fileLink2.style = "display:none";
-        fileLink3.style = "display:none";
-        fileLink4.style = "display:none";
-        fileLink1.setAttribute('target', '_blank');
-        fileLink2.setAttribute('target', '_blank');
-        fileLink3.setAttribute('target', '_blank');
-        fileLink4.setAttribute('target', '_blank');
-        fileLink1.href = "https://interview.tw/search?keyword=" + companyName;
-        fileLink2.href = "https://www.qollie.com/search?keyword=" + companyName + "&kind=company&from=normal";
-        fileLink3.href = "https://www.twjobs.net/q.aspx?q=" + companyName;
-        fileLink4.href = "https://www.goodjob.life/companies/" + companyName;
-        fileLink1.click();
-        fileLink2.click();
-        fileLink3.click();
-        fileLink4.click();
+        var fileLinks = [];
+        var linkNum = 3;
+        // 製造並配置多個超連結
+        for (var i = 0; i < linkNum; i++) {
+            fileLinks.push(document.createElement("a"));
+            document.body.appendChild(fileLinks[i]);
+            fileLinks[i].style = "display:none";
+            fileLinks[i].setAttribute('target', '_blank');
+        }
+        // 設定超連結的網址
+        fileLinks[0].href = "https://interview.tw/search?keyword=" + companyName;
+        fileLinks[1].href = "https://www.qollie.com/search?keyword=" + companyName + "&kind=company&from=normal";
+        fileLinks[2].href = "https://www.goodjob.life/companies/" + companyName;
+        // 開啟所有的超連結
+        for (var i = 0; i < linkNum; i++) {
+            fileLinks[i].click();
+        }
     }
 </script>
 
@@ -183,17 +176,17 @@
                                         {
                                             sequence++;
                                             string selector_id = Guid.NewGuid().ToString();
-                                            <tr class="gradeA">
-                                                <td style="display:none;">@sequence</td>
-                                                <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
-                                                <td>@jobItem.Salary</td>
-                                                <td><a onclick="SearchComment('@jobItem.Company'); return false;" style="cursor:pointer;">@jobItem.Company</a></td>
-                                                <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
-                                                <td class="center-block" style="white-space: nowrap;">
-                                                    <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">封鎖工作</button>
-                                                    <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>
-                                                </td>
-                                            </tr>
+                                                                    <tr class="gradeA">
+                                                                        <td style="display:none;">@sequence</td>
+                                                                        <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
+                                                                        <td>@jobItem.Salary</td>
+                                                                        <td><a onclick="SearchComment('@jobItem.Company'); return false;" style="cursor:pointer;">@jobItem.Company</a></td>
+                                                                        <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
+                                                                        <td class="center-block" style="white-space: nowrap;">
+                                                                            <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">封鎖工作</button>
+                                                                            <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>
+                                                                        </td>
+                                                                    </tr>
                                         }
                                     }
                                 </tbody>
