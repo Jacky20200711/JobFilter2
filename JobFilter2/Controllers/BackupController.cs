@@ -71,14 +71,13 @@ namespace JobFilter2.Controllers
             }
         }
 
-        public IActionResult DeleteAll()
+        public IActionResult ClearBlock()
         {
             try
             {
-                _context.Database.ExecuteSqlRaw($"DELETE FROM CrawlSetting");
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
-                TempData["message"] = "刪除成功";
+                TempData["message"] = "清除成功";
             }
             catch (Exception ex)
             {
