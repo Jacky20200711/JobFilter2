@@ -124,7 +124,7 @@
 <script>
     function SearchComment(companyName) {
         var fileLinks = [];
-        var linkNum = 3;
+        var linkNum = 2;
         // 製造並配置多個超連結
         for (var i = 0; i < linkNum; i++) {
             fileLinks.push(document.createElement("a"));
@@ -136,7 +136,6 @@
         companyName = ResetCompanyName(companyName);
         fileLinks[0].href = "https://interview.tw/search?keyword=" + companyName;
         fileLinks[1].href = "https://www.qollie.com/search?keyword=" + companyName + "&kind=company&from=normal";
-        fileLinks[2].href = "https://www.goodjob.life/companies/" + companyName;
         // 開啟所有的超連結
         for (var i = 0; i < linkNum; i++) {
             fileLinks[i].click();
@@ -147,7 +146,7 @@
         // 為了處理XX有限公司被改名成XX股份有限公司的情況，拔除相關部分以免影響搜尋
         companyName = companyName.replace("股份有限公司", "");
         companyName = companyName.replace("有限公司", "");
-        // 將第一個找到的中文字元視為公司名稱的開頭(若字元的 ASCII Code > 255 則視為中文字元) 
+        // 將第一個找到的中文字元視為公司名稱的開頭(PS:若字元的 ASCII Code > 255 則視為中文字元) 
         var startIndex = 0;
         for(var i = 0; i < companyName.length; i++){
             if (companyName[i].charCodeAt() > 255) {
