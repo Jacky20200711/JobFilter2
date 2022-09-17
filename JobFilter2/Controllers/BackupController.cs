@@ -54,7 +54,7 @@ namespace JobFilter2.Controllers
                 // 匯入前先清空各資料表
                 _context.Database.ExecuteSqlRaw($"DELETE FROM CrawlSetting");
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
-                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
+                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
 
                 // 提取資料夾路徑
                 string importPath = PostData["importPath"].ToString();
