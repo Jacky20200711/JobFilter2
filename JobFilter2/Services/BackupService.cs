@@ -60,14 +60,6 @@ namespace JobFilter2.Services
                 List<BlockJobItem> DataList2 = new List<BlockJobItem>();
                 List<BlockCompany> DataList3 = new List<BlockCompany>();
 
-                // 這些變數用來整理資料內容，等等會用 SQL 做多筆的資料匯入
-                List<string> insert_CrawlSetting = new List<string>();
-                List<string> insert_BlockJobItem = new List<string>();
-                List<string> insert_BlockCompany = new List<string>();
-                List<SqlParameter> sqlParameter_CrawlSetting = new List<SqlParameter>();
-                List<SqlParameter> sqlParameter_BlockJobItem = new List<SqlParameter>();
-                List<SqlParameter> sqlParameter_BlockCompany = new List<SqlParameter>();
-
                 // 若備份檔案存在，才會進一步讀取資料
                 if (File.Exists(fPath1))
                 {
@@ -96,7 +88,7 @@ namespace JobFilter2.Services
                     var csvReader2 = new CsvReader(reader2, CultureInfo.InvariantCulture);
                     DataList2 = csvReader2.GetRecords<BlockJobItem>().ToList();
 
-                    // 若LIST不為空，才會進一步設定並執行SQL
+                    // 若LIST不為空，才會將資料匯入DB
                     if (DataList2.Count > 0)
                     {
                         using var transaction = _context.Database.BeginTransaction();
@@ -116,7 +108,7 @@ namespace JobFilter2.Services
                     var csvReader3 = new CsvReader(reader3, CultureInfo.InvariantCulture);
                     DataList3 = csvReader3.GetRecords<BlockCompany>().ToList();
 
-                    // 若LIST不為空，才會進一步設定並執行SQL
+                    // 若LIST不為空，才會將資料匯入DB
                     if (DataList3.Count > 0)
                     {
                         using var transaction = _context.Database.BeginTransaction();
