@@ -157,7 +157,14 @@ namespace JobFilter2.Controllers
 
         public IActionResult JobItems()
         {
-            return View();
+            List<JobItem> jobItems = new List<JobItem>();
+            string itemStr = HttpContext.Session.GetString("jobItems");
+            if (itemStr != null)
+            {
+                jobItems = JsonConvert.DeserializeObject<List<JobItem>>(itemStr);
+            }
+
+            return View(jobItems);
         }
     }
 }

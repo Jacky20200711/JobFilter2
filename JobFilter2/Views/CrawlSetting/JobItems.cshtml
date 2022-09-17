@@ -1,15 +1,5 @@
-﻿@using Newtonsoft.Json;
-@using Microsoft.AspNetCore.Http
-@using JobFilter2.Services
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-@{
-    List<JobItem> jobItems = new List<JobItem>();
-    string itemStr = HttpContextAccessor.HttpContext.Session.GetString("jobItems");
-    if(itemStr != null)
-    {
-        jobItems = JsonConvert.DeserializeObject<List<JobItem>>(itemStr);
-    }
-}﻿
+﻿@model List<JobFilter2.Models.JobItem>
+@using JobFilter2.Services;
 
 <script>
     // 這個函數用來將 Entity Code 轉回中文
@@ -186,7 +176,7 @@
                                 <tbody>
                                     @{
                                         int sequence = 0;
-                                        foreach (var jobItem in jobItems)
+                                        foreach (var jobItem in Model)
                                         {
                                             sequence++;
                                             string selector_id = Guid.NewGuid().ToString();
