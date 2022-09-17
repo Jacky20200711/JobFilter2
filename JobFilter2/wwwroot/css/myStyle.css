@@ -1,0 +1,48 @@
+﻿/* 和頂端工具列相關的部分 */
+#navbar-top-links-left {
+    color: white;
+}
+
+#navbar-top-links-left:hover {
+    color: #72FFFF;
+}
+
+#navbar-top-links-middle {
+    top: -4px;
+    color: white;
+}
+
+#navbar-top-links-middle:hover {
+    margin-top: -2px;
+}
+
+.toolbar_li {
+    margin-top: 6px;
+    height: 40px;
+    font-weight: 600;
+    width: 120px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.toolbar_li:hover {
+    border: 2px solid white;
+}
+
+/* 和 SweetAlert 相關的部分 */
+.swal-button-font-size {
+    font-size: 20px !important;
+}
+
+.swal-title-font-size {
+    font-size: 40px !important;
+}
+
+.swal-radio {
+    display: grid !important;
+    font-size: 18px !important;
+}
+
+.swal-radio label {
+    cursor: pointer;
+}
