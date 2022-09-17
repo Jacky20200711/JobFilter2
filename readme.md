@@ -73,7 +73,4 @@ create table CrawlSetting
 # 將DB的資料匯出成CSV檔案  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_07.PNG?raw=true)  
 &emsp;  
-# 確認匯出結果  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_08.PNG?raw=true)  
-&emsp;  
 

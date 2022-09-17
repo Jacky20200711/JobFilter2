@@ -67,7 +67,7 @@
         (async () => {
             const { value: new_reason } = await Swal.fire({
                 title: '請選擇封鎖理由',
-                width:360,
+                width: 400,
                 input: 'radio',
                 inputOptions: {
                     @Html.Raw(@Utility.GetRadioItems())
