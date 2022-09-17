@@ -36,7 +36,7 @@ namespace JobFilter2.Controllers
             {
                 _logger.LogError(ex.ToString());
                 TempData["message"] = "操作失敗";
-                return RedirectToRoute(new { controller = "Home", action = "Index" });
+                return Content("ERROR");
             }
         }
 

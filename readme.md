@@ -52,25 +52,22 @@ create table CrawlSetting
 &nbsp;&nbsp;&nbsp;&nbsp;Remark nvarchar(20),  
 );  
 &emsp;  
-# 網站首頁  
+# 網站首頁(爬蟲列表)  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_01.PNG?raw=true)  
-&emsp;  
-# 爬蟲列表  
+&emsp;   
+# 修改爬蟲設定  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_02.PNG?raw=true)  
 &emsp;  
-# 修改爬蟲設定  
+# 點選[爬取工作]，取得過濾後的工作列表  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_03.PNG?raw=true)  
 &emsp;  
-# 點選[爬取工作]，取得過濾後的工作列表  
+# 點選職位名稱的超連結，開啟該職缺的104頁面  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_04.PNG?raw=true)  
 &emsp;  
-# 點選職位名稱的超連結，開啟該職缺的104頁面  
+# 點選封鎖公司之後，彈出選擇理由的視窗  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_05.PNG?raw=true)  
 &emsp;  
-# 點選封鎖公司之後，彈出選擇理由的視窗  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_06.PNG?raw=true)  
-&emsp;  
 # 將DB的資料匯出成CSV檔案  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_07.PNG?raw=true)  
+![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_06.PNG?raw=true)  
 &emsp;  
 

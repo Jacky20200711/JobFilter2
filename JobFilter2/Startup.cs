@@ -42,7 +42,7 @@ namespace JobFilter2
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=CrawlSetting}/{action=Index}/{id?}");
             });
 
             Utility.SetRadioItems();
