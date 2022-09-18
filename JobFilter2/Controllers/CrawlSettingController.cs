@@ -137,7 +137,7 @@ namespace JobFilter2.Controllers
                 List<JobItem> jobItems = await crawlService.GetTargetItems(crawlSetting);
                 if (jobItems.Count == 0)
                 {
-                    TempData["message"] = "搜尋到0筆工作";
+                    TempData["message"] = "搜尋失敗";
                     return RedirectToAction("Index");
                 }
 
