@@ -54,23 +54,23 @@
                                     <div class="form-group" style="margin-top:25px;">
                                         <label>工作年資</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                         @{
-                                            string isChecked_1 = Model.Seniority == "1年以下" ? "checked" : "";
-                                            string isChecked_2 = Model.Seniority == "1~3年" ? "checked" : "";
-                                            string isChecked_3 = Model.Seniority == "3~5年" ? "checked" : "";
-                                            string radioStyle = "width:18px;height:18px; cursor:pointer; margin-top:3px;";
-                                            string radioLabelStyle = "margin-left:4px; font-size:14px; margin-top:3px;";
+                                            string isChecked_1 = Model.Seniority.Contains("1") ? "checked" : "";
+                                            string isChecked_2 = Model.Seniority.Contains("3") ? "checked" : "";
+                                            string isChecked_3 = Model.Seniority.Contains("5") ? "checked" : "";
+                                            string cBoxStyle = "width:18px; height:18px; cursor:pointer; margin-top:3px;";
+                                            string cBoxLabelStyle = "margin-left:4px; font-size:14px; margin-top:3px;";
 
-                                            <label class="radio-inline">
-                                                <input type="radio" style="@radioStyle" name="Seniority" value="1年以下" @isChecked_1>
-                                                <label style="@radioLabelStyle">1年以下</label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="seniority1" style="@cBoxStyle" value="1" @isChecked_1>
+                                                <label style="@cBoxLabelStyle">1年以下</label>
                                             </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" style="@radioStyle" name="Seniority" value="1~3年" @isChecked_2>
-                                                <label style="@radioLabelStyle">1~3年</label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="seniority2" style="@cBoxStyle" value="3" @isChecked_2>
+                                                <label style="@cBoxLabelStyle">1~3年</label>
                                             </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" style="@radioStyle" name="Seniority" value="3~5年" @isChecked_3>
-                                                <label style="@radioLabelStyle">3~5年</label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="seniority3" style="@cBoxStyle" value="5" @isChecked_3>
+                                                <label style="@cBoxLabelStyle">3~5年</label>
                                             </label>
                                         }
                                     </div>

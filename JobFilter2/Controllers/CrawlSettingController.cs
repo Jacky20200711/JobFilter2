@@ -47,10 +47,17 @@ namespace JobFilter2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CrawlSetting data)
+        public async Task<IActionResult> Create(CrawlSetting data, string seniority1, string seniority2, string seniority3)
         {
             try
             {
+                // 調整年資欄位
+                List<string> sList = new List<string>();
+                if (!string.IsNullOrEmpty(seniority1)) sList.Add(seniority1);
+                if (!string.IsNullOrEmpty(seniority2)) sList.Add(seniority2);
+                if (!string.IsNullOrEmpty(seniority3)) sList.Add(seniority3);
+                data.Seniority = string.Join(",", sList);
+
                 // 新增爬蟲設定 & 寫入DB
                 _context.Add(data);
                 await _context.SaveChangesAsync();
@@ -92,10 +99,18 @@ namespace JobFilter2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CrawlSetting data)
+        public async Task<IActionResult> Edit(CrawlSetting data, string seniority1, string seniority2, string seniority3)
         {
             try
             {
+                // 調整年資欄位
+                List<string> sList = new List<string>();
+                if (!string.IsNullOrEmpty(seniority1)) sList.Add(seniority1);
+                if (!string.IsNullOrEmpty(seniority2)) sList.Add(seniority2);
+                if (!string.IsNullOrEmpty(seniority3)) sList.Add(seniority3);
+                data.Seniority = string.Join(",", sList);
+
+                // 設定欲修改的欄位
                 _context.Entry(data).Property(p => p.TargetUrl).IsModified = true;
                 _context.Entry(data).Property(p => p.MinSalary).IsModified = true;
                 _context.Entry(data).Property(p => p.Seniority).IsModified = true;

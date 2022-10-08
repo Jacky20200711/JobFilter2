@@ -26,15 +26,7 @@ namespace JobFilter2.Services
         /// </summary>
         public async Task LoadPage(Crawler crawler, CrawlSetting crawlSetting, int currentPage = 1)
         {
-            int seniority = crawlSetting.Seniority switch
-            {
-                "1年以下" => 1,
-                "1~3年" => 3,
-                "3~5年" => 5,
-                _ => 1,
-            };
-
-            string targetUrl = crawlSetting.TargetUrl + $"&scmin={crawlSetting.MinSalary}&page={currentPage}&jobexp={seniority}";
+            string targetUrl = crawlSetting.TargetUrl + $"&scmin={crawlSetting.MinSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}";
 
             try
             {

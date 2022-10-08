@@ -96,7 +96,14 @@
                                                 <td style="display:none;">@sequence</td>
                                                 <td>@remark</td>
                                                 <td>@crawlSetting.MinSalary</td>
-                                                <td>@crawlSetting.Seniority</td>
+                                                @{
+                                                    List<string> sList = new List<string>();
+                                                    if (crawlSetting.Seniority.Contains("1")) sList.Add("0-1");
+                                                    if (crawlSetting.Seniority.Contains("3")) sList.Add("1-3");
+                                                    if (crawlSetting.Seniority.Contains("5")) sList.Add("3-5");
+                                                    string seniority = string.Join(",", sList);
+                                                }
+                                                <td>@seniority</td>
                                                 <td class="center-block">
                                                     <button class="btn btn-info" onclick="location.href='@Url.Action("DoCrawl", "CrawlSetting", new { id = crawlSetting.Id })'">爬取工作</button>
                                                     <button class="btn btn-success" onclick="location.href='@Url.Action("Edit", "CrawlSetting", new { id = crawlSetting.Id })'">修改</button>
