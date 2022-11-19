@@ -1,4 +1,4 @@
-using JobFilter2.Models;
+using JobFilter2.Models.Entities;
 using JobFilter2.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

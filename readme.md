@@ -46,7 +46,7 @@ create table BlockCompany
 create table CrawlSetting  
 (  
 &nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
-&nbsp;&nbsp;&nbsp;&nbsp;TargetUrl nvarchar(400) NOT NULL,  
+&nbsp;&nbsp;&nbsp;&nbsp;TargetUrl nvarchar(2000) NOT NULL,  
 &nbsp;&nbsp;&nbsp;&nbsp;MinSalary int NOT NULL,  
 &nbsp;&nbsp;&nbsp;&nbsp;Seniority nvarchar(10) NOT NULL,  
 &nbsp;&nbsp;&nbsp;&nbsp;Remark nvarchar(20),  

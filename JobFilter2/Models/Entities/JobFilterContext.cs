@@ -1,11 +1,10 @@
 ﻿using System;
-using JobFilter2.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace JobFilter2.Models
+namespace JobFilter2.Models.Entities
 {
     public partial class JobFilterContext : DbContext
     {
@@ -64,9 +63,7 @@ namespace JobFilter2.Models
                     .IsRequired()
                     .HasMaxLength(10);
 
-                entity.Property(e => e.TargetUrl)
-                    .IsRequired()
-                    .HasMaxLength(400);
+                entity.Property(e => e.TargetUrl).HasMaxLength(2000);
             });
 
             OnModelCreatingPartial(modelBuilder);
