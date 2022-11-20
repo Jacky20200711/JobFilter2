@@ -1,7 +1,5 @@
 ﻿using CsvHelper;
-using JobFilter2.Models;
 using JobFilter2.Models.Entities;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,6 @@
 ﻿using JobFilter2.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using AngleSharp.Dom;
 using System.Threading.Tasks;
 using NLog;
@@ -12,9 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.Collections;
-using System.Linq.Expressions;
-using NLog.Time;
 
 namespace JobFilter2.Services
 {
@@ -239,7 +235,7 @@ namespace JobFilter2.Services
                     foreach (string word in exWords)
                     {
                         // 考慮到英文單字，兩邊都轉成小寫再進行比對
-                        // 添加 Trim 可以忽略將多餘的空白
+                        // 添加 Trim 可以忽略多餘的空白
                         if (job.Title.ToLower().Contains(word.Trim().ToLower()))
                         {
                             hasWord = true;
