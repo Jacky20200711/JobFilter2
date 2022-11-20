@@ -111,10 +111,11 @@ namespace JobFilter2.Controllers
                 data.Seniority = string.Join(",", sList);
 
                 // 設定欲修改的欄位
+                _context.Entry(data).Property(p => p.Remark).IsModified = true;
                 _context.Entry(data).Property(p => p.TargetUrl).IsModified = true;
                 _context.Entry(data).Property(p => p.MinSalary).IsModified = true;
                 _context.Entry(data).Property(p => p.Seniority).IsModified = true;
-                _context.Entry(data).Property(p => p.Remark).IsModified = true;
+                _context.Entry(data).Property(p => p.ExcludeWords).IsModified = true;
                 await _context.SaveChangesAsync();
                 TempData["message"] = "修改成功";
             }
@@ -158,8 +159,8 @@ namespace JobFilter2.Controllers
 
                 // 根據DB資訊來過濾工作列表，並將結果儲存到 Session
                 jobItems = await crawlService.GetUnblockedItems(_context, jobItems);
+                jobItems = crawlService.FilterByExcludeWords(jobItems, crawlSetting.ExcludeWords);
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
-
                 return RedirectToAction("JobItems");
             }
             catch (Exception ex)

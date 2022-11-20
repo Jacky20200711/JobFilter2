@@ -45,14 +45,20 @@
                                     </div>
                                     <div class="form-group">
                                         <label>目標網址</label>
-                                        <textarea class="form-control" name="TargetUrl" rows="6" maxlength="2000" required>@Model.TargetUrl</textarea>
+                                        <textarea class="form-control" name="TargetUrl" rows="7" maxlength="2000" required>@Model.TargetUrl</textarea>
                                     </div>
-                                    <div class="form-group">
-                                        <label>月薪下限</label>
-                                        <input class="form-control" name="MinSalary" type="number" value=@Model.MinSalary min="40000" max=3000000 autocomplete="off" required>
+                                    <div style="display:flex; width:100%;">
+                                        <div class="form-group" style="width:48%;">
+                                            <label>月薪下限</label>
+                                            <input class="form-control" name="MinSalary" type="number" min="40000" max=3000000 value="@Model.MinSalary" required>
+                                        </div>
+                                        <div class="form-group" style="width:50%; margin-left:2%;">
+                                            <label>排除關鍵字</label>
+                                            <input class="form-control" name="ExcludeWords" placeholder="請以逗號區隔" value="@Model.ExcludeWords" maxlength="50">
+                                        </div>
                                     </div>
                                     <div class="form-group" style="margin-top:25px;">
-                                        <label>工作年資</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label>經歷要求</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                         @{
                                             string isChecked_1 = Model.Seniority.Contains("1") ? "checked" : "";
                                             string isChecked_2 = Model.Seniority.Contains("3") ? "checked" : "";
@@ -62,7 +68,7 @@
 
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="seniority1" style="@cBoxStyle" value="1" @isChecked_1>
-                                                <label style="@cBoxLabelStyle">1年以下</label>
+                                                <label style="@cBoxLabelStyle">0~1年</label>
                                             </label>
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="seniority2" style="@cBoxStyle" value="3" @isChecked_2>

@@ -81,7 +81,8 @@
                                         <th style="display:none;">排版用(不顯示)</th>
                                         <th>設定說明</th>
                                         <th>最低月薪</th>
-                                        <th>工作年資</th>
+                                        <th>經歷要求</th>
+                                        <th>職稱過濾</th>
                                         <th>操作選項</th>
                                     </tr>
                                 </thead>
@@ -104,6 +105,7 @@
                                                     string seniority = string.Join(",", sList);
                                                 }
                                                 <td>@seniority</td>
+                                                <td>@(string.IsNullOrEmpty(crawlSetting.ExcludeWords) ? "無" : crawlSetting.ExcludeWords)</td>
                                                 <td class="center-block">
                                                     <button class="btn btn-info" onclick="location.href='@Url.Action("DoCrawl", "CrawlSetting", new { id = crawlSetting.Id })'">爬取工作</button>
                                                     <button class="btn btn-success" onclick="location.href='@Url.Action("Edit", "CrawlSetting", new { id = crawlSetting.Id })'">修改</button>

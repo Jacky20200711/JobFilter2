@@ -13,6 +13,8 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Collections;
+using System.Linq.Expressions;
+using NLog.Time;
 
 namespace JobFilter2.Services
 {
@@ -211,6 +213,47 @@ namespace JobFilter2.Services
 
                 // 刷新 Session 儲存的工作列表
                 httpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(new_jobitems));
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<JobItem> FilterByExcludeWords(List<JobItem> jobItems, string excludeWords)
+        {
+            if (string.IsNullOrEmpty(excludeWords))
+            {
+                return jobItems;
+            }
+
+            try
+            {
+                List<JobItem> new_jobItems = new List<JobItem>();
+                List<string> exWords = excludeWords.Split(',').ToList();
+
+                foreach (var job in jobItems)
+                {
+                    // 檢查職稱是否包含關鍵字
+                    bool hasWord = false;
+                    foreach (string word in exWords)
+                    {
+                        // 考慮到英文單字，兩邊都轉成小寫再進行比對
+                        // 添加 Trim 可以忽略將多餘的空白
+                        if (job.Title.ToLower().Contains(word.Trim().ToLower()))
+                        {
+                            hasWord = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasWord)
+                    {
+                        new_jobItems.Add(job);
+                    }
+                }
+
+                return new_jobItems;
             }
             catch(Exception ex)
             {

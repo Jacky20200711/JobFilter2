@@ -12,5 +12,6 @@ namespace JobFilter2.Models.Entities
         public int MinSalary { get; set; }
         public string Seniority { get; set; }
         public string Remark { get; set; }
+        public string ExcludeWords { get; set; }
     }
 }
