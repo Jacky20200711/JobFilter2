@@ -72,6 +72,12 @@ namespace JobFilter2.Services
             // 走訪每一對標籤，萃取出各自夾帶的工作內容
             foreach (var item in itemsCssSelector)
             {
+                // 若遇到頁面下方的推薦工作，則忽略並停止萃取
+                if(item.GetAttribute("class").Contains("recommend"))
+                {
+                    break;
+                }
+
                 IElement JobLink = item.QuerySelector("div h2 a");
                 IElement JobAddress = item.QuerySelector("div ul li a");
                 IElement JobSalary = item.QuerySelector(".b-tag--default");
