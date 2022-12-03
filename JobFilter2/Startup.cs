@@ -44,8 +44,6 @@ namespace JobFilter2
                     name: "default",
                     pattern: "{controller=CrawlSetting}/{action=Index}/{id?}");
             });
-
-            Utility.SetRadioItems();
         }
     }
 }

@@ -26,25 +26,14 @@ namespace JobFilter2.Services
             { "R11", "投遞履歷後沒有回應/感謝函" },
         };
 
-        
-        private static string radioItemStr;
-
         /// <summary>
-        /// 根據事先定義的封鎖代號與內文，來設定 radio 對應的封鎖代碼/封鎖理由
-        /// </summary>
-        public static void SetRadioItems()
-        {
-            List<string> radioItems = new List<string>();
-            BLOCK_REASON.ToList().ForEach(x => radioItems.Add($"\'{x.Key}\':\'{x.Value}\'"));
-            radioItemStr = string.Join(',', radioItems);
-        }
-
-        /// <summary>
-        /// 取得 radio 對應的封鎖代碼/封鎖理由，其所有的 key 與 value
+        /// 取得 radio 的 Key 與 Value (這些值會填入前端 radio 的 inputOption 參數)
         /// </summary>
         public static string GetRadioItems()
         {
-            return radioItemStr;
+            List<string> radioItems = new List<string>();
+            BLOCK_REASON.ToList().ForEach(x => radioItems.Add($"\'{x.Key}\':\'{x.Value}\'"));
+            return string.Join(',', radioItems);
         }
     }
 }
