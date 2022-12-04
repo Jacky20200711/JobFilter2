@@ -38,7 +38,7 @@
                                 <form role="form" asp-controller="CrawlSetting" asp-action="Create">
                                     <div class="form-group">
                                         <label>設定說明</label>
-                                        <input class="form-control" name="Remark" maxlength="20">
+                                        <input class="form-control" name="Remark" maxlength="100">
                                     </div>
                                     <div class="form-group">
                                         <label>目標網址</label>
@@ -49,10 +49,10 @@
                                             <label>月薪下限</label>
                                             <input class="form-control" name="MinSalary" type="number" value=40000 min="40000" max=3000000 autocomplete="off" required>
                                         </div>
-                                        <div class="form-group" style="width:50%; margin-left:2%;">
-                                            <label>排除關鍵字</label>
-                                            <input class="form-control" name="ExcludeWords" placeholder="請以逗號區隔" maxlength="50">
-                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>排除關鍵字</label>
+                                        <textarea class="form-control" name="ExcludeWords" rows="2" placeholder="請以逗號區隔" maxlength="200"></textarea>
                                     </div>
                                     <div class="form-group" style="margin-top:25px;">
                                         @{

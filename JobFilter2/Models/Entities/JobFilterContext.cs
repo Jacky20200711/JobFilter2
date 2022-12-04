@@ -57,9 +57,9 @@ namespace JobFilter2.Models.Entities
             {
                 entity.ToTable("CrawlSetting");
 
-                entity.Property(e => e.ExcludeWords).HasMaxLength(50);
+                entity.Property(e => e.ExcludeWords).HasMaxLength(200);
 
-                entity.Property(e => e.Remark).HasMaxLength(20);
+                entity.Property(e => e.Remark).HasMaxLength(100);
 
                 entity.Property(e => e.Seniority)
                     .IsRequired()
