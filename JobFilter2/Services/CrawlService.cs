@@ -22,9 +22,11 @@ namespace JobFilter2.Services
         /// <summary>
         /// 派出爬蟲，爬取指定的網址
         /// </summary>
-        public async Task LoadPage(Crawler crawler, CrawlSetting crawlSetting, int currentPage = 1)
+        public async Task LoadPage(Crawler crawler, CrawlSetting crawlSetting, int currentPage = 1, string sctp = "M")
         {
-            string targetUrl = crawlSetting.TargetUrl + $"&scmin={crawlSetting.MinSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}";
+            // 最低年薪視為(月薪下限*14)
+            int minSalary = sctp == "Y" ? crawlSetting.MinSalary * 14 : crawlSetting.MinSalary;
+            string targetUrl = crawlSetting.TargetUrl + $"&sctp={sctp}&scmin={minSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}";
 
             try
             {
@@ -118,6 +120,10 @@ namespace JobFilter2.Services
                 crawlers.Add(new Crawler());
                 _ = LoadPage(crawlers[^1], crawlSetting, i);
             }
+
+            // 寫明年薪的工作比較少，爬取第一頁即可
+            crawlers.Add(new Crawler());
+            _ = LoadPage(crawlers[^1], crawlSetting, 1, sctp:"Y");
 
             // 等待所有爬蟲結束任務
             while (crawlers.Any(c => !c.isMissionCompleted))
