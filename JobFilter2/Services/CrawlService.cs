@@ -26,7 +26,9 @@ namespace JobFilter2.Services
         {
             // 最低年薪視為(月薪下限*14)
             int minSalary = sctp == "Y" ? crawlSetting.MinSalary * 14 : crawlSetting.MinSalary;
-            string targetUrl = crawlSetting.TargetUrl + $"&sctp={sctp}&scmin={minSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}";
+
+            // 若沒有設置 scstrict = 1 則薪資過濾會失效
+            string targetUrl = crawlSetting.TargetUrl + $"&sctp={sctp}&scmin={minSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}&scstrict=1";
 
             try
             {
