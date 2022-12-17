@@ -1,4 +1,5 @@
 ﻿using JobFilter2.Models.Entities;
+using JobFilter2.Models;
 using JobFilter2.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,14 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public string Export(IFormCollection PostData)
+        public Result Export(IFormCollection PostData)
         {
+            Result result = new Result
+            {
+                Code= 0,
+                Message = "操作失敗"
+            };
+
             try
             {
                 // 提取資料夾路徑
@@ -32,23 +39,32 @@ namespace JobFilter2.Controllers
                 // 檢查路徑是否存在
                 if (!Directory.Exists(exportPath))
                 {
-                    return "路徑錯誤";
+                    result.Message = "路徑錯誤";
+                    return result;
                 }
 
-                // 將DB資料匯出到目標資料夾
+                // 匯出到目標資料夾
                 backupService.Export(_context, exportPath);
-                return "匯出成功";
+                result.Message = "匯出成功";
+                result.Code = 1;
+                TempData["message"] = result.Message;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return "操作失敗";
             }
+            return result;
         }
 
         [HttpPost]
-        public string Import(IFormCollection PostData)
+        public Result Import(IFormCollection PostData)
         {
+            Result result = new Result
+            {
+                Code = 0,
+                Message = "操作失敗"
+            };
+
             try
             {
                 // 匯入前先清空各資料表
@@ -62,18 +78,21 @@ namespace JobFilter2.Controllers
                 // 檢查路徑是否存在
                 if (!Directory.Exists(importPath))
                 {
-                    return "路徑錯誤";
+                    result.Message = "路徑錯誤";
+                    return result;
                 }
 
                 // 從目標資料夾讀取CSV並匯入DB
                 backupService.Import(_context, importPath);
-                return "匯入成功";
+                result.Message = "匯入成功";
+                result.Code = 1;
+                TempData["message"] = result.Message;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return "操作失敗";
             }
+            return result;
         }
 
         public IActionResult ClearBlock()
@@ -89,7 +108,7 @@ namespace JobFilter2.Controllers
                 _logger.LogError(ex.ToString());
                 TempData["message"] = "操作失敗";
             }
-            return RedirectToRoute(new { controller = "CrawlSetting", action = "Index" });
+            return RedirectToRoute(new { controller = "BlockCompany", action = "Index" });
         }
     }
 }

@@ -51,7 +51,7 @@
                                 <li>
                                     <a onclick="Export();" href="#" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 匯出備份</a>
                                     <a onclick="Import();" href="#" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 匯入備份</a>
-                                    <a href="@Url.Action("ClearBlock","Backup")" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 清除封鎖</a>
+                                    @*<a href="@Url.Action("ClearBlock","Backup")" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 清除封鎖</a>*@
                                 </li>
                             </ul>
 
@@ -112,16 +112,21 @@
                         url: '@Url.Action("Export", "Backup")',
                         data: { exportPath: inputValue }
                     })
-                    .done(function (message) {
-                        Swal.fire({
-                            title : message,
-                            customClass: {
-                                title: 'swal-title-font-size',
-                                closeButton: 'swal-button-font-size',
-                                confirmButton: 'swal-button-font-size',
-                                cancelButton: 'swal-button-font-size'
-                            }
-                        });
+                    .done(function (result) {
+                        if(result["code"] == 1){
+                            self.location.href = '@Url.Action("Index","BlockCompany")';
+                        }
+                        else{
+                            Swal.fire({
+                                title : "操作失敗",
+                                customClass: {
+                                    title: 'swal-title-font-size',
+                                    closeButton: 'swal-button-font-size',
+                                    confirmButton: 'swal-button-font-size',
+                                    cancelButton: 'swal-button-font-size'
+                                }
+                            });
+                        }
                     });
                 }
             })()
@@ -152,16 +157,21 @@
                         url: '@Url.Action("Import", "Backup")',
                         data: { importPath: inputValue }
                     })
-                    .done(function (message) {
-                        Swal.fire({
-                            title : message,
-                            customClass: {
-                                title: 'swal-title-font-size',
-                                closeButton: 'swal-button-font-size',
-                                confirmButton: 'swal-button-font-size',
-                                cancelButton: 'swal-button-font-size'
-                            }
-                        });
+                    .done(function (result) {
+                        if(result["code"] == 1){
+                            self.location.href = '@Url.Action("Index","BlockCompany")';
+                        }
+                        else{
+                            Swal.fire({
+                                title : "操作失敗",
+                                customClass: {
+                                    title: 'swal-title-font-size',
+                                    closeButton: 'swal-button-font-size',
+                                    confirmButton: 'swal-button-font-size',
+                                    cancelButton: 'swal-button-font-size'
+                                }
+                            });
+                        }
                     });
                 }
             })()
