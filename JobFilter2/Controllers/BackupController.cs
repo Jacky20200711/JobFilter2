@@ -47,7 +47,6 @@ namespace JobFilter2.Controllers
                 backupService.Export(_context, exportPath);
                 result.Message = "匯出成功";
                 result.Code = 1;
-                TempData["message"] = result.Message;
             }
             catch (Exception ex)
             {
