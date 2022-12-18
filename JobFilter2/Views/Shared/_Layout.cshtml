@@ -113,20 +113,15 @@
                         data: { exportPath: inputValue }
                     })
                     .done(function (result) {
-                        if(result["code"] == 1){
-                            self.location.href = '@Url.Action("Index","BlockCompany")';
-                        }
-                        else{
-                            Swal.fire({
-                                title : "操作失敗",
-                                customClass: {
-                                    title: 'swal-title-font-size',
-                                    closeButton: 'swal-button-font-size',
-                                    confirmButton: 'swal-button-font-size',
-                                    cancelButton: 'swal-button-font-size'
-                                }
-                            });
-                        }
+                        Swal.fire({
+                            title : result["message"],
+                            customClass: {
+                                title: 'swal-title-font-size',
+                                closeButton: 'swal-button-font-size',
+                                confirmButton: 'swal-button-font-size',
+                                cancelButton: 'swal-button-font-size'
+                            }
+                        });
                     });
                 }
             })()
