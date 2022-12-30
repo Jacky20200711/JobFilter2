@@ -66,7 +66,7 @@ namespace JobFilter2.Services
         /// <summary>
         /// 解析爬下來的 document 並將提取後的工作放入 jobItems
         /// </summary>
-        private void GetTargetJobs(IDocument document, List<JobItem> jobItems)
+        private void GetTargetJobs(IDocument document, List<JobItem> jobItems, HashSet<string> jobCodeSet)
         {
             if (document == null) return;
 
@@ -94,6 +94,14 @@ namespace JobFilter2.Services
                     string Company = JobAddress.TextContent.Trim();
                     string Address = JobAddress.GetAttribute("title").Split("公司住址：")[1];
                     string Salary = JobSalary.TextContent;
+
+                    // 檢查這個工作連結是否曾經出現過，若沒有則添加，否則忽略且不處理這筆資料
+                    // 根據測試，兩個相同職缺的 jobCode 會一樣，但 jobLink 卻可能不一樣，所以必須用 jobCode 來判斷是否重複
+                    if (!jobCodeSet.Contains(Code))
+                    {
+                        jobCodeSet.Add(Code);
+                    }
+                    else continue;
 
                     jobItems.Add(new JobItem
                     {
@@ -134,10 +142,11 @@ namespace JobFilter2.Services
             }
 
             // 依序提取各分頁的工作資訊
+            HashSet<string> jobCodeSet = new HashSet<string>(); // 儲存出現過的工作連結
             List<JobItem> jobItems = new List<JobItem>();
             foreach(var crawler in crawlers)
             {
-                GetTargetJobs(crawler.domTree, jobItems);
+                GetTargetJobs(crawler.domTree, jobItems, jobCodeSet);
             }
 
             return jobItems;
