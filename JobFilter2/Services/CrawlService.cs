@@ -53,7 +53,7 @@ namespace JobFilter2.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                _logger.Error($"爬蟲出錯 & errorCatch = {ex.Message}\n{ex.StackTrace}");
             }
             finally
             {
@@ -95,7 +95,7 @@ namespace JobFilter2.Services
                     string Address = JobAddress.GetAttribute("title").Split("公司住址：")[1];
                     string Salary = JobSalary.TextContent;
 
-                    // 檢查這個工作連結是否曾經出現過，若沒有則添加，否則忽略且不處理這筆資料
+                    // 檢查工作代碼是否曾經出現過，若沒有則添加，否則忽略這筆資料
                     // 根據測試，兩個相同職缺的 jobCode 會一樣，但 jobLink 卻可能不一樣，所以必須用 jobCode 來判斷是否重複
                     if (!jobCodeSet.Contains(Code))
                     {
@@ -142,7 +142,7 @@ namespace JobFilter2.Services
             }
 
             // 依序提取各分頁的工作資訊
-            HashSet<string> jobCodeSet = new HashSet<string>(); // 儲存出現過的工作連結
+            HashSet<string> jobCodeSet = new HashSet<string>(); // 儲存出現過的 jobCode (用來避免相同的職缺重複出現)
             List<JobItem> jobItems = new List<JobItem>();
             foreach(var crawler in crawlers)
             {
@@ -153,7 +153,7 @@ namespace JobFilter2.Services
         }
 
         /// <summary>
-        /// 根據DB資訊來過濾傳入的 jobItems
+        /// 根據DB儲存的黑名單，來過濾傳入的 jobItems
         /// </summary>
         /// <returns>過濾完畢的工作列表</returns>
         public async Task<List<JobItem>> GetUnblockedItems(JobFilterContext context, List<JobItem> jobItems)
