@@ -28,31 +28,6 @@ dotnet add package CsvHelper --version 27.1.1
 dotnet add package NLog --version 4.7.10  
 dotnet add package NLog.Web.AspNetCore --version 4.13.0-readme-preview  
 &emsp;  
-# DB Schema  
-create table BlockJobItem  
-(  
-&nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
-&nbsp;&nbsp;&nbsp;&nbsp;JobCode nvarchar(20) NOT NULL,  
-);  
-&emsp;  
-create table BlockCompany  
-(  
-&nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
-&nbsp;&nbsp;&nbsp;&nbsp;CompanyName nvarchar(100) NOT NULL,  
-&nbsp;&nbsp;&nbsp;&nbsp;BlockReason nvarchar(20) NOT NULL,  
-);  
-&emsp;  
-create table CrawlSetting  
-(  
-&nbsp;&nbsp;&nbsp;&nbsp;Id int primary key NOT NULL IDENTITY,  
-&nbsp;&nbsp;&nbsp;&nbsp;TargetUrl nvarchar(2000) NOT NULL,  
-&nbsp;&nbsp;&nbsp;&nbsp;MinSalary int NOT NULL,  
-&nbsp;&nbsp;&nbsp;&nbsp;Seniority nvarchar(10) NOT NULL,  
-&nbsp;&nbsp;&nbsp;&nbsp;Remark nvarchar(100),  
-&nbsp;&nbsp;&nbsp;&nbsp;ExcludeWords nvarchar(200),  
-&nbsp;&nbsp;&nbsp;&nbsp;HasSalary nvarchar(10),
-);  
-&emsp;  
 # 網站首頁(爬蟲列表)  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_01.PNG?raw=true)  
 &emsp;   
