@@ -6,7 +6,6 @@ https://github.com/Jacky20200711/JobFilter
 1.修改操作介面  
 2.簡化操作流程(將多數的操作改用ajax來避免跳頁)  
 3.新增封鎖工作的功能  
-4.改用 DB-First 規劃資料庫  
 &emsp;  
 # 使用技術  
 1.使用 HttpClient 爬取網頁  
