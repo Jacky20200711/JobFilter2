@@ -59,6 +59,8 @@ namespace JobFilter2.Models.Entities
 
                 entity.Property(e => e.ExcludeWords).HasMaxLength(200);
 
+                entity.Property(e => e.HasSalary).HasMaxLength(10);
+
                 entity.Property(e => e.Remark).HasMaxLength(100);
 
                 entity.Property(e => e.Seniority)

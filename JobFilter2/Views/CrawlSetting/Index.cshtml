@@ -83,6 +83,7 @@
                                         <th>最低月薪</th>
                                         <th>經歷要求</th>
                                         <th>職稱過濾</th>
+                                        <th>排除面議</th>
                                         <th>操作選項</th>
                                     </tr>
                                 </thead>
@@ -106,6 +107,7 @@
                                                 }
                                                 <td>@seniority</td>
                                                 <td>@(string.IsNullOrEmpty(crawlSetting.ExcludeWords) ? "無" : crawlSetting.ExcludeWords)</td>
+                                                <td>@crawlSetting.HasSalary</td>
                                                 <td class="center-block">
                                                     <button class="btn btn-info" onclick="location.href='@Url.Action("DoCrawl", "CrawlSetting", new { id = crawlSetting.Id })'">爬取工作</button>
                                                     <button class="btn btn-success" onclick="location.href='@Url.Action("Edit", "CrawlSetting", new { id = crawlSetting.Id })'">修改</button>

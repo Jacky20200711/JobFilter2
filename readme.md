@@ -51,6 +51,7 @@ create table CrawlSetting
 &nbsp;&nbsp;&nbsp;&nbsp;Seniority nvarchar(10) NOT NULL,  
 &nbsp;&nbsp;&nbsp;&nbsp;Remark nvarchar(100),  
 &nbsp;&nbsp;&nbsp;&nbsp;ExcludeWords nvarchar(200),  
+&nbsp;&nbsp;&nbsp;&nbsp;HasSalary nvarchar(10),
 );  
 &emsp;  
 # 網站首頁(爬蟲列表)  

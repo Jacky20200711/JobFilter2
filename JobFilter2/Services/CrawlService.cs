@@ -30,6 +30,11 @@ namespace JobFilter2.Services
             // 若沒有設置 scstrict = 1 則薪資過濾會失效
             string targetUrl = crawlSetting.TargetUrl + $"&sctp={sctp}&scmin={minSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}&scstrict=1";
 
+            // 檢查是否排除面議，調整爬取網址
+            targetUrl = targetUrl.Replace("&scneg=0", "");
+            targetUrl = targetUrl.Replace("&scneg=1", "");
+            targetUrl += crawlSetting.HasSalary == "是" ? "&scneg=0" : "&scneg=1";
+
             try
             {
                 // 送出請求
