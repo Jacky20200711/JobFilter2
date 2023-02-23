@@ -1,7 +1,6 @@
 ﻿using JobFilter2.Models.Entities;
 using JobFilter2.Models;
 using JobFilter2.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,7 +22,7 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public Result Export(IFormCollection PostData)
+        public Result Export(string exportPath)
         {
             Result result = new Result
             {
@@ -33,9 +32,6 @@ namespace JobFilter2.Controllers
 
             try
             {
-                // 提取資料夾路徑
-                string exportPath = PostData["exportPath"].ToString();
-
                 // 檢查路徑是否存在
                 if (!Directory.Exists(exportPath))
                 {
@@ -56,7 +52,7 @@ namespace JobFilter2.Controllers
         }
 
         [HttpPost]
-        public Result Import(IFormCollection PostData)
+        public Result Import(string importPath)
         {
             Result result = new Result
             {
@@ -66,20 +62,17 @@ namespace JobFilter2.Controllers
 
             try
             {
-                // 匯入前先清空各資料表
-                _context.Database.ExecuteSqlRaw($"DELETE FROM CrawlSetting");
-                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
-                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
-
-                // 提取資料夾路徑
-                string importPath = PostData["importPath"].ToString();
-
                 // 檢查路徑是否存在
                 if (!Directory.Exists(importPath))
                 {
                     result.Message = "路徑錯誤";
                     return result;
                 }
+
+                // 匯入前先清空各資料表
+                _context.Database.ExecuteSqlRaw($"DELETE FROM CrawlSetting");
+                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
+                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
 
                 // 從目標資料夾讀取CSV並匯入DB
                 backupService.Import(_context, importPath);
