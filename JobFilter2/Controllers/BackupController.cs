@@ -41,9 +41,12 @@ namespace JobFilter2.Controllers
                 }
 
                 // 匯出到目標資料夾
-                backupService.Export(exportPath);
-                result.Message = "匯出成功";
-                result.Code = 1;
+                int resultCode = backupService.Export(exportPath);
+                if(resultCode == 1)
+                {
+                    result.Message = "匯出成功";
+                    result.Code = 1;
+                }
             }
             catch (Exception ex)
             {
@@ -76,10 +79,13 @@ namespace JobFilter2.Controllers
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
 
                 // 從目標資料夾讀取CSV並匯入DB
-                backupService.Import(importPath);
-                result.Message = "匯入成功";
-                result.Code = 1;
-                TempData["message"] = result.Message;
+                int resultCode = backupService.Import(importPath);
+                if (resultCode == 1)
+                {
+                    result.Message = "匯入成功";
+                    result.Code = 1;
+                    TempData["message"] = result.Message;
+                }
             }
             catch (Exception ex)
             {

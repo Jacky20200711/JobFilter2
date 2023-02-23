@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using JobFilter2.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,13 +14,18 @@ namespace JobFilter2.Services
     public class BackupService
     {
         private readonly JobFilterContext _context;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public BackupService(JobFilterContext context)
         {
             _context = context;
         }
 
-        public void Export(string exportPath)
+        /// <summary>
+        /// 將DB資料匯出成CSV檔案
+        /// </summary>
+        /// <returns>成功回傳1，失敗回傳0</returns>
+        public int Export(string exportPath)
         {
             try
             {
@@ -45,14 +51,20 @@ namespace JobFilter2.Services
                 using var writer3 = new StreamWriter("BlockCompanies.csv", false, Encoding.UTF8);
                 using var csvWriter3 = new CsvWriter(writer3, CultureInfo.InvariantCulture);
                 csvWriter3.WriteRecords(DataList3);
+                return 1;
             }
             catch(Exception ex)
             {
-                throw ex;
+                _logger.Error($"匯出錯誤 : {ex.Message}\n{ex.StackTrace}");
+                return 0;
             }
         }
 
-        public void Import(string importPath)
+        /// <summary>
+        /// 將CSV檔案匯入DB
+        /// </summary>
+        /// <returns>成功回傳1，失敗回傳0</returns>
+        public int Import(string importPath)
         {
             try
             {
@@ -124,10 +136,12 @@ namespace JobFilter2.Services
                         transaction.Commit();
                     }
                 }
+                return 1;
             }
             catch (Exception ex)
             {
-                throw ex;
+                _logger.Error($"匯入錯誤 : {ex.Message}\n{ex.StackTrace}");
+                return 0;
             }
         }
     }
