@@ -13,12 +13,13 @@ namespace JobFilter2.Controllers
     {
         private readonly JobFilterContext _context;
         private readonly ILogger<BackupController> _logger;
-        private readonly BackupService backupService = new BackupService();
+        private readonly BackupService backupService;
 
         public BackupController(JobFilterContext context, ILogger<BackupController> logger)
         {
             _context = context;
             _logger = logger;
+            backupService = new BackupService(_context);
         }
 
         [HttpPost]
@@ -40,7 +41,7 @@ namespace JobFilter2.Controllers
                 }
 
                 // 匯出到目標資料夾
-                backupService.Export(_context, exportPath);
+                backupService.Export(exportPath);
                 result.Message = "匯出成功";
                 result.Code = 1;
             }
@@ -75,7 +76,7 @@ namespace JobFilter2.Controllers
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
 
                 // 從目標資料夾讀取CSV並匯入DB
-                backupService.Import(_context, importPath);
+                backupService.Import(importPath);
                 result.Message = "匯入成功";
                 result.Code = 1;
                 TempData["message"] = result.Message;

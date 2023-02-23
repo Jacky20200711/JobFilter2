@@ -12,7 +12,14 @@ namespace JobFilter2.Services
 {
     public class BackupService
     {
-        public void Export(JobFilterContext _context, string exportPath)
+        private readonly JobFilterContext _context;
+
+        public BackupService(JobFilterContext context)
+        {
+            _context = context;
+        }
+
+        public void Export(string exportPath)
         {
             try
             {
@@ -45,7 +52,7 @@ namespace JobFilter2.Services
             }
         }
 
-        public void Import(JobFilterContext _context, string importPath)
+        public void Import(string importPath)
         {
             try
             {
