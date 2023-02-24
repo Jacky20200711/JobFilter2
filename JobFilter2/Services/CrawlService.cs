@@ -187,9 +187,9 @@ namespace JobFilter2.Services
 
                 return new_jobitems;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -238,9 +238,9 @@ namespace JobFilter2.Services
                 // 刷新 Session 儲存的工作列表
                 httpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(new_jobitems));
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -279,9 +279,9 @@ namespace JobFilter2.Services
 
                 return new_jobItems;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                throw ex;
+                throw;
             }
         }
     }
