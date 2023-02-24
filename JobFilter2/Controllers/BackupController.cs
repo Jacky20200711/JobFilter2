@@ -42,6 +42,8 @@ namespace JobFilter2.Controllers
 
                 // 匯出到目標資料夾
                 backupService.Export(exportPath);
+                result.Message = "匯出成功";
+                result.Code = 1;
             }
             catch (Exception ex)
             {
