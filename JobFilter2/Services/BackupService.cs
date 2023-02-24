@@ -24,8 +24,7 @@ namespace JobFilter2.Services
         /// <summary>
         /// 將DB資料匯出成CSV檔案
         /// </summary>
-        /// <returns>成功回傳1，失敗回傳0</returns>
-        public int Export(string exportPath)
+        public void Export(string exportPath)
         {
             try
             {
@@ -51,20 +50,17 @@ namespace JobFilter2.Services
                 using var writer3 = new StreamWriter("BlockCompanies.csv", false, Encoding.UTF8);
                 using var csvWriter3 = new CsvWriter(writer3, CultureInfo.InvariantCulture);
                 csvWriter3.WriteRecords(DataList3);
-                return 1;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                _logger.Error($"匯出錯誤 : {ex.Message}\n{ex.StackTrace}");
-                return 0;
+                throw;
             }
         }
 
         /// <summary>
         /// 將CSV檔案匯入DB
         /// </summary>
-        /// <returns>成功回傳1，失敗回傳0</returns>
-        public int Import(string importPath)
+        public void Import(string importPath)
         {
             try
             {
@@ -136,12 +132,10 @@ namespace JobFilter2.Services
                         transaction.Commit();
                     }
                 }
-                return 1;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.Error($"匯入錯誤 : {ex.Message}\n{ex.StackTrace}");
-                return 0;
+                throw;
             }
         }
     }

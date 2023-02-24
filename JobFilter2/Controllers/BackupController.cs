@@ -33,7 +33,7 @@ namespace JobFilter2.Controllers
 
             try
             {
-                // 檢查路徑是否存在
+                // 檢查目標路徑是否存在
                 if (!Directory.Exists(exportPath))
                 {
                     result.Message = "路徑錯誤";
@@ -41,16 +41,11 @@ namespace JobFilter2.Controllers
                 }
 
                 // 匯出到目標資料夾
-                int resultCode = backupService.Export(exportPath);
-                if(resultCode == 1)
-                {
-                    result.Message = "匯出成功";
-                    result.Code = 1;
-                }
+                backupService.Export(exportPath);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
             }
             return result;
         }
@@ -66,7 +61,7 @@ namespace JobFilter2.Controllers
 
             try
             {
-                // 檢查路徑是否存在
+                // 檢查目標路徑是否存在
                 if (!Directory.Exists(importPath))
                 {
                     result.Message = "路徑錯誤";
@@ -79,17 +74,14 @@ namespace JobFilter2.Controllers
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
 
                 // 從目標資料夾讀取CSV並匯入DB
-                int resultCode = backupService.Import(importPath);
-                if (resultCode == 1)
-                {
-                    result.Message = "匯入成功";
-                    result.Code = 1;
-                    TempData["message"] = result.Message;
-                }
+                backupService.Import(importPath);
+                result.Message = "匯入成功";
+                result.Code = 1;
+                TempData["message"] = result.Message;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
             }
             return result;
         }
@@ -104,7 +96,7 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 TempData["message"] = "操作失敗";
             }
             return RedirectToRoute(new { controller = "BlockCompany", action = "Index" });
