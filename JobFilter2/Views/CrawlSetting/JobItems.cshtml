@@ -113,9 +113,9 @@
 
 <script>
     function SearchComment(companyName) {
+        // 製造指定數量的超連結並配置
+        var linkNum = 3;
         var fileLinks = [];
-        var linkNum = 2;
-        // 製造並配置多個超連結
         for (var i = 0; i < linkNum; i++) {
             fileLinks.push(document.createElement("a"));
             document.body.appendChild(fileLinks[i]);
@@ -126,6 +126,7 @@
         companyName = ResetCompanyName(companyName);
         fileLinks[0].href = "https://interview.tw/search?keyword=" + companyName;
         fileLinks[1].href = "https://www.qollie.com/search?keyword=" + companyName + "&kind=company&from=normal";
+        fileLinks[2].href = "https://www.goodjob.life/companies/" + companyName;
         // 開啟所有的超連結
         for (var i = 0; i < linkNum; i++) {
             fileLinks[i].click();
