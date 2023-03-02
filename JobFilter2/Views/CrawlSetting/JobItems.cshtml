@@ -126,7 +126,7 @@
         companyName = ResetCompanyName(companyName);
         fileLinks[0].href = "https://interview.tw/search?keyword=" + companyName;
         fileLinks[1].href = "https://www.qollie.com/search?keyword=" + companyName + "&kind=company&from=normal";
-        fileLinks[2].href = "https://www.goodjob.life/companies/" + companyName;
+        fileLinks[2].href = "https://www.goodjob.life/search?q=" + companyName;
         // 開啟所有的超連結
         for (var i = 0; i < linkNum; i++) {
             fileLinks[i].click();
