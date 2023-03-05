@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
@@ -31,9 +32,8 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
-                TempData["message"] = "操作失敗";
-                return RedirectToRoute(new { controller = "CrawlSetting", action = "Index" });
+                _logger.LogError($"{ex.Message}");
+                return Content("<h2>Service unavailable.</h2>", "text/html", Encoding.UTF8);
             }
         }
 
@@ -53,7 +53,7 @@ namespace JobFilter2.Controllers
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 return "操作失敗";
             }
         }
@@ -77,7 +77,7 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
             }
             return result;
         }
@@ -93,7 +93,7 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 return "操作失敗";
             }
         }

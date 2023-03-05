@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace JobFilter2.Controllers
@@ -33,9 +34,8 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
-                TempData["message"] = "操作失敗";
-                return Content("ERROR");
+                _logger.LogError($"{ex.Message}");
+                return Content("<h2>Service unavailable.</h2>", "text/html", Encoding.UTF8);
             }
         }
 
@@ -64,7 +64,7 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 TempData["message"] = "操作失敗";
             }
             return RedirectToAction("Index");
@@ -90,7 +90,7 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 TempData["message"] = "操作失敗";
                 return RedirectToAction("Index");
             }
@@ -121,7 +121,7 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 TempData["message"] = "操作失敗";
             }
             return RedirectToAction("Index");
@@ -139,7 +139,7 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 return "操作失敗";
             }
         }
@@ -171,7 +171,7 @@ namespace JobFilter2.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 TempData["message"] = "操作失敗";
                 return RedirectToAction("Index");
             }

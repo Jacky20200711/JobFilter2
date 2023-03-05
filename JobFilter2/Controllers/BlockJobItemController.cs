@@ -35,7 +35,7 @@ namespace JobFilter2.Controllers
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 return "操作失敗";
             }
         }
