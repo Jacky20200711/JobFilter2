@@ -129,21 +129,37 @@ namespace JobFilter2.Services
         {
             List<Crawler> crawlers = new List<Crawler>();
 
-            // 製造多個爬蟲，爬取目標分頁
-            for (int i = 1; i <= 20; i++)
-            {
-                crawlers.Add(new Crawler());
-                _ = LoadPage(crawlers[^1], crawlSetting, i);
-            }
+            int firstPage = 1;
+            int lastPage = 20;
+            int loopRemainTimes = 2;
 
-            // 寫明年薪的工作比較少，爬取第一頁即可
-            crawlers.Add(new Crawler());
-            _ = LoadPage(crawlers[^1], crawlSetting, 1, sctp:"Y");
-
-            // 等待所有爬蟲結束任務
-            while (crawlers.Any(c => !c.isMissionCompleted))
+            while (loopRemainTimes > 0)
             {
-                await Task.Delay(200);
+                // 製造多個爬蟲，爬取目標分頁
+                for (int i = firstPage; i <= lastPage; i++)
+                {
+                    crawlers.Add(new Crawler());
+                    _ = LoadPage(crawlers[^1], crawlSetting, i);
+                }
+
+                // 派出第一批爬蟲之後，另外再派一隻去爬有註明年薪的工作
+                // 由於有註明年新的工作數量很少，只要嘗試爬取一個分頁即可
+                if (firstPage == 1)
+                {
+                    crawlers.Add(new Crawler());
+                    _ = LoadPage(crawlers[^1], crawlSetting, 1, sctp: "Y");
+                }
+
+                // 等待所有爬蟲結束任務
+                while (crawlers.Any(c => !c.isMissionCompleted))
+                {
+                    await Task.Delay(200);
+                }
+
+                // 修改分頁範圍，準備進入下一輪迴圈來爬取該範圍的分頁
+                firstPage = lastPage + 1;
+                lastPage += lastPage;
+                loopRemainTimes--;
             }
 
             // 依序提取各分頁的工作資訊
