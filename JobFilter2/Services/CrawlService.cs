@@ -180,33 +180,27 @@ namespace JobFilter2.Services
         public async Task<List<JobItem>> GetUnblockedItems(JobFilterContext context, List<JobItem> jobItems)
         {
             List<JobItem> new_jobitems = new List<JobItem>();
-            try
+
+            // 取得已封鎖的工作代碼與公司名稱
+            var blockJobItems = await context.BlockJobItems.ToListAsync();
+            var blockCompanys = await context.BlockCompanies.ToListAsync();
+
+            // 將已封鎖的工作代碼和公司名稱，轉存到 HashTable 以加速搜尋比對
+            HashSet<string> blockJobCodeSet = new HashSet<string>();
+            HashSet<string> blockCompanySet = new HashSet<string>();
+            blockJobItems.ForEach(x => blockJobCodeSet.Add(x.JobCode));
+            blockCompanys.ForEach(x => blockCompanySet.Add(x.CompanyName));
+
+            // 檢查傳入的工作列表，取出沒有被過濾的工作
+            foreach (var jobItem in jobItems)
             {
-                // 取得已封鎖的工作代碼與公司名稱
-                var blockJobItems = await context.BlockJobItems.ToListAsync();
-                var blockCompanys = await context.BlockCompanies.ToListAsync();
-
-                // 將已封鎖的工作代碼和公司名稱，轉存到 HashTable 以加速搜尋比對
-                HashSet<string> blockJobCodeSet = new HashSet<string>();
-                HashSet<string> blockCompanySet = new HashSet<string>();
-                blockJobItems.ForEach(x => blockJobCodeSet.Add(x.JobCode));
-                blockCompanys.ForEach(x => blockCompanySet.Add(x.CompanyName));
-
-                // 檢查傳入的工作列表，取出沒有被過濾的工作
-                foreach (var jobItem in jobItems)
+                if (!blockJobCodeSet.Contains(jobItem.Code) && !blockCompanySet.Contains(jobItem.Company))
                 {
-                    if (!blockJobCodeSet.Contains(jobItem.Code) && !blockCompanySet.Contains(jobItem.Company))
-                    {
-                        new_jobitems.Add(jobItem);
-                    }
+                    new_jobitems.Add(jobItem);
                 }
+            }
 
-                return new_jobitems;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return new_jobitems;
         }
 
         /// <summary>
@@ -216,48 +210,41 @@ namespace JobFilter2.Services
         {
             List<JobItem> new_jobitems = new List<JobItem>();
 
-            try
+            // 從 Session 取出工作列表
+            string jobItemsStr = httpContext.Session.GetString("jobItems");
+            if (jobItemsStr == null)
             {
-                // 從 Session 取出工作列表
-                string jobItemsStr = httpContext.Session.GetString("jobItems");
-                if (jobItemsStr == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
+            List<JobItem> jobItems = JsonConvert.DeserializeObject<List<JobItem>>(jobItemsStr);
 
-                // 判斷 User 是要封鎖工作還是封鎖公司
-                if (blockType == "jobCode")
+            // 判斷 User 是要封鎖工作還是封鎖公司
+            if (blockType == "jobCode")
+            {
+                // 觀察工作列表，取出未被封鎖的工作項目
+                foreach (var jobItem in jobItems)
                 {
-                    // 觀察工作列表，取出未被封鎖的工作項目
-                    foreach (var jobItem in jobItems)
+                    if (jobItem.Code != target)
                     {
-                        if (jobItem.Code != target)
-                        {
-                            new_jobitems.Add(jobItem);
-                        }
+                        new_jobitems.Add(jobItem);
                     }
                 }
-                else if (blockType == "company")
+            }
+            else if (blockType == "company")
+            {
+                // 觀察工作列表，取出未被封鎖的工作項目
+                foreach (var jobItem in jobItems)
                 {
-                    // 觀察工作列表，取出未被封鎖的工作項目
-                    foreach (var jobItem in jobItems)
+                    if (jobItem.Company != target)
                     {
-                        if (jobItem.Company != target)
-                        {
-                            new_jobitems.Add(jobItem);
-                        }
+                        new_jobitems.Add(jobItem);
                     }
                 }
+            }
 
-                // 刷新 Session 儲存的工作列表
-                httpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(new_jobitems));
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            // 刷新 Session 儲存的工作列表
+            httpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(new_jobitems));
         }
 
         public List<JobItem> FilterByExcludeWords(List<JobItem> jobItems, string excludeWords)
@@ -267,38 +254,30 @@ namespace JobFilter2.Services
                 return jobItems;
             }
 
-            try
+            List<JobItem> new_jobItems = new List<JobItem>();
+            List<string> exWords = excludeWords.Split(',').ToList();
+
+            foreach (var job in jobItems)
             {
-                List<JobItem> new_jobItems = new List<JobItem>();
-                List<string> exWords = excludeWords.Split(',').ToList();
-
-                foreach (var job in jobItems)
+                // 檢查職稱是否包含關鍵字
+                bool hasWord = false;
+                foreach (string word in exWords)
                 {
-                    // 檢查職稱是否包含關鍵字
-                    bool hasWord = false;
-                    foreach (string word in exWords)
+                    // 考慮到英文單字，兩邊都轉成小寫再進行比對
+                    // 添加 Trim 可以忽略多餘的空白
+                    if (job.Title.ToLower().Contains(word.Trim().ToLower()))
                     {
-                        // 考慮到英文單字，兩邊都轉成小寫再進行比對
-                        // 添加 Trim 可以忽略多餘的空白
-                        if (job.Title.ToLower().Contains(word.Trim().ToLower()))
-                        {
-                            hasWord = true;
-                            break;
-                        }
-                    }
-
-                    if (!hasWord)
-                    {
-                        new_jobItems.Add(job);
+                        hasWord = true;
+                        break;
                     }
                 }
 
-                return new_jobItems;
+                if (!hasWord)
+                {
+                    new_jobItems.Add(job);
+                }
             }
-            catch(Exception)
-            {
-                throw;
-            }
+            return new_jobItems;
         }
     }
 }
