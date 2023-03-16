@@ -10,13 +10,14 @@ namespace JobFilter2.Controllers
     public class BlockJobItemController : Controller
     {
         private readonly JobFilterContext _context;
-        private readonly CrawlService crawlService = new CrawlService();
+        private readonly CrawlService _crawlService;
         private readonly ILogger<BlockJobItemController> _logger;
 
-        public BlockJobItemController(JobFilterContext context, ILogger<BlockJobItemController> logger)
+        public BlockJobItemController(JobFilterContext context, ILogger<BlockJobItemController> logger, CrawlService crawlService)
         {
             _context = context;
             _logger = logger;
+            _crawlService = crawlService;
         }
 
         [HttpPost]
@@ -29,7 +30,7 @@ namespace JobFilter2.Controllers
                 await _context.SaveChangesAsync();
 
                 // 刷新 Session 儲存的工作列表
-                crawlService.UpdateJobList(data.JobCode, blockType: "jobCode", HttpContext);
+                _crawlService.UpdateJobList(data.JobCode, blockType: "jobCode", HttpContext);
                
                 return "封鎖成功";
             }

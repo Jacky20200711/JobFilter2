@@ -20,10 +20,12 @@ namespace JobFilter2
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<JobFilterContext>(options => options.UseSqlServer("Name=ConnectionStrings:DefaultConnection"));
+            services.AddDbContext<JobFilterContext>();
             services.AddControllersWithViews();
             services.AddSession();
             services.AddHttpContextAccessor();
+            services.AddScoped<BackupService>();
+            services.AddScoped<CrawlService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

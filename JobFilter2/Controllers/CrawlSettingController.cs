@@ -16,13 +16,14 @@ namespace JobFilter2.Controllers
     public class CrawlSettingController : Controller
     {
         private readonly JobFilterContext _context;
-        private readonly CrawlService crawlService = new CrawlService();
+        private readonly CrawlService _crawlService;
         private readonly ILogger<CrawlSettingController> _logger;
 
-        public CrawlSettingController(JobFilterContext context, ILogger<CrawlSettingController> logger)
+        public CrawlSettingController(JobFilterContext context, ILogger<CrawlSettingController> logger, CrawlService crawlService)
         {
             _context = context;
             _logger = logger;
+            _crawlService = crawlService;
         }
 
         public async Task<IActionResult> Index()
@@ -150,7 +151,7 @@ namespace JobFilter2.Controllers
             {
                 // 爬取目標頁面，提取工作列表
                 var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
-                List<JobItem> jobItems = await crawlService.GetTargetItems(crawlSetting);
+                List<JobItem> jobItems = await _crawlService.GetTargetItems(crawlSetting);
 
                 // 若職缺數量為零，視為搜尋失敗
                 if (jobItems.Count == 0)
@@ -160,10 +161,10 @@ namespace JobFilter2.Controllers
                 }
 
                 // 過濾掉已封鎖的工作和公司
-                jobItems = await crawlService.GetUnblockedItems(_context, jobItems);
+                jobItems = await _crawlService.GetUnblockedItems(_context, jobItems);
 
                 // 過濾掉職稱裡面含有特定關鍵字的職缺
-                jobItems = crawlService.FilterByExcludeWords(jobItems, crawlSetting.ExcludeWords);
+                jobItems = _crawlService.FilterByExcludeWords(jobItems, crawlSetting.ExcludeWords);
 
                 // 將最終結果儲存到 Session
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
