@@ -180,7 +180,6 @@
                                         foreach (var jobItem in Model)
                                         {
                                             sequence++;
-                                            string selector_id = Guid.NewGuid().ToString();
                                             <tr class="gradeA">
                                                 <td style="display:none;">@sequence</td>
                                                 <td><a href="@jobItem.Link" target="_blank">@jobItem.Title</a></td>
