@@ -21,9 +21,9 @@ namespace JobFilter2.Services
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// 派出爬蟲，爬取指定的網址
+        /// 爬取指定的網址與分頁
         /// </summary>
-        public async Task LoadPage(Crawler crawler, CrawlSetting crawlSetting, int currentPage = 1, string sctp = "M")
+        public async Task LoadPage(PageData pageData, CrawlSetting crawlSetting, int currentPage = 1, string sctp = "M")
         {
             // 最低年薪視為(月薪下限*14)
             int minSalary = sctp == "Y" ? crawlSetting.MinSalary * 14 : crawlSetting.MinSalary;
@@ -50,7 +50,7 @@ namespace JobFilter2.Services
                     // 將頁面內容轉成 domTree 的形式
                     var config = Configuration.Default;
                     var context = BrowsingContext.New(config);
-                    crawler.domTree = await context.OpenAsync(res => res.Content(pageContent));
+                    pageData.document = await context.OpenAsync(res => res.Content(pageContent));
                 }
                 else
                 {
@@ -122,7 +122,7 @@ namespace JobFilter2.Services
         /// <returns>提取後的工作列表(尚未經由DB資訊做過濾)</returns>
         public async Task<List<JobItem>> GetTargetItems(CrawlSetting crawlSetting)
         {
-            List<Crawler> crawlers = new List<Crawler>();
+            List<PageData> pageDataList = new List<PageData>();
 
             int firstPage = 1;
             int lastPage = 20;
@@ -134,19 +134,20 @@ namespace JobFilter2.Services
 
                 for (int i = firstPage; i <= lastPage; i++)
                 {
-                    // 新增爬蟲
-                    crawlers.Add(new Crawler());
+                    // 新增 PageData (用來儲存這一輪爬蟲取得的頁面內容)
+                    pageDataList.Add(new PageData());
 
-                    // 爬取目標分頁
-                    tasks.Add(LoadPage(crawlers[^1], crawlSetting, i));
+                    // 新增爬蟲，爬取目標分頁並將頁面內容轉存到 PageData
+                    // 注意，只有非同步函數才可以直接添加到 Task 並自動執行
+                    tasks.Add(LoadPage(pageDataList[^1], crawlSetting, i));
                 }
 
                 // 派出第一批爬蟲之後，另外再派一隻去爬有註明年薪的工作
                 // 由於有註明年薪的工作數量很少，所以爬取一個分頁即可
                 if (firstPage == 1)
                 {
-                    crawlers.Add(new Crawler());
-                    tasks.Add(LoadPage(crawlers[^1], crawlSetting, 1, sctp: "Y"));
+                    pageDataList.Add(new PageData());
+                    tasks.Add(LoadPage(pageDataList[^1], crawlSetting, 1, sctp: "Y"));
                 }
 
                 // 等待所有 Task 結束
@@ -161,9 +162,9 @@ namespace JobFilter2.Services
             // 依序提取各分頁的工作資訊
             HashSet<string> jobCodeSet = new HashSet<string>(); // 儲存出現過的 jobCode (用來避免相同的職缺重複出現)
             List<JobItem> jobItems = new List<JobItem>();
-            foreach(var crawler in crawlers)
+            foreach(var pageData in pageDataList)
             {
-                GetTargetJobs(crawler.domTree, jobItems, jobCodeSet);
+                GetTargetJobs(pageData.document, jobItems, jobCodeSet);
             }
 
             return jobItems;
