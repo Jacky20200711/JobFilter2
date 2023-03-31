@@ -6,6 +6,5 @@ namespace JobFilter2.Models
     public class Crawler
     {
         public IDocument domTree = null;
-        public bool isMissionCompleted = false;
     }
 }

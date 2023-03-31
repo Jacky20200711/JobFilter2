@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.Security.Policy;
 
 namespace JobFilter2.Services
 {
@@ -59,12 +60,6 @@ namespace JobFilter2.Services
             catch (Exception ex)
             {
                 _logger.Error($"爬蟲出錯 & errorCatch = {ex.Message}\n{ex.StackTrace}");
-            }
-            finally
-            {
-                /* 這個變數用來判斷爬蟲是否已經完成工作，
-                 * 不論爬蟲執行成功、失敗、或是中途出錯，最後都必須令這個值為 true */
-                crawler.isMissionCompleted = true;
             }
         }
 
@@ -135,26 +130,27 @@ namespace JobFilter2.Services
 
             while (loopRemainTimes > 0)
             {
-                // 製造多個爬蟲，爬取目標分頁
+                List<Task> tasks = new List<Task>();
+
                 for (int i = firstPage; i <= lastPage; i++)
                 {
+                    // 新增爬蟲
                     crawlers.Add(new Crawler());
-                    _ = LoadPage(crawlers[^1], crawlSetting, i);
+
+                    // 爬取目標分頁
+                    tasks.Add(LoadPage(crawlers[^1], crawlSetting, i));
                 }
 
                 // 派出第一批爬蟲之後，另外再派一隻去爬有註明年薪的工作
-                // 由於有註明年新的工作數量很少，只要嘗試爬取一個分頁即可
+                // 由於有註明年薪的工作數量很少，所以爬取一個分頁即可
                 if (firstPage == 1)
                 {
                     crawlers.Add(new Crawler());
-                    _ = LoadPage(crawlers[^1], crawlSetting, 1, sctp: "Y");
+                    tasks.Add(LoadPage(crawlers[^1], crawlSetting, 1, sctp: "Y"));
                 }
 
-                // 等待所有爬蟲結束任務
-                while (crawlers.Any(c => !c.isMissionCompleted))
-                {
-                    await Task.Delay(200);
-                }
+                // 等待所有 Task 結束
+                await Task.WhenAll(tasks);
 
                 // 修改分頁範圍，準備進入下一輪迴圈來爬取該範圍的分頁
                 firstPage = lastPage + 1;
