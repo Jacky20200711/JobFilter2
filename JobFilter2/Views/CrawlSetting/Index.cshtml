@@ -80,7 +80,7 @@
                                     <tr>
                                         <th style="display:none;">排版用(不顯示)</th>
                                         <th>設定說明</th>
-                                        <th>最低月薪</th>
+                                        <th>最低月薪不得低於</th>
                                         <th>經歷要求</th>
                                         <th>職稱過濾</th>
                                         <th>排除面議</th>
@@ -104,6 +104,10 @@
                                                     if (crawlSetting.Seniority.Contains("3")) sList.Add("1-3");
                                                     if (crawlSetting.Seniority.Contains("5")) sList.Add("3-5");
                                                     string seniority = string.Join(",", sList);
+                                                    if (string.IsNullOrEmpty(seniority))
+                                                    {
+                                                        seniority = "無";
+                                                    }
                                                 }
                                                 <td>@seniority</td>
                                                 <td>@(string.IsNullOrEmpty(crawlSetting.ExcludeWords) ? "無" : crawlSetting.ExcludeWords)</td>
