@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.Security.Policy;
 
 namespace JobFilter2.Services
 {
@@ -19,6 +18,14 @@ namespace JobFilter2.Services
     {
         private static readonly HttpClient httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly JobFilterContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public CrawlService(JobFilterContext context, IHttpContextAccessor httpContextAccessor)
+        {
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         /// <summary>
         /// 爬取指定的網址與分頁
@@ -174,13 +181,13 @@ namespace JobFilter2.Services
         /// 根據DB儲存的黑名單，來過濾傳入的 jobItems
         /// </summary>
         /// <returns>過濾完畢的工作列表</returns>
-        public async Task<List<JobItem>> GetUnblockedItems(JobFilterContext context, List<JobItem> jobItems)
+        public async Task<List<JobItem>> GetUnblockedItems(List<JobItem> jobItems)
         {
             List<JobItem> new_jobitems = new List<JobItem>();
 
             // 取得已封鎖的工作代碼與公司名稱
-            var blockJobItems = await context.BlockJobItems.ToListAsync();
-            var blockCompanys = await context.BlockCompanies.ToListAsync();
+            var blockJobItems = await _context.BlockJobItems.ToListAsync();
+            var blockCompanys = await _context.BlockCompanies.ToListAsync();
 
             // 將已封鎖的工作代碼和公司名稱，轉存到 HashTable 以加速搜尋比對
             HashSet<string> blockJobCodeSet = new HashSet<string>();
@@ -203,12 +210,12 @@ namespace JobFilter2.Services
         /// <summary>
         /// 刷新 Session 儲存的工作列表(當封鎖工作或封鎖公司之後，都會Call這個函數)
         /// </summary>
-        public void UpdateJobList(string target, string blockType, HttpContext httpContext)
+        public void UpdateJobList(string target, string blockType)
         {
             List<JobItem> new_jobitems = new List<JobItem>();
 
             // 從 Session 取出工作列表
-            string jobItemsStr = httpContext.Session.GetString("jobItems");
+            string jobItemsStr = _httpContextAccessor.HttpContext.Session.GetString("jobItems");
             if (jobItemsStr == null)
             {
                 return;
@@ -241,7 +248,7 @@ namespace JobFilter2.Services
             }
 
             // 刷新 Session 儲存的工作列表
-            httpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(new_jobitems));
+            _httpContextAccessor.HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(new_jobitems));
         }
 
         public List<JobItem> FilterByExcludeWords(List<JobItem> jobItems, string excludeWords)

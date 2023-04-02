@@ -161,7 +161,7 @@ namespace JobFilter2.Controllers
                 }
 
                 // 過濾掉已封鎖的工作和公司
-                jobItems = await _crawlService.GetUnblockedItems(_context, jobItems);
+                jobItems = await _crawlService.GetUnblockedItems(jobItems);
 
                 // 過濾掉職稱裡面含有特定關鍵字的職缺
                 jobItems = _crawlService.FilterByExcludeWords(jobItems, crawlSetting.ExcludeWords);

@@ -30,7 +30,7 @@ namespace JobFilter2.Controllers
                 await _context.SaveChangesAsync();
 
                 // 刷新 Session 儲存的工作列表
-                _crawlService.UpdateJobList(data.JobCode, blockType: "jobCode", HttpContext);
+                _crawlService.UpdateJobList(data.JobCode, blockType: "jobCode");
                
                 return "封鎖成功";
             }
