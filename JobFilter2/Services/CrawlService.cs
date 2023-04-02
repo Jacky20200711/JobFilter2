@@ -30,13 +30,13 @@ namespace JobFilter2.Services
         /// <summary>
         /// 爬取指定的網址與分頁
         /// </summary>
-        public async Task LoadPage(PageData pageData, CrawlSetting crawlSetting, int currentPage = 1, string sctp = "M")
+        public async Task LoadPage(PageData pageData, CrawlSetting crawlSetting, int currentPage = 1, string salaryType = "M")
         {
             // 最低年薪視為(月薪下限*14)
-            int minSalary = sctp == "Y" ? crawlSetting.MinSalary * 14 : crawlSetting.MinSalary;
+            int minSalary = salaryType == "Y" ? crawlSetting.MinSalary * 14 : crawlSetting.MinSalary;
 
             // 若沒有設置 scstrict = 1 則薪資過濾會失效
-            string targetUrl = crawlSetting.TargetUrl + $"&sctp={sctp}&scmin={minSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}&scstrict=1";
+            string targetUrl = crawlSetting.TargetUrl + $"&sctp={salaryType}&scmin={minSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}&scstrict=1";
 
             // 檢查是否排除面議，調整爬取網址
             targetUrl = targetUrl.Replace("&scneg=0", "");
@@ -154,7 +154,7 @@ namespace JobFilter2.Services
                 if (firstPage == 1)
                 {
                     pageDataList.Add(new PageData());
-                    tasks.Add(LoadPage(pageDataList[^1], crawlSetting, 1, sctp: "Y"));
+                    tasks.Add(LoadPage(pageDataList[^1], crawlSetting, 1, salaryType: "Y"));
                 }
 
                 // 等待所有 Task 結束
