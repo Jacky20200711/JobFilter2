@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using AngleSharp.Text;
 
 namespace JobFilter2.Services
 {
@@ -178,9 +179,9 @@ namespace JobFilter2.Services
         }
 
         /// <summary>
-        /// 根據DB儲存的黑名單，來過濾傳入的 jobItems
+        /// 根據DB的封鎖工作與封鎖公司，來過濾傳入的 jobItems
         /// </summary>
-        /// <returns>過濾完畢的工作列表</returns>
+        /// <returns>返回過濾後的結果</returns>
         public async Task<List<JobItem>> GetUnblockedItems(List<JobItem> jobItems)
         {
             List<JobItem> new_jobitems = new List<JobItem>();
@@ -251,6 +252,10 @@ namespace JobFilter2.Services
             _httpContextAccessor.HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(new_jobitems));
         }
 
+        /// <summary>
+        /// 過濾掉職稱裡面含有特定關鍵字的職缺
+        /// </summary>
+        /// <returns>返回過濾後的結果</returns>
         public List<JobItem> FilterByExcludeWords(List<JobItem> jobItems, string excludeWords)
         {
             if (string.IsNullOrEmpty(excludeWords))
@@ -282,6 +287,46 @@ namespace JobFilter2.Services
                 }
             }
             return new_jobItems;
+        }
+
+        /// <summary>
+        /// 過濾掉最高月薪開太低的職缺
+        /// </summary>
+        /// <returns>返回過濾後的結果</returns>
+        public List<JobItem> FilterByMaxSalary(List<JobItem> jobItems, int maxSalaryOfSetting)
+        {
+            List<JobItem> new_jobs = new List<JobItem>();
+
+            foreach (var job in jobItems)
+            {
+                if (!job.Salary.Contains('~'))
+                {
+                    continue;
+                }
+
+                // 取出薪水範圍 '~' 右側的數字
+                string rightPart = job.Salary.Split('~')[1];
+                List<char> digits = new List<char>();
+                foreach (char c in rightPart)
+                {
+                    if (c.IsDigit())
+                    {
+                        digits.Add(c);
+                    }
+                }
+
+                // 將這些數字重新拼接，並轉成該職缺的最高月薪
+                string digitToStr = new string(digits.ToArray());
+                int maxSalaryOfJobItem = int.Parse(digitToStr);
+
+                // 若最高月薪符合設定，則添加這筆資料
+                if(maxSalaryOfJobItem >= maxSalaryOfSetting)
+                {
+                    new_jobs.Add(job);
+                }
+            }
+
+            return new_jobs;
         }
     }
 }
