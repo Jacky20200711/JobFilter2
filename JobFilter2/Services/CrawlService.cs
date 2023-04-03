@@ -299,8 +299,10 @@ namespace JobFilter2.Services
 
             foreach (var job in jobItems)
             {
+                // 如果沒有薪水範圍，視為符合設定並直接添加
                 if (!job.Salary.Contains('~'))
                 {
+                    new_jobs.Add(job);
                     continue;
                 }
 
