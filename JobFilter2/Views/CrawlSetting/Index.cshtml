@@ -81,6 +81,7 @@
                                         <th style="display:none;">排版用(不顯示)</th>
                                         <th>設定說明</th>
                                         <th>最低月薪不得低於</th>
+                                        <th>最高月薪不得低於</th>
                                         <th>經歷要求</th>
                                         <th>職稱過濾</th>
                                         <th>排除面議</th>
@@ -98,6 +99,7 @@
                                                 <td style="display:none;">@sequence</td>
                                                 <td>@remark</td>
                                                 <td>@crawlSetting.MinSalary</td>
+                                                <td>@crawlSetting.MaxSalary</td>
                                                 @{
                                                     List<string> sList = new List<string>();
                                                     if (crawlSetting.Seniority.Contains("1")) sList.Add("0-1");

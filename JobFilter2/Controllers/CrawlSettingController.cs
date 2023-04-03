@@ -117,6 +117,7 @@ namespace JobFilter2.Controllers
                 _context.Entry(data).Property(p => p.Seniority).IsModified = true;
                 _context.Entry(data).Property(p => p.ExcludeWords).IsModified = true;
                 _context.Entry(data).Property(p => p.HasSalary).IsModified = true;
+                _context.Entry(data).Property(p => p.MaxSalary).IsModified = true;
                 await _context.SaveChangesAsync();
                 TempData["message"] = "修改成功";
             }
