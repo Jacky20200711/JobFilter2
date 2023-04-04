@@ -31,18 +31,18 @@ namespace JobFilter2
 
             services.AddAntiforgery(options =>
             {
-                options.Cookie.Name = ".AspNetCore.Antiforgery.JobFilter2";    // ╜в╖О╧wЁ]╕W╨ы║Aав╖K╕P╪к Domain ╙╨ Cookie ╓╛╛ш╓zбZ
+                options.Cookie.Name = ".AspNetCore.Antiforgery.JobFilter2";    // Д©╝Ф■╧И═░Х╗╜Е░█Г╗╠О╪▄И│©Е┘█Е░▄Ф╗ё Domain Г └ Cookie Д╨▓Г⌡╦Е╧╡Ф⌠╬
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.Cookie.Name = ".AspNetCore.Authentication.JobFilter2"; // ╜в╖О╧wЁ]╕W╨ы║Aав╖K╕P╪к Domain ╙╨ Cookie ╓╛╛ш╓zбZ
+                options.Cookie.Name = ".AspNetCore.Authentication.JobFilter2"; // Д©╝Ф■╧И═░Х╗╜Е░█Г╗╠О╪▄И│©Е┘█Е░▄Ф╗ё Domain Г └ Cookie Д╨▓Г⌡╦Е╧╡Ф⌠╬
             });
 
             services.Configure<CookieTempDataProviderOptions>(options =>
             {
-                options.Cookie.Name = ".AspNetCore.TempData.JobFilter2";       // ╜в╖О╧wЁ]╕W╨ы║Aав╖K╕P╪к Domain ╙╨ Cookie ╓╛╛ш╓zбZ
+                options.Cookie.Name = ".AspNetCore.TempData.JobFilter2";       // Д©╝Ф■╧И═░Х╗╜Е░█Г╗╠О╪▄И│©Е┘█Е░▄Ф╗ё Domain Г └ Cookie Д╨▓Г⌡╦Е╧╡Ф⌠╬
             });
         }
 
