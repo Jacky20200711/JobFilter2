@@ -73,7 +73,7 @@ namespace JobFilter2.Controllers
                 // 匯入前先清空各資料表
                 _context.Database.ExecuteSqlRaw($"DELETE FROM CrawlSetting");
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
-                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
+                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany WHERE BlockReason IN ('R09','R10') "); // 只將未來可能會有興趣的公司，從封鎖公司中移除
 
                 // 從目標資料夾讀取CSV並匯入DB
                 _backupService.Import(importPath);
@@ -92,7 +92,7 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
+                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany WHERE BlockReason IN ('R09','R10') "); // 只將未來可能會有興趣的公司，從封鎖公司中移除
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
                 TempData["message"] = "清除成功";
             }
