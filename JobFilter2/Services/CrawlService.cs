@@ -324,10 +324,11 @@ namespace JobFilter2.Services
                 string digitToStr = new string(digits.ToArray());
                 int checkNum = int.Parse(digitToStr);
 
-                // 如果薪水不是一個範圍，例如"月薪 N 以上"，則判斷 N 是否為 50000 以上
+                // 如果薪水不是一個範圍，例如"月薪 N 以上"，則判斷 N 是否夠大
                 if (!hasSalaryRange)
                 {
-                    if(checkNum >= 50000)
+                    // 若 N 為 60000 以上才添加，否則視為低薪職缺並果斷忽略
+                    if(checkNum >= 60000)
                     {
                         new_jobs.Add(job);
                     }
