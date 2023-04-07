@@ -167,7 +167,7 @@ namespace JobFilter2.Controllers
                 // 過濾掉職稱裡面含有特定關鍵字的職缺
                 jobItems = _crawlService.FilterByExcludeWords(jobItems, crawlSetting.ExcludeWords);
 
-                // 過濾掉最高月薪開太低的職缺
+                // 過濾掉最高月薪開太低的職缺(注意，目前的設計是會直接過濾掉待遇面議的職缺)
                 jobItems = _crawlService.FilterByMaxSalary(jobItems, crawlSetting.MaxSalary);
 
                 // 將最終結果儲存到 Session
