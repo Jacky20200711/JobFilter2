@@ -299,17 +299,20 @@ namespace JobFilter2.Services
 
             foreach (var job in jobItems)
             {
-                // 如果沒有薪水範圍，視為符合設定並直接添加
-                if (!job.Salary.Contains('~'))
+                // 預設從頭搜尋數字
+                string searchContent = job.Salary;
+
+                // 如果薪水為一個範圍，則從'~'右方搜尋數字
+                bool hasSalaryRange = false;
+                if (job.Salary.Contains('~'))
                 {
-                    new_jobs.Add(job);
-                    continue;
+                    searchContent = job.Salary.Split('~')[1];
+                    hasSalaryRange = true;
                 }
 
-                // 取出薪水範圍 '~' 右側的數字
-                string rightPart = job.Salary.Split('~')[1];
+                // 開始搜尋數字並儲存
                 List<char> digits = new List<char>();
-                foreach (char c in rightPart)
+                foreach (char c in searchContent)
                 {
                     if (c.IsDigit())
                     {
@@ -317,14 +320,25 @@ namespace JobFilter2.Services
                     }
                 }
 
-                // 將這些數字重新拼接，並轉成該職缺的最高月薪
+                // 將這些字元重新拼接成數字
                 string digitToStr = new string(digits.ToArray());
-                int maxSalaryOfJobItem = int.Parse(digitToStr);
+                int checkNum = int.Parse(digitToStr);
 
-                // 若最高月薪符合設定，則添加這筆資料
-                if(maxSalaryOfJobItem >= maxSalaryOfSetting)
+                // 如果薪水不是一個範圍，例如"月薪 N 以上"，則判斷 N 是否為 50000 以上
+                if (!hasSalaryRange)
                 {
-                    new_jobs.Add(job);
+                    if(checkNum >= 50000)
+                    {
+                        new_jobs.Add(job);
+                    }
+                }
+                // 如果薪水屬於一個範圍，則判斷上限是否符合期望
+                else
+                {
+                    if (checkNum >= maxSalaryOfSetting)
+                    {
+                        new_jobs.Add(job);
+                    }
                 }
             }
 
