@@ -28,6 +28,7 @@ namespace JobFilter2
             services.AddHttpContextAccessor();
             services.AddScoped<BackupService>();
             services.AddScoped<CrawlService>();
+            services.AddScoped<JobFilterService>();
 
             services.AddAntiforgery(options =>
             {

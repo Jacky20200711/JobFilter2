@@ -14,14 +14,14 @@ namespace JobFilter2.Controllers
     public class BlockCompanyController : Controller
     {
         private readonly JobFilterContext _context;
-        private readonly CrawlService _crawlService;
+        private readonly JobFilterService _jobFilterService;
         private readonly ILogger<BlockCompanyController> _logger;
 
-        public BlockCompanyController(JobFilterContext context, ILogger<BlockCompanyController> logger, CrawlService crawlService)
+        public BlockCompanyController(JobFilterContext context, ILogger<BlockCompanyController> logger, JobFilterService jobFilterService)
         {
             _context = context;
             _logger = logger;
-            _crawlService = crawlService;
+            _jobFilterService = jobFilterService;
         }
 
         public async Task<IActionResult> Index()
@@ -48,7 +48,7 @@ namespace JobFilter2.Controllers
                 await _context.SaveChangesAsync();
 
                 // 刷新 Session 儲存的工作列表
-                _crawlService.UpdateJobList(data.CompanyName, blockType: "company");
+                _jobFilterService.UpdateJobList(data.CompanyName, blockType: "company");
 
                 return "封鎖成功";
             }

@@ -16,14 +16,16 @@ namespace JobFilter2.Controllers
     public class CrawlSettingController : Controller
     {
         private readonly JobFilterContext _context;
+        private readonly JobFilterService _jobFilterService;
         private readonly CrawlService _crawlService;
         private readonly ILogger<CrawlSettingController> _logger;
 
-        public CrawlSettingController(JobFilterContext context, ILogger<CrawlSettingController> logger, CrawlService crawlService)
+        public CrawlSettingController(JobFilterContext context, ILogger<CrawlSettingController> logger, CrawlService crawlService, JobFilterService jobFilterService)
         {
             _context = context;
             _logger = logger;
             _crawlService = crawlService;
+            _jobFilterService = jobFilterService;
         }
 
         public async Task<IActionResult> Index()
@@ -162,13 +164,13 @@ namespace JobFilter2.Controllers
                 }
 
                 // 過濾掉已封鎖的工作和公司
-                jobItems = await _crawlService.GetUnblockedItems(jobItems);
+                jobItems = await _jobFilterService.GetUnblockedItems(jobItems);
 
                 // 過濾掉職稱裡面含有特定關鍵字的職缺
-                jobItems = _crawlService.FilterByExcludeWords(jobItems, crawlSetting.ExcludeWords);
+                jobItems = _jobFilterService.FilterByExcludeWords(jobItems, crawlSetting.ExcludeWords);
 
-                // 過濾掉最高月薪開太低的職缺(注意，目前的設計是會直接過濾掉待遇面議的職缺)
-                jobItems = _crawlService.FilterByMaxSalary(jobItems, crawlSetting.MaxSalary);
+                // 過濾掉最高月薪開太低的職缺(注意，這裡的設計會將待遇面議的職缺過濾掉)
+                jobItems = _jobFilterService.FilterByMaxSalary(jobItems, crawlSetting.MaxSalary);
 
                 // 將最終結果儲存到 Session
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
