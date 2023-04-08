@@ -44,9 +44,9 @@ dotnet add package NLog.Web.AspNetCore --version 4.13.0-readme-preview
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_05.PNG?raw=true)  
 &emsp;  
 # 點選[公司名稱的超連結]  
-> 會自動以公司名稱到天眼通、goodjob、面試趣做搜尋，並開啟對應的分頁  
+會自動以公司名稱到天眼通、goodjob、面試趣做搜尋，並開啟對應的分頁。  
 &emsp;  
 # 點選[公司地址的超連結]  
-> 會開啟 Google map 的分頁，並且定位到公司地址  
+會開啟 Google map 的分頁，並且自動定位到公司地址。  
 &emsp;  
 
