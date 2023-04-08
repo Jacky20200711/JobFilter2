@@ -98,7 +98,7 @@ namespace JobFilter2.Services
         /// <summary>
         /// 過濾掉職稱裡面含有特定關鍵字的職缺
         /// </summary>
-        /// <returns>返回過濾後的結果</returns>
+        /// <returns>過濾後的工作列表</returns>
         public List<JobItem> FilterByExcludeWords(List<JobItem> jobItems, string excludeWords)
         {
             if (string.IsNullOrEmpty(excludeWords))
@@ -135,7 +135,7 @@ namespace JobFilter2.Services
         /// <summary>
         /// 過濾掉最高月薪開太低的職缺
         /// </summary>
-        /// <returns>返回過濾後的結果</returns>
+        /// <returns>過濾後的工作列表</returns>
         public List<JobItem> FilterByMaxSalary(List<JobItem> jobItems, int maxSalaryOfSetting)
         {
             List<JobItem> new_jobs = new List<JobItem>();
@@ -183,6 +183,32 @@ namespace JobFilter2.Services
                     {
                         new_jobs.Add(job);
                     }
+                }
+            }
+
+            return new_jobs;
+        }
+
+        /// <summary>
+        /// 過濾掉派遣駐點的職缺
+        /// </summary>
+        /// <returns>過濾後的工作列表</returns>
+        public List<JobItem> FilterExpatriate(List<JobItem> jobItems)
+        {
+            List<JobItem> new_jobs = new List<JobItem>();
+
+            foreach (var job in jobItems)
+            {
+                // 如果地址長度太小，判定為"XX市XX區"的外派職缺，果斷忽略
+                // 如果地址尾端為外派職缺特有，果斷忽略
+                string lastTwoChars = job.Address.Substring(job.Address.Length - 2);
+                if (job.Address.Length <= 6 || lastTwoChars == "市內" || lastTwoChars == "附近" || lastTwoChars == "北市" || lastTwoChars[^1] == '段')
+                {
+                    continue;
+                }
+                else
+                {
+                    new_jobs.Add(job);
                 }
             }
 

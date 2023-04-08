@@ -172,6 +172,9 @@ namespace JobFilter2.Controllers
                 // 過濾掉最高月薪開太低的職缺(注意，這裡的設計會將待遇面議的職缺過濾掉)
                 jobItems = _jobFilterService.FilterByMaxSalary(jobItems, crawlSetting.MaxSalary);
 
+                // 過濾掉外派駐點的職缺
+                jobItems = _jobFilterService.FilterExpatriate(jobItems);
+
                 // 將最終結果儲存到 Session
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
                 return RedirectToAction("JobItems");
