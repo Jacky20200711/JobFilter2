@@ -142,6 +142,13 @@ namespace JobFilter2.Services
 
             foreach (var job in jobItems)
             {
+                // 若是待遇面議則直接添加
+                if(job.Salary == "待遇面議")
+                {
+                    new_jobs.Add(job);
+                    continue;
+                }
+
                 // 預設從頭搜尋數字
                 string searchContent = job.Salary;
 
