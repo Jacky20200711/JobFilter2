@@ -49,8 +49,8 @@
                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> 備份還原<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a onclick="Export();" href="#" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 匯出備份</a>
-                                    <a onclick="Import();" href="#" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 匯入備份</a>
+                                    <a onclick="Export(); event.preventDefault();" href="#" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 匯出備份</a>
+                                    <a onclick="Import(); event.preventDefault();" href="#" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 匯入備份</a>
                                     @*<a href="@Url.Action("ClearBlock","Backup")" style="cursor:pointer;"><i class="fa fa-edit fa-fw"></i> 清除封鎖</a>*@
                                 </li>
                             </ul>
