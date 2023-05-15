@@ -208,8 +208,10 @@ namespace JobFilter2.Services
             {
                 // 如果地址長度太小，判定為"XX市XX區"的外派職缺，果斷忽略
                 // 如果地址尾端為外派職缺特有，果斷忽略
-                string lastTwoChars = job.Address.Substring(job.Address.Length - 2);
-                if (job.Address.Length <= 6 || lastTwoChars == "市內" || lastTwoChars == "附近" || lastTwoChars == "北市" || lastTwoChars[^1] == '段')
+                string lastTwoChars = job.Address[^2..];
+                if (job.Address.Length <= 6 || lastTwoChars == "市內" || lastTwoChars == "附近" || 
+                    lastTwoChars == "北市" || lastTwoChars[^1] == '段' || lastTwoChars == "地區" ||
+                    lastTwoChars[^1] == '路' || job.Address.Contains("公司規定"))
                 {
                     continue;
                 }
