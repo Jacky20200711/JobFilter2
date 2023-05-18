@@ -138,7 +138,7 @@ namespace JobFilter2.Controllers
             {
                 _context.Entry(data).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
-                TempData["message"] = "刪除成功";
+                //TempData["message"] = "刪除成功";
                 return "刪除成功";
             }
             catch (Exception ex)
