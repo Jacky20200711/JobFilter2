@@ -33,9 +33,9 @@
                         請填寫並確認表單內容
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <form role="form" asp-controller="CrawlSetting" asp-action="Create">
+                        <form role="form" asp-controller="CrawlSetting" asp-action="Create">
+                            <div class="row" style="display:flex;">
+                                <div class="col-lg-6">
                                     <div style="display:flex; width:100%;">
                                         <div class="form-group" style="width:48%;">
                                             <label>設定說明</label>
@@ -45,26 +45,13 @@
                                             <label>排除面議</label>
                                             <select class="form-control" name="HasSalary" required>
                                                 <option>是</option>
+                                                <option>否</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>目標網址</label>
-                                        <textarea class="form-control" name="TargetUrl" rows="7" maxlength="2000" required></textarea>
-                                    </div>
-                                    <div style="display:flex; width:100%;">
-                                        <div class="form-group" style="width:48%;">
-                                            <label>最低月薪不得低於</label>
-                                            <input class="form-control" name="MinSalary" type="number" value=40000 min="40000" max=900000 autocomplete="off" required>
-                                        </div>
-                                        <div class="form-group" style="margin-left:4%; width:48%;">
-                                            <label>最高月薪不得低於</label>
-                                            <input class="form-control" name="MaxSalary" type="number" value=60000 min="60000" max=900000 autocomplete="off" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>排除關鍵字(以逗號區隔)</label>
-                                        <textarea class="form-control" name="ExcludeWords" rows="2" maxlength="200"></textarea>
+                                        <textarea class="form-control" name="TargetUrl" rows="6" maxlength="2000" required></textarea>
                                     </div>
                                     <div class="form-group" style="margin-top:25px;">
                                         @{
@@ -88,9 +75,25 @@
                                     <button type="submit" class="btn btn-primary">送出</button>
                                     <button type="reset" class="btn btn-success">重設</button>
                                     <a class="btn btn-danger" href="@Url.Action("Index","CrawlSetting")">回上一頁</a>
-                                </form>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div style="display:flex; width:100%;">
+                                        <div class="form-group" style="width:48%;">
+                                            <label>最低月薪不得低於</label>
+                                            <input class="form-control" name="MinSalary" type="number" value=40000 min="40000" max=900000 autocomplete="off" required>
+                                        </div>
+                                        <div class="form-group" style="margin-left:4%; width:48%;">
+                                            <label>最高月薪不得低於</label>
+                                            <input class="form-control" name="MaxSalary" type="number" value=60000 min="60000" max=900000 autocomplete="off" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>排除關鍵字(以逗號區隔)</label>
+                                        <textarea class="form-control" name="ExcludeWords" rows="6" maxlength="200"></textarea>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
