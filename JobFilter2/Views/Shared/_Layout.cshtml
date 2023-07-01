@@ -88,25 +88,7 @@
         });
         function Export() {
             (async () => {
-                //const { value: inputValue } = await Swal.fire({
-                //    title: '匯出路徑如下',
-                //    width:600,
-                //    html:'<input id="swal-input" class="swal2-input" value="D:\\Desktop\\Profile\\Note\\Job\\JobFilter2" style="font-size:20px;width:400px;">',
-                //    focusConfirm: false,
-                //    showCancelButton: true,
-                //    customClass: {
-                //        title: 'swal-title-font-size',
-                //        closeButton: 'swal-button-font-size',
-                //        confirmButton: 'swal-button-font-size',
-                //        cancelButton: 'swal-button-font-size'
-                //    },
-                //    preConfirm: () => {
-                //        return document.getElementById('swal-input').value
-                //    }
-                //})
-
                 let inputValue = "D:\\Desktop\\Profile\\Note\\Job\\JobFilter2";
-
                 if (inputValue) {
                     //Swal.fire(inputValue)
                     $.ajax({
@@ -130,25 +112,7 @@
         }
         function Import() {
             (async () => {
-                //const { value: inputValue } = await Swal.fire({
-                //    title: '匯入來源如下',
-                //    width:600,
-                //    html:'<input id="swal-input" class="swal2-input" value="D:\\Desktop\\Profile\\Note\\Job\\JobFilter2" style="font-size:20px;width:400px;">',
-                //    focusConfirm: false,
-                //    showCancelButton: true,
-                //    customClass: {
-                //        title: 'swal-title-font-size',
-                //        closeButton: 'swal-button-font-size',
-                //        confirmButton: 'swal-button-font-size',
-                //        cancelButton: 'swal-button-font-size'
-                //    },
-                //    preConfirm: () => {
-                //        return document.getElementById('swal-input').value
-                //    }
-                //})
-
                 let inputValue = "D:\\Desktop\\Profile\\Note\\Job\\JobFilter2";
-
                 if (inputValue) {
                     //Swal.fire(inputValue)
                     $.ajax({
@@ -174,6 +138,27 @@
                     });
                 }
             })()
+        }
+    </script>
+    <script>
+        // 這個函數用來將 Entity Code 轉回中文
+        function decodeEntities(encodedString) {
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = encodedString;
+            return textArea.value;
+        }
+        // 顯示來自後端的訊息
+        var serverMessage = decodeEntities('@TempData["message"]');
+        if (serverMessage.length > 0) {
+            Swal.fire({
+                title: serverMessage,
+                customClass: {
+                    title: 'swal-title-font-size',
+                    closeButton: 'swal-button-font-size',
+                    confirmButton: 'swal-button-font-size',
+                    cancelButton: 'swal-button-font-size'
+                }
+            });
         }
     </script>
 </body>

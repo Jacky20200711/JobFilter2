@@ -2,27 +2,6 @@
 @using JobFilter2.Services
 
 <script>
-    // 這個函數用來將 Entity Code 轉回中文
-    function decodeEntities(encodedString) {
-        var textArea = document.createElement('textarea');
-        textArea.innerHTML = encodedString;
-        return textArea.value;
-    }
-    var serverMessage = decodeEntities('@TempData["message"]');
-    if (serverMessage.length > 0) {
-        Swal.fire({
-            title : serverMessage,
-            customClass: {
-                title: 'swal-title-font-size',
-                closeButton: 'swal-button-font-size',
-                confirmButton: 'swal-button-font-size',
-                cancelButton: 'swal-button-font-size'
-            }
-        });
-    }
-</script>
-
-<script>
     function DeleteData(idOfData, btn_edit, btn_delete) {
         Swal.fire({
             title: "確定要刪除?",

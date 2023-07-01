@@ -1,26 +1,5 @@
 ﻿@model JobFilter2.Models.Entities.CrawlSetting
 
-<script>
-    // 這個函數用來將 Entity Code 轉回中文
-    function decodeEntities(encodedString) {
-        var textArea = document.createElement('textarea');
-        textArea.innerHTML = encodedString;
-        return textArea.value;
-    }
-    var serverMessage = decodeEntities('@TempData["message"]');
-    if (serverMessage.length > 0) {
-        Swal.fire({
-            title : serverMessage,
-            customClass: {
-                title: 'swal-title-font-size',
-                closeButton: 'swal-button-font-size',
-                confirmButton: 'swal-button-font-size',
-                cancelButton: 'swal-button-font-size'
-            }
-        });
-    }
-</script>
-
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">

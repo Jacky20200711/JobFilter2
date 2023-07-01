@@ -2,27 +2,6 @@
 @using JobFilter2.Services;
 
 <script>
-    // 這個函數用來將 Entity Code 轉回中文
-    function decodeEntities(encodedString) {
-        var textArea = document.createElement('textarea');
-        textArea.innerHTML = encodedString;
-        return textArea.value;
-    }
-    var serverMessage = decodeEntities('@TempData["message"]');
-    if (serverMessage.length > 0) {
-        Swal.fire({
-            title : serverMessage,
-            customClass: {
-                title: 'swal-title-font-size',
-                closeButton: 'swal-button-font-size',
-                confirmButton: 'swal-button-font-size',
-                cancelButton: 'swal-button-font-size'
-            }
-        });
-    }
-</script>
-
-<script>
     function BlockJob(jobCode, btn_blockJob, btn_blockCompany) {
         $.ajax({
             type: 'POST',
@@ -47,41 +26,6 @@
                 });
             }
         });
-        //Swal.fire({
-        //    title: "確定要封鎖?",
-        //    showCancelButton: true,
-        //    customClass: {
-        //        title: 'swal-title-font-size',
-        //        closeButton: 'swal-button-font-size',
-        //        confirmButton: 'swal-button-font-size',
-        //        cancelButton: 'swal-button-font-size'
-        //    }
-        //}).then(function(result) {
-        //    if (result.value) {
-        //        $.ajax({
-        //            type: 'POST',
-        //            url: '@Url.Action("Create", "BlockJobItem")',
-        //            data: { jobCode: jobCode }
-        //        })
-        //        .done(function (message) {
-        //            if (message == "封鎖成功") {
-        //                document.getElementById(btn_blockCompany).disabled = true;
-        //                document.getElementById(btn_blockJob).disabled = true;
-        //            }
-        //            else{
-        //                Swal.fire({
-        //                    title : "操作失敗",
-        //                    customClass: {
-        //                        title: 'swal-title-font-size',
-        //                        closeButton: 'swal-button-font-size',
-        //                        confirmButton: 'swal-button-font-size',
-        //                        cancelButton: 'swal-button-font-size'
-        //                    }
-        //                });
-        //            }
-        //        });
-        //    }
-        //});
     }
 </script>
 
@@ -110,50 +54,6 @@
                 });
             }
         });
-        //(async () => {
-        //    const { value: blockReason } = await Swal.fire({
-        //        title: '請選擇封鎖理由',
-        //        width: 400,
-        //        input: 'radio',
-        //        inputOptions: {
-        //            @Html.Raw(@Utility.GetRadioItems())
-        //        },
-        //        inputValue: 'R01', // R01這個值來自於後端定義的封鎖代碼
-        //        showCancelButton: true,
-        //        customClass: {
-        //            title: 'swal-title-font-size',
-        //            closeButton: 'swal-button-font-size',
-        //            confirmButton: 'swal-button-font-size',
-        //            cancelButton: 'swal-button-font-size',
-        //            input: 'swal-radio'
-        //        },
-        //    })
-        //    if (blockReason) {
-        //        $.ajax({
-        //            type: 'POST',
-        //            url: '@Url.Action("Create", "BlockCompany")',
-        //            data: { companyName: companyName, blockReason: blockReason }
-        //        })
-        //        .done(function (message) {
-        //            if (message == "封鎖成功") {
-        //                document.getElementById(btn_blockCompany).disabled = true;
-        //                document.getElementById(btn_blockJob).disabled = true;
-        //            }
-        //            else{
-        //                Swal.fire({
-        //                    title : "操作失敗",
-        //                    customClass: {
-        //                        title: 'swal-title-font-size',
-        //                        closeButton: 'swal-button-font-size',
-        //                        confirmButton: 'swal-button-font-size',
-        //                        cancelButton: 'swal-button-font-size'
-        //                    }
-        //                });
-        //            }
-        //        });
-        //    }
-
-        //})()
     }
 </script>
 
