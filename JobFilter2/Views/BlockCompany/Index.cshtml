@@ -42,8 +42,9 @@
                 })
                 .done(function (message) {
                     if (message == "刪除成功") {
-                        document.getElementById(btn_edit).disabled = true;
-                        document.getElementById(btn_delete).disabled = true;
+                        //document.getElementById(btn_edit).disabled = true;
+                        //document.getElementById(btn_delete).disabled = true;
+                        self.location.reload();
                     }
                     else{
                         Swal.fire({

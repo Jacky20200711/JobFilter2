@@ -87,21 +87,5 @@ namespace JobFilter2.Controllers
             }
             return result;
         }
-
-        public IActionResult ClearBlock()
-        {
-            try
-            {
-                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany WHERE BlockReason IN ('R09','R10') "); // 只將未來可能會有興趣的公司，從封鎖公司中移除
-                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
-                TempData["message"] = "清除成功";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
-                TempData["message"] = "操作失敗";
-            }
-            return RedirectToRoute(new { controller = "BlockCompany", action = "Index" });
-        }
     }
 }
