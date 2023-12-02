@@ -49,7 +49,7 @@ namespace JobFilter2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CrawlSetting data, string seniority1, string seniority2, string seniority3)
+        public async Task<IActionResult> Create(CrawlSetting data, string seniority1, string seniority2, string seniority3, string seniority4)
         {
             try
             {
@@ -58,6 +58,7 @@ namespace JobFilter2.Controllers
                 if (!string.IsNullOrEmpty(seniority1)) sList.Add(seniority1);
                 if (!string.IsNullOrEmpty(seniority2)) sList.Add(seniority2);
                 if (!string.IsNullOrEmpty(seniority3)) sList.Add(seniority3);
+                if (!string.IsNullOrEmpty(seniority4)) sList.Add(seniority4);
                 data.Seniority = string.Join(",", sList);
 
                 // 新增爬蟲設定 & 寫入DB
@@ -101,7 +102,7 @@ namespace JobFilter2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CrawlSetting data, string seniority1, string seniority2, string seniority3)
+        public async Task<IActionResult> Edit(CrawlSetting data, string seniority1, string seniority2, string seniority3, string seniority4)
         {
             try
             {
@@ -110,6 +111,7 @@ namespace JobFilter2.Controllers
                 if (!string.IsNullOrEmpty(seniority1)) sList.Add(seniority1);
                 if (!string.IsNullOrEmpty(seniority2)) sList.Add(seniority2);
                 if (!string.IsNullOrEmpty(seniority3)) sList.Add(seniority3);
+                if (!string.IsNullOrEmpty(seniority4)) sList.Add(seniority4);
                 data.Seniority = string.Join(",", sList);
 
                 // 設定欲修改的欄位

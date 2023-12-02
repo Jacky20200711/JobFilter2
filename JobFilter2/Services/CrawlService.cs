@@ -20,8 +20,8 @@ namespace JobFilter2.Services
         /// </summary>
         public async Task LoadPage(PageData pageData, CrawlSetting crawlSetting, int currentPage = 1, string salaryType = "M")
         {
-            // 最低年薪視為(月薪下限*14)
-            int minSalary = salaryType == "Y" ? crawlSetting.MinSalary * 14 : crawlSetting.MinSalary;
+            // 最低年薪少於70萬則過濾
+            int minSalary = salaryType == "Y" ? 700000 : crawlSetting.MinSalary;
 
             // 若沒有設置 scstrict = 1 則薪資過濾會失效
             string targetUrl = crawlSetting.TargetUrl + $"&sctp={salaryType}&scmin={minSalary}&page={currentPage}&jobexp={crawlSetting.Seniority}&scstrict=1";

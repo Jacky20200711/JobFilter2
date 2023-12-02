@@ -51,9 +51,12 @@
                                     <div class="form-group" style="margin-top:25px;">
                                         <label>經歷要求</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                         @{
-                                            string isChecked_1 = Model.Seniority.Contains("1") ? "checked" : "";
-                                            string isChecked_2 = Model.Seniority.Contains("3") ? "checked" : "";
-                                            string isChecked_3 = Model.Seniority.Contains("5") ? "checked" : "";
+                                            List<string> SenioritySplit = Model.Seniority?.Split(',').ToList();
+                                            SenioritySplit = SenioritySplit ?? new List<string>();
+                                            string isChecked_1 = SenioritySplit.Contains("1") ? "checked" : "";
+                                            string isChecked_2 = SenioritySplit.Contains("3") ? "checked" : "";
+                                            string isChecked_3 = SenioritySplit.Contains("5") ? "checked" : "";
+                                            string isChecked_4 = SenioritySplit.Contains("10") ? "checked" : "";
                                             string cBoxStyle = "width:18px; height:18px; cursor:pointer; margin-top:3px;";
                                             string cBoxLabelStyle = "margin-left:4px; font-size:14px; margin-top:3px;";
 
@@ -68,6 +71,10 @@
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="seniority3" style="@cBoxStyle" value="5" @isChecked_3>
                                                 <label style="@cBoxLabelStyle">3~5年</label>
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="seniority4" style="@cBoxStyle" value="10" @isChecked_4>
+                                                <label style="@cBoxLabelStyle">5~10年</label>
                                             </label>
                                         }
                                     </div>

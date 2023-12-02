@@ -81,9 +81,12 @@
                                                 <td>@crawlSetting.MaxSalary</td>
                                                 @{
                                                     List<string> sList = new List<string>();
-                                                    if (crawlSetting.Seniority.Contains("1")) sList.Add("0-1");
-                                                    if (crawlSetting.Seniority.Contains("3")) sList.Add("1-3");
-                                                    if (crawlSetting.Seniority.Contains("5")) sList.Add("3-5");
+                                                    List<string> SenioritySplit = crawlSetting.Seniority?.Split(',').ToList();
+                                                    SenioritySplit = SenioritySplit ?? new List<string>();
+                                                    if (SenioritySplit.Contains("1")) sList.Add("0-1");
+                                                    if (SenioritySplit.Contains("3")) sList.Add("1-3");
+                                                    if (SenioritySplit.Contains("5")) sList.Add("3-5");
+                                                    if (SenioritySplit.Contains("10")) sList.Add("5-10");
                                                     string seniority = string.Join(",", sList);
                                                     if (string.IsNullOrEmpty(seniority))
                                                     {
