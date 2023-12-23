@@ -12,9 +12,9 @@ namespace JobFilter2.Services
 {
     public class BackupService
     {
-        private readonly JobFilterContext _context;
+        private readonly ProjectContext _context;
 
-        public BackupService(JobFilterContext context)
+        public BackupService(ProjectContext context)
         {
             _context = context;
         }
@@ -28,22 +28,22 @@ namespace JobFilter2.Services
             Directory.SetCurrentDirectory(exportPath);
 
             // 撈出欲備份的資料
-            List<CrawlSetting> DataList1 = _context.CrawlSettings.ToList();
-            List<BlockJobItem> DataList2 = _context.BlockJobItems.ToList();
-            List<BlockCompany> DataList3 = _context.BlockCompanies.ToList();
+            List<CrawlSetting> DataList1 = _context.CrawlSetting.ToList();
+            List<BlockJobItem> DataList2 = _context.BlockJobItem.ToList();
+            List<BlockCompany> DataList3 = _context.BlockCompany.ToList();
 
             // 寫入CSV檔案(爬蟲設定)
-            using var writer1 = new StreamWriter("CrawlSettings.csv", false, Encoding.UTF8);
+            using var writer1 = new StreamWriter("CrawlSetting.csv", false, Encoding.UTF8);
             using var csvWriter1 = new CsvWriter(writer1, CultureInfo.InvariantCulture);
             csvWriter1.WriteRecords(DataList1);
 
             // 寫入CSV檔案(封鎖工作)
-            using var writer2 = new StreamWriter("BlockJobItems.csv", false, Encoding.UTF8);
+            using var writer2 = new StreamWriter("BlockJobItem.csv", false, Encoding.UTF8);
             using var csvWriter2 = new CsvWriter(writer2, CultureInfo.InvariantCulture);
             csvWriter2.WriteRecords(DataList2);
 
             // 寫入CSV檔案(封鎖公司)
-            using var writer3 = new StreamWriter("BlockCompanies.csv", false, Encoding.UTF8);
+            using var writer3 = new StreamWriter("BlockCompany.csv", false, Encoding.UTF8);
             using var csvWriter3 = new CsvWriter(writer3, CultureInfo.InvariantCulture);
             csvWriter3.WriteRecords(DataList3);
         }
@@ -53,9 +53,9 @@ namespace JobFilter2.Services
         /// </summary>
         public void Import(string importPath)
         {
-            string fPath1 = importPath + "\\CrawlSettings.csv";
-            string fPath2 = importPath + "\\BlockJobItems.csv";
-            string fPath3 = importPath + "\\BlockCompanies.csv";
+            string fPath1 = importPath + "\\CrawlSetting.csv";
+            string fPath2 = importPath + "\\BlockJobItem.csv";
+            string fPath3 = importPath + "\\BlockCompany.csv";
 
             // 這些變數用來儲存從檔案讀取出來的資料
             List<CrawlSetting> DataList1 = new List<CrawlSetting>();

@@ -9,11 +9,11 @@ namespace JobFilter2.Controllers
 {
     public class BlockJobItemController : Controller
     {
-        private readonly JobFilterContext _context;
+        private readonly ProjectContext _context;
         private readonly JobFilterService _jobFilterService;
         private readonly ILogger<BlockJobItemController> _logger;
 
-        public BlockJobItemController(JobFilterContext context, ILogger<BlockJobItemController> logger, JobFilterService jobFilterService)
+        public BlockJobItemController(ProjectContext context, ILogger<BlockJobItemController> logger, JobFilterService jobFilterService)
         {
             _context = context;
             _logger = logger;

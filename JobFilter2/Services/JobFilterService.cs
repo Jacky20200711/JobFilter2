@@ -12,10 +12,10 @@ namespace JobFilter2.Services
 {
     public class JobFilterService
     {
-        private readonly JobFilterContext _context;
+        private readonly ProjectContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public JobFilterService(JobFilterContext context, IHttpContextAccessor httpContextAccessor)
+        public JobFilterService(ProjectContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
@@ -30,8 +30,8 @@ namespace JobFilter2.Services
             List<JobItem> new_jobitems = new List<JobItem>();
 
             // 取得已封鎖的工作代碼與公司名稱
-            var blockJobItems = await _context.BlockJobItems.ToListAsync();
-            var blockCompanys = await _context.BlockCompanies.ToListAsync();
+            var blockJobItems = await _context.BlockJobItem.ToListAsync();
+            var blockCompanys = await _context.BlockCompany.ToListAsync();
 
             // 將已封鎖的工作代碼和公司名稱，轉存到 HashTable 以加速搜尋比對
             HashSet<string> blockJobCodeSet = new HashSet<string>();

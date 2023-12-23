@@ -15,12 +15,12 @@ namespace JobFilter2.Controllers
 {
     public class CrawlSettingController : Controller
     {
-        private readonly JobFilterContext _context;
+        private readonly ProjectContext _context;
         private readonly JobFilterService _jobFilterService;
         private readonly CrawlService _crawlService;
         private readonly ILogger<CrawlSettingController> _logger;
 
-        public CrawlSettingController(JobFilterContext context, ILogger<CrawlSettingController> logger, CrawlService crawlService, JobFilterService jobFilterService)
+        public CrawlSettingController(ProjectContext context, ILogger<CrawlSettingController> logger, CrawlService crawlService, JobFilterService jobFilterService)
         {
             _context = context;
             _logger = logger;
@@ -32,7 +32,7 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                var data = await _context.CrawlSettings.ToListAsync();
+                var data = await _context.CrawlSetting.ToListAsync();
                 return View(data);
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace JobFilter2.Controllers
                     return NotFound();
                 }
 
-                var data = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
+                var data = await _context.CrawlSetting.FirstOrDefaultAsync(u => u.Id == id);
 
                 if (data == null)
                 {
@@ -155,7 +155,7 @@ namespace JobFilter2.Controllers
             try
             {
                 // 爬取目標頁面，提取工作列表
-                var crawlSetting = await _context.CrawlSettings.FirstOrDefaultAsync(u => u.Id == id);
+                var crawlSetting = await _context.CrawlSetting.FirstOrDefaultAsync(u => u.Id == id);
                 List<JobItem> jobItems = await _crawlService.GetTargetItems(crawlSetting);
 
                 // 若職缺數量為零，視為搜尋失敗

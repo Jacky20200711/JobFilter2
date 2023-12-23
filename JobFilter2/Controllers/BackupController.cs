@@ -11,11 +11,11 @@ namespace JobFilter2.Controllers
 {
     public class BackupController : Controller
     {
-        private readonly JobFilterContext _context;
+        private readonly ProjectContext _context;
         private readonly ILogger<BackupController> _logger;
         private readonly BackupService _backupService;
 
-        public BackupController(JobFilterContext context, ILogger<BackupController> logger, BackupService backupService)
+        public BackupController(ProjectContext context, ILogger<BackupController> logger, BackupService backupService)
         {
             _context = context;
             _logger = logger;

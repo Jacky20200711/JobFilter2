@@ -13,11 +13,11 @@ namespace JobFilter2.Controllers
 {
     public class BlockCompanyController : Controller
     {
-        private readonly JobFilterContext _context;
+        private readonly ProjectContext _context;
         private readonly JobFilterService _jobFilterService;
         private readonly ILogger<BlockCompanyController> _logger;
 
-        public BlockCompanyController(JobFilterContext context, ILogger<BlockCompanyController> logger, JobFilterService jobFilterService)
+        public BlockCompanyController(ProjectContext context, ILogger<BlockCompanyController> logger, JobFilterService jobFilterService)
         {
             _context = context;
             _logger = logger;
@@ -28,7 +28,7 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                var data = await _context.BlockCompanies.OrderByDescending(c => c.Id).ToListAsync();
+                var data = await _context.BlockCompany.OrderByDescending(c => c.Id).ToListAsync();
                 return View(data);
             }
             catch (Exception ex)

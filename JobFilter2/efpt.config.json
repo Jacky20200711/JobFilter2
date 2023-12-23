@@ -1,0 +1,49 @@
+﻿{
+   "CodeGenerationMode": 1,
+   "ContextClassName": "ProjectContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models\/Entities",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "JobFilter2",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[BlockCompany]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BlockJobItem]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CrawlSetting]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "laptop-7509mba0\\sqlexpress.JobFilter2.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
