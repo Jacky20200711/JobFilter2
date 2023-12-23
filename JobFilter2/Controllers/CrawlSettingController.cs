@@ -118,10 +118,11 @@ namespace JobFilter2.Controllers
                 _context.Entry(data).Property(p => p.Remark).IsModified = true;
                 _context.Entry(data).Property(p => p.TargetUrl).IsModified = true;
                 _context.Entry(data).Property(p => p.MinSalary).IsModified = true;
+                _context.Entry(data).Property(p => p.MaxSalary).IsModified = true;
                 _context.Entry(data).Property(p => p.Seniority).IsModified = true;
                 _context.Entry(data).Property(p => p.ExcludeWords).IsModified = true;
+                _context.Entry(data).Property(p => p.IncludeWords).IsModified = true;
                 _context.Entry(data).Property(p => p.HasSalary).IsModified = true;
-                _context.Entry(data).Property(p => p.MaxSalary).IsModified = true;
                 await _context.SaveChangesAsync();
                 TempData["message"] = "修改成功";
             }
@@ -140,7 +141,6 @@ namespace JobFilter2.Controllers
             {
                 _context.Entry(data).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
-                //TempData["message"] = "刪除成功";
                 return "刪除成功";
             }
             catch (Exception ex)
@@ -170,6 +170,9 @@ namespace JobFilter2.Controllers
 
                 // 過濾掉職稱裡面含有特定關鍵字的職缺
                 jobItems = _jobFilterService.FilterByExcludeWords(jobItems, crawlSetting.ExcludeWords);
+
+                // 過濾掉職稱裡面沒有特定關鍵字的職缺
+                jobItems = _jobFilterService.FilterByIncludeWords(jobItems, crawlSetting.IncludeWords);
 
                 // 過濾掉最高月薪開太低的職缺(注意，這裡的設計會將待遇面議的職缺過濾掉)
                 jobItems = _jobFilterService.FilterByMaxSalary(jobItems, crawlSetting.MaxSalary);

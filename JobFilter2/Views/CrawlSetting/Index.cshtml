@@ -59,10 +59,11 @@
                                     <tr>
                                         <th style="display:none;">排版用(不顯示)</th>
                                         <th style="white-space: nowrap;">設定說明</th>
-                                        <th style="white-space: nowrap;">最低月薪不得低於</th>
-                                        <th style="white-space: nowrap;">最高月薪不得低於</th>
+                                        <th style="white-space: nowrap;">最低月薪</th>
+                                        <th style="white-space: nowrap;">最高月薪(下限)</th>
                                         <th style="white-space: nowrap;">經歷要求</th>
-                                        <th style="white-space: nowrap;">職稱過濾</th>
+                                        <th style="white-space: nowrap;">職稱排除</th>
+                                        <th style="white-space: nowrap;">職稱包含</th>
                                         <th style="white-space: nowrap;">排除面議</th>
                                         <th style="white-space: nowrap;">操作選項</th>
                                     </tr>
@@ -95,6 +96,7 @@
                                                 }
                                                 <td>@seniority</td>
                                                 <td>@(string.IsNullOrEmpty(crawlSetting.ExcludeWords) ? "無" : crawlSetting.ExcludeWords)</td>
+                                                <td>@(string.IsNullOrEmpty(crawlSetting.IncludeWords) ? "無" : crawlSetting.IncludeWords)</td>
                                                 <td>@crawlSetting.HasSalary</td>
                                                 <td style="white-space: nowrap;">
                                                     <button class="btn btn-info" onclick="location.href='@Url.Action("DoCrawl", "CrawlSetting", new { id = crawlSetting.Id })'">爬取工作</button>

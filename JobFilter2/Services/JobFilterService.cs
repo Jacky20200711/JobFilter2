@@ -124,7 +124,46 @@ namespace JobFilter2.Services
                     }
                 }
 
+                // 若沒有關鍵字則添加
                 if (!hasWord)
+                {
+                    new_jobItems.Add(job);
+                }
+            }
+            return new_jobItems;
+        }
+
+        /// <summary>
+        /// 過濾掉職稱裡面沒有特定關鍵字的職缺
+        /// </summary>
+        /// <returns>過濾後的工作列表</returns>
+        public List<JobItem> FilterByIncludeWords(List<JobItem> jobItems, string includeWords)
+        {
+            if (string.IsNullOrEmpty(includeWords))
+            {
+                return jobItems;
+            }
+
+            List<JobItem> new_jobItems = new List<JobItem>();
+            List<string> inWords = includeWords.Split(',').ToList();
+
+            foreach (var job in jobItems)
+            {
+                // 檢查職稱是否包含關鍵字
+                bool hasWord = false;
+                foreach (string word in inWords)
+                {
+                    // 考慮到英文單字，兩邊都轉成小寫再進行比對
+                    // 添加 Trim 可以忽略多餘的空白
+                    if (job.Title.ToLower().Contains(word.Trim().ToLower()))
+                    {
+                        hasWord = true;
+                        break;
+                    }
+                }
+
+                // 若包含關鍵字則添加
+                if (hasWord)
                 {
                     new_jobItems.Add(job);
                 }

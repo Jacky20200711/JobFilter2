@@ -37,7 +37,7 @@
                                             string cBoxStyle = "width:18px; height:18px; cursor:pointer; margin-top:3px;";
                                             string cBoxLabelStyle = "margin-left:4px; font-size:14px; margin-top:3px;";
                                         }
-                                        <label>經歷要求</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label>經歷要求</label><br>
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="seniority1" style="@cBoxStyle" value="1">
                                             <label style="@cBoxLabelStyle">0~1年</label>
@@ -73,6 +73,10 @@
                                     <div class="form-group">
                                         <label>排除關鍵字(以逗號區隔)</label>
                                         <textarea class="form-control" name="ExcludeWords" rows="6" maxlength="200"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>包含關鍵字(以逗號區隔)</label>
+                                        <textarea class="form-control" name="IncludeWords" rows="1" maxlength="200"></textarea>
                                     </div>
                                 </div>
                             </div>

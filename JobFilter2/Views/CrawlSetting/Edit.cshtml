@@ -49,7 +49,7 @@
                                         <textarea class="form-control" name="TargetUrl" rows="6" maxlength="2000" required>@Model.TargetUrl</textarea>
                                     </div>
                                     <div class="form-group" style="margin-top:25px;">
-                                        <label>經歷要求</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label>經歷要求</label><br>
                                         @{
                                             List<string> SenioritySplit = Model.Seniority?.Split(',').ToList();
                                             SenioritySplit = SenioritySplit ?? new List<string>();
@@ -96,6 +96,10 @@
                                     <div class="form-group">
                                         <label>排除關鍵字(以逗號區隔)</label>
                                         <textarea class="form-control" name="ExcludeWords" rows="6" maxlength="200">@Model.ExcludeWords</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>包含關鍵字(以逗號區隔)</label>
+                                        <textarea class="form-control" name="IncludeWords" rows="1" maxlength="200">@Model.IncludeWords</textarea>
                                     </div>
                                 </div>
                             </div>
