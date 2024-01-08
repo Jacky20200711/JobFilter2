@@ -180,6 +180,9 @@ namespace JobFilter2.Controllers
                 // 過濾掉外派駐點的職缺
                 jobItems = _jobFilterService.FilterExpatriate(jobItems);
 
+                // 過濾掉永久封鎖的公司
+                jobItems = _jobFilterService.FilterByBlockForever(jobItems);
+
                 // 將最終結果儲存到 Session
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
                 return RedirectToAction("JobItems");

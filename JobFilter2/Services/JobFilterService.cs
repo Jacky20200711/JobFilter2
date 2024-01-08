@@ -262,5 +262,26 @@ namespace JobFilter2.Services
 
             return new_jobs;
         }
+
+        /// <summary>
+        /// 過濾掉永久封鎖的公司
+        /// </summary>
+        /// <returns>過濾後的工作列表</returns>
+        public List<JobItem> FilterByBlockForever(List<JobItem> jobItems)
+        {
+            var blockForeverDict = _context.BlockForever.ToDictionary(x => x.CompanyName, x => true);
+
+            List<JobItem> new_jobItems = new List<JobItem>();
+
+            foreach (var job in jobItems)
+            {
+                if (!blockForeverDict.ContainsKey(job.Company))
+                {
+                    new_jobItems.Add(job);
+                }
+            }
+
+            return new_jobItems;
+        }
     }
 }

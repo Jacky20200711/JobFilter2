@@ -1,5 +1,5 @@
 ﻿{
-   "CodeGenerationMode": 1,
+   "CodeGenerationMode": 2,
    "ContextClassName": "ProjectContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
@@ -16,6 +16,10 @@
    "Tables": [
       {
          "Name": "[dbo].[BlockCompany]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BlockForever]",
          "ObjectType": 0
       },
       {
