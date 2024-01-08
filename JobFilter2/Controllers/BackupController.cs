@@ -74,6 +74,7 @@ namespace JobFilter2.Controllers
                 _context.Database.ExecuteSqlRaw($"DELETE FROM CrawlSetting");
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockJobItem");
                 _context.Database.ExecuteSqlRaw($"DELETE FROM BlockCompany");
+                _context.Database.ExecuteSqlRaw($"DELETE FROM BlockForever");
 
                 // 從目標資料夾讀取CSV並匯入DB
                 _backupService.Import(importPath);

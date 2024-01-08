@@ -30,6 +30,7 @@ namespace JobFilter2.Services
             List<CrawlSetting> DataList1 = _context.CrawlSetting.ToList();
             List<BlockJobItem> DataList2 = _context.BlockJobItem.ToList();
             List<BlockCompany> DataList3 = _context.BlockCompany.ToList();
+            List<BlockForever> DataList4 = _context.BlockForever.ToList();
 
             // 寫入CSV檔案(爬蟲設定)
             using var writer1 = new StreamWriter("CrawlSetting.csv", false, Encoding.UTF8);
@@ -45,6 +46,11 @@ namespace JobFilter2.Services
             using var writer3 = new StreamWriter("BlockCompany.csv", false, Encoding.UTF8);
             using var csvWriter3 = new CsvWriter(writer3, CultureInfo.InvariantCulture);
             csvWriter3.WriteRecords(DataList3);
+
+            // 寫入CSV檔案(永久封鎖)
+            using var writer4 = new StreamWriter("BlockForever.csv", false, Encoding.UTF8);
+            using var csvWriter4 = new CsvWriter(writer4, CultureInfo.InvariantCulture);
+            csvWriter4.WriteRecords(DataList4);
         }
 
         /// <summary>
@@ -55,11 +61,13 @@ namespace JobFilter2.Services
             string fPath1 = importPath + "\\CrawlSetting.csv";
             string fPath2 = importPath + "\\BlockJobItem.csv";
             string fPath3 = importPath + "\\BlockCompany.csv";
+            string fPath4 = importPath + "\\BlockForever.csv";
 
             // 這些變數用來儲存從檔案讀取出來的資料
             List<CrawlSetting> DataList1 = new List<CrawlSetting>();
             List<BlockJobItem> DataList2 = new List<BlockJobItem>();
             List<BlockCompany> DataList3 = new List<BlockCompany>();
+            List<BlockForever> DataList4 = new List<BlockForever>();
 
             // 若備份檔案存在，才會進一步讀取資料
             if (File.Exists(fPath1))
@@ -117,6 +125,26 @@ namespace JobFilter2.Services
                     _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.BlockCompany ON");
                     _context.SaveChanges();
                     _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.BlockCompany OFF");
+                    transaction.Commit();
+                }
+            }
+
+            // 若備份檔案存在，才會進一步讀取資料
+            if (File.Exists(fPath4))
+            {
+                // 讀取檔案資料並轉成LIST
+                using var reader4 = new StreamReader(fPath4, Encoding.UTF8);
+                var csvReader4 = new CsvReader(reader4, CultureInfo.InvariantCulture);
+                DataList4 = csvReader4.GetRecords<BlockForever>().ToList();
+
+                // 若LIST不為空，才會將資料匯入DB
+                if (DataList4.Count > 0)
+                {
+                    using var transaction = _context.Database.BeginTransaction();
+                    _context.AddRange(DataList4);
+                    _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.BlockForever ON");
+                    _context.SaveChanges();
+                    _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.BlockForever OFF");
                     transaction.Commit();
                 }
             }
