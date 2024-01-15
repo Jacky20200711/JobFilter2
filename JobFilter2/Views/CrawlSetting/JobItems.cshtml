@@ -34,7 +34,7 @@
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Create", "BlockCompany")',
-            data: { companyName: companyName, blockReason: "R05" }
+            data: { companyName: companyName, blockReason: "R09" }
         })
         .done(function (message) {
             if (message == "封鎖成功") {
