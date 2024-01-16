@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -182,6 +183,9 @@ namespace JobFilter2.Controllers
 
                 // 過濾掉永久封鎖的公司
                 jobItems = _jobFilterService.FilterByBlockForever(jobItems);
+
+                // 以公司名稱排序
+                jobItems = jobItems.OrderBy(x => x.Company).ToList();
 
                 // 將最終結果儲存到 Session
                 HttpContext.Session.SetString("jobItems", JsonConvert.SerializeObject(jobItems));
