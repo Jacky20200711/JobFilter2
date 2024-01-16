@@ -91,6 +91,63 @@
     }
 </script>
 
+<script>
+    function BlockForever() {
+        (async () => {
+            const { value: formValues } = await Swal.fire({
+                width: 600,
+                title: '輸入公司名稱與封鎖理由',
+                html:
+                    '<input id="swal-input1" class="swal2-input" style="width:80%;" autocomplete="off" placeholder="公司名稱">' +
+                    '<input id="swal-input2" class="swal2-input" style="width:80%;" autocomplete="off" placeholder="封鎖理由">',
+                focusConfirm: false,
+                showCancelButton: true,
+                customClass: {
+                    title: 'swal-title-font-size',
+                    closeButton: 'swal-button-font-size',
+                    confirmButton: 'swal-button-font-size',
+                    cancelButton: 'swal-button-font-size',
+                },
+                preConfirm: () => {
+                    if (document.getElementById('swal-input1').value.length == 0) {
+                        Swal.showValidationMessage('<span style="font-size:24px;">公司名稱不可為空</span>');
+                        return;
+                    }
+                    if (document.getElementById('swal-input2').value.length == 0) {
+                        Swal.showValidationMessage('<span style="font-size:24px;">封鎖理由不可為空</span>');
+                        return;
+                    }
+                    return [
+                        document.getElementById('swal-input1').value,
+                        document.getElementById('swal-input2').value
+                    ]
+                }
+            })
+            if (formValues) {
+                let CompanyName = formValues[0];
+                let BlockReason = formValues[1];
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("BlockForever", "BlockCompany")',
+                    data: { CompanyName: CompanyName, BlockReason: BlockReason }
+                })
+                .done(function (result) {
+                    let resultMessage = result === "封鎖成功" ? "操作成功" : "操作失敗";
+                    Swal.fire({
+                        title: resultMessage,
+                        customClass: {
+                            title: 'swal-title-font-size',
+                            closeButton: 'swal-button-font-size',
+                            confirmButton: 'swal-button-font-size',
+                            cancelButton: 'swal-button-font-size'
+                        }
+                    });
+                });
+            }
+        })()
+    }
+</script>
+
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
@@ -101,6 +158,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <button class="btn btn-primary" onclick="BlockForever()">新增永久封鎖</button>
+                    </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover" id="dataTables-example">
@@ -118,15 +178,15 @@
                                         foreach (var blockCompany in Model)
                                         {
                                             sequence++;
-                                            <tr class="gradeA">
-                                                <td style="display:none;">@sequence</td>
-                                                <td>@blockCompany.CompanyName</td>
-                                                <td id="reason_@blockCompany.Id">@Utility.BLOCK_REASON[blockCompany.BlockReason]</td>
-                                                <td class="center-block">
-                                                    <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
-                                                    <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id, 'edit_@blockCompany.Id', 'delete_@blockCompany.Id')">刪除</button>
-                                                </td>
-                                            </tr>
+                                                <tr class="gradeA">
+                                                    <td style="display:none;">@sequence</td>
+                                                    <td>@blockCompany.CompanyName</td>
+                                                    <td id="reason_@blockCompany.Id">@Utility.BLOCK_REASON[blockCompany.BlockReason]</td>
+                                                    <td class="center-block">
+                                                        <button class="btn btn-success" id="edit_@blockCompany.Id" onclick="EditBlockReason(@blockCompany.Id, 'reason_@blockCompany.Id')">修改理由</button>
+                                                        <button class="btn btn-danger" id="delete_@blockCompany.Id" onclick="DeleteData(@blockCompany.Id, 'edit_@blockCompany.Id', 'delete_@blockCompany.Id')">刪除</button>
+                                                    </td>
+                                                </tr>
                                         }
                                     }
                                 </tbody>

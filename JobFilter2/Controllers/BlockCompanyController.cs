@@ -98,5 +98,21 @@ namespace JobFilter2.Controllers
                 return "操作失敗";
             }
         }
+
+        [HttpPost]
+        public async Task<string> BlockForever(BlockForever data)
+        {
+            try
+            {
+                _context.Add(data);
+                await _context.SaveChangesAsync();
+                return "封鎖成功";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
+                return "操作失敗";
+            }
+        }
     }
 }
