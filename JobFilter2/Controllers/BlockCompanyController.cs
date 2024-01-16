@@ -104,6 +104,8 @@ namespace JobFilter2.Controllers
         {
             try
             {
+                data.CompanyName = data.CompanyName?.Trim();
+                data.BlockReason = data.BlockReason?.Trim();
                 _context.Add(data);
                 await _context.SaveChangesAsync();
                 return "封鎖成功";
