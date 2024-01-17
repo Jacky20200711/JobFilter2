@@ -10,9 +10,9 @@
         })
         .done(function (message) {
             if (message == "封鎖成功") {
-                //document.getElementById(btn_blockCompany).disabled = true;
-                //document.getElementById(btn_blockJob).disabled = true;
-                self.location.reload();
+                document.getElementById(btn_blockCompany).disabled = true;
+                document.getElementById(btn_blockJob).disabled = true;
+                //self.location.reload();
             }
             else {
                 Swal.fire({
