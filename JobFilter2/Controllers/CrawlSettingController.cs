@@ -206,6 +206,9 @@ namespace JobFilter2.Controllers
             if (itemStr != null)
             {
                 jobItems = JsonConvert.DeserializeObject<List<JobItem>>(itemStr);
+
+                // 過濾掉永久封鎖的公司
+                jobItems = _jobFilterService.FilterByBlockForever(jobItems);
             }
 
             return View(jobItems);
