@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,6 +116,41 @@ namespace JobFilter2.Controllers
                 _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
                 return "操作失敗";
             }
+        }
+
+        public async Task<IActionResult> BlockAllForever()
+        {
+            try
+            {
+                var blockCompanyList = _context.BlockCompany.ToList();
+                var newBlockForeverList = new List<BlockForever>();
+
+                // 新增永久封鎖
+                foreach (var b in blockCompanyList)
+                {
+                    newBlockForeverList.Add(new BlockForever
+                    {
+                        CompanyName = b.CompanyName?.Trim(),
+                        BlockReason = "面試沒上或投履歷沒邀約，並且已經失去興趣",
+                    });
+                }
+                
+                _context.AddRange(newBlockForeverList);
+
+                // 刪除暫時封鎖
+                _context.RemoveRange(blockCompanyList);
+
+                // 更新資料庫
+                await _context.SaveChangesAsync();
+                TempData["message"] = "操作成功";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
+                TempData["message"] = "操作失敗";
+            }
+            return RedirectToAction("Index");
         }
     }
 }
