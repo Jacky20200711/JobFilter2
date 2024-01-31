@@ -29,16 +29,16 @@ dotnet add package NLog --version 4.7.10
 dotnet add package NLog.Web.AspNetCore --version 4.13.0-readme-preview  
 &emsp;  
 # 網站首頁(爬蟲列表)  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_01.PNG?raw=true)  
+![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_01.png?raw=true)  
 &emsp;   
 # 新增/修改爬蟲設定  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_02.PNG?raw=true)  
+![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_02.png?raw=true)  
 &emsp;  
 # 點選[爬取工作]，取得過濾後的工作列表  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_03.PNG?raw=true)  
+![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_03.png?raw=true)  
 &emsp;  
 # 點選[職位名稱的超連結]，開啟該職缺的104頁面  
-![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_04.PNG?raw=true)  
+![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_04.png?raw=true)  
 &emsp;  
 # 點選[公司名稱的超連結]  
 會自動以公司名稱到天眼通、goodjob、面試趣做搜尋，並開啟對應的分頁。  
