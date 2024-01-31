@@ -157,7 +157,7 @@ namespace JobFilter2.Controllers
         {
             try
             {
-                var blockCompanyList = _context.BlockForever.ToList();
+                var blockCompanyList = _context.BlockForever.OrderByDescending(x => x.Id).ToList();
                 return View(blockCompanyList);
             }
             catch (Exception ex)
