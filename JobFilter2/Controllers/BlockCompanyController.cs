@@ -131,7 +131,7 @@ namespace JobFilter2.Controllers
                     newBlockForeverList.Add(new BlockForever
                     {
                         CompanyName = b.CompanyName?.Trim(),
-                        BlockReason = "面試沒上或投履歷沒邀約，並且已經失去興趣",
+                        BlockReason = "面試沒上或投履歷沒邀約",
                     });
                 }
                 
@@ -151,6 +151,20 @@ namespace JobFilter2.Controllers
                 TempData["message"] = "操作失敗";
             }
             return RedirectToAction("Index");
+        }
+
+        public IActionResult GetBlockForeverList()
+        {
+            try
+            {
+                var blockCompanyList = _context.BlockForever.ToList();
+                return View(blockCompanyList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex.Message}\n{ex.StackTrace}");
+                return Content("<h2>Service unavailable.</h2>", "text/html", Encoding.UTF8);
+            }
         }
     }
 }
