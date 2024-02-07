@@ -269,13 +269,13 @@ namespace JobFilter2.Services
         /// <returns>過濾後的工作列表</returns>
         public List<JobItem> FilterByBlockForever(List<JobItem> jobItems)
         {
-            var blockForeverDict = _context.BlockForever.ToDictionary(x => x.CompanyName, x => true);
+            var blockForeverDict = _context.BlockForever.ToDictionary(x => x.CompanyName.Replace(" ",""), x => true);
 
             List<JobItem> new_jobItems = new List<JobItem>();
 
             foreach (var job in jobItems)
             {
-                if (!blockForeverDict.ContainsKey(job.Company))
+                if (!blockForeverDict.ContainsKey(job.Company.Replace(" ", "")))
                 {
                     new_jobItems.Add(job);
                 }

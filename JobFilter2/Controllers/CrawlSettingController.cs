@@ -181,9 +181,6 @@ namespace JobFilter2.Controllers
                 // 過濾掉外派駐點的職缺
                 jobItems = _jobFilterService.FilterExpatriate(jobItems);
 
-                // 過濾掉永久封鎖的公司
-                jobItems = _jobFilterService.FilterByBlockForever(jobItems);
-
                 // 以公司名稱排序
                 jobItems = jobItems.OrderBy(x => x.Company).ToList();
 
