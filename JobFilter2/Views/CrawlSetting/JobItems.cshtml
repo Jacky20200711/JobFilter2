@@ -107,6 +107,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <button class="btn btn-primary" onclick="BlockForever()">新增永久封鎖</button>
+                    </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover" id="dataTables-example">
@@ -133,7 +136,7 @@
                                                 <td><a onclick="SearchComment('@jobItem.Company'); return false;" style="cursor:pointer;">@jobItem.Company</a></td>
                                                 <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
                                                 <td class="center-block" style="white-space: nowrap;">
-                                                    <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">封鎖工作</button>
+                                                    <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">隱藏</button>
                                                     <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>
                                                 </td>
                                             </tr>
