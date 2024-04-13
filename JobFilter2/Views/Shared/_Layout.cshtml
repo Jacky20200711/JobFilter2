@@ -43,7 +43,7 @@
                     <ul class="nav" id="side-menu">
                         <li>
                             <a href="@Url.Action("Index", "CrawlSetting")"><i class="fa fa-edit fa-fw"></i> 爬蟲設定</a>
-                            <a href="@Url.Action("Index", "BlockCompany")"><i class="fa fa-edit fa-fw"></i> 暫時封鎖</a>
+                            @* <a href="@Url.Action("Index", "BlockCompany")"><i class="fa fa-edit fa-fw"></i> 暫時封鎖</a> *@
                             <a href="@Url.Action("GetBlockForeverList", "BlockCompany")"><i class="fa fa-edit fa-fw"></i> 永久封鎖</a>
                         </li>
                         <li>
@@ -123,7 +123,7 @@
                     })
                     .done(function (result) {
                         if(result["code"] == 1){
-                            self.location.href = '@Url.Action("Index","BlockCompany")';
+                            self.location.href = '@Url.Action("GetBlockForeverList","BlockCompany")';
                         }
                         else{
                             Swal.fire({
@@ -164,13 +164,13 @@
     </script>
 
     <script>
-        function BlockForever() {
+        function BlockForever(companyName = '') {
             (async () => {
                 const { value: formValues } = await Swal.fire({
                     width: 600,
                     title: '輸入公司名稱與封鎖理由',
                     html:
-                        '<input id="swal-input1" class="swal2-input" style="width:80%; font-size:20px;" autocomplete="off" placeholder="公司名稱">' +
+                        '<input id="swal-input1" class="swal2-input" style="width:80%; font-size:20px;" autocomplete="off" placeholder="公司名稱" value="' + companyName + '">' +
                         '<input id="swal-input2" class="swal2-input" style="width:80%; font-size:20px;" autocomplete="off" placeholder="封鎖理由">',
                     focusConfirm: false,
                     showCancelButton: true,
@@ -179,6 +179,9 @@
                         closeButton: 'swal-button-font-size',
                         confirmButton: 'swal-button-font-size',
                         cancelButton: 'swal-button-font-size',
+                    },
+                    didOpen: () => {
+                        Swal.getHtmlContainer().querySelector('#swal-input2').focus()
                     },
                     preConfirm: () => {
                         if (document.getElementById('swal-input1').value.length == 0) {
@@ -194,7 +197,8 @@
                             document.getElementById('swal-input2').value
                         ]
                     }
-                })
+                });
+
                 if (formValues) {
                     let CompanyName = formValues[0];
                     let BlockReason = formValues[1];
@@ -203,22 +207,22 @@
                         url: '@Url.Action("BlockForever", "BlockCompany")',
                         data: { CompanyName: CompanyName, BlockReason: BlockReason }
                     })
-                        .done(function (result) {
-                            if (result === "封鎖成功") {
-                                self.location.reload();
-                            }
-                            else {
-                                Swal.fire({
-                                    title: "操作失敗",
-                                    customClass: {
-                                        title: 'swal-title-font-size',
-                                        closeButton: 'swal-button-font-size',
-                                        confirmButton: 'swal-button-font-size',
-                                        cancelButton: 'swal-button-font-size'
-                                    }
-                                });
-                            }
-                        });
+                    .done(function (result) {
+                        if (result === "封鎖成功") {
+                            self.location.reload();
+                        }
+                        else {
+                            Swal.fire({
+                                title: "操作失敗",
+                                customClass: {
+                                    title: 'swal-title-font-size',
+                                    closeButton: 'swal-button-font-size',
+                                    confirmButton: 'swal-button-font-size',
+                                    cancelButton: 'swal-button-font-size'
+                                }
+                            });
+                        }
+                    });
                 }
             })()
         }

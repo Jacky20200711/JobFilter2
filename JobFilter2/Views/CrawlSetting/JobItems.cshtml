@@ -10,9 +10,9 @@
         })
         .done(function (message) {
             if (message == "封鎖成功") {
-                document.getElementById(btn_blockCompany).disabled = true;
-                document.getElementById(btn_blockJob).disabled = true;
-                //self.location.reload();
+                // document.getElementById(btn_blockCompany).disabled = true;
+                // document.getElementById(btn_blockJob).disabled = true;
+                self.location.reload();
             }
             else {
                 Swal.fire({
@@ -137,7 +137,8 @@
                                                 <td><a href="https://www.google.com/maps?q=@jobItem.Address" target="_blank">@jobItem.Address</a></td>
                                                 <td class="center-block" style="white-space: nowrap;">
                                                     <button class="btn btn-success" id="btn_blockJob_@jobItem.Code" onclick="BlockJob('@jobItem.Code', 'btn_blockJob_@jobItem.Code', 'btn_blockCompany_@jobItem.Code')">隱藏</button>
-                                                    <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>
+                                                    <!--<button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockCompany('btn_blockCompany_@jobItem.Code', '@jobItem.Company', 'btn_blockJob_@jobItem.Code')">封鎖公司</button>-->
+                                                    <button class="btn btn-danger" id="btn_blockCompany_@jobItem.Code" onclick="BlockForever('@jobItem.Company')">封鎖公司</button>
                                                 </td>
                                             </tr>
                                         }
