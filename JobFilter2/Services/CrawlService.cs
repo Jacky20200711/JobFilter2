@@ -120,8 +120,8 @@ namespace JobFilter2.Services
             List<PageData> pageDataList = new List<PageData>();
 
             int firstPage = 1;
-            int lastPage = 20;
-            int loopRemainTimes = 2;
+            int lastPage = 15;
+            int loopRemainTimes = 2; // 最多爬 15 * 2 = 30 個頁面就好，不然會拿到 429 錯誤代碼(請求太多)
 
             while (loopRemainTimes > 0)
             {
@@ -147,6 +147,7 @@ namespace JobFilter2.Services
 
                 // 等待所有 Task 結束
                 await Task.WhenAll(tasks);
+                await Task.Delay(500); // 稍微停止一下再繼續爬下一批，降低被限流或黑名單的風險
 
                 // 修改分頁範圍，準備進入下一輪迴圈來爬取該範圍的分頁
                 firstPage = lastPage + 1;
