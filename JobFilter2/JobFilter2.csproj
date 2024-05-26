@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	<NoWarn>IDE0037;IDE0017;IDE0028;CS0618;NETSDK1138;CA1416;CS1591;IDE0090;CA2254;CA2211</NoWarn>  
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
