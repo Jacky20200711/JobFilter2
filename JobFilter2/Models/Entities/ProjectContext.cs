@@ -3,96 +3,86 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace JobFilter2.Models.Entities
+namespace JobFilter2.Models.Entities;
+
+public partial class ProjectContext : DbContext
 {
-    public partial class ProjectContext : DbContext
+    public ProjectContext(DbContextOptions<ProjectContext> options)
+        : base(options)
     {
-        public ProjectContext()
-        {
-        }
-
-        public ProjectContext(DbContextOptions<ProjectContext> options)
-            : base(options)
-        {
-        }
-
-        public virtual DbSet<BlockCompany> BlockCompany { get; set; }
-        public virtual DbSet<BlockForever> BlockForever { get; set; }
-        public virtual DbSet<BlockJobItem> BlockJobItem { get; set; }
-        public virtual DbSet<CrawlSetting> CrawlSetting { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<BlockCompany>(entity =>
-            {
-                entity.Property(e => e.Id).HasComment("資料編號");
-
-                entity.Property(e => e.BlockReason)
-                    .HasMaxLength(200)
-                    .HasComment("封鎖理由");
-
-                entity.Property(e => e.CompanyName)
-                    .HasMaxLength(200)
-                    .HasComment("公司名稱");
-            });
-
-            modelBuilder.Entity<BlockForever>(entity =>
-            {
-                entity.HasIndex(e => e.CompanyName, "index_BlockForever_CompanyName")
-                    .IsUnique();
-
-                entity.Property(e => e.BlockReason).HasMaxLength(100);
-
-                entity.Property(e => e.CompanyName).HasMaxLength(100);
-            });
-
-            modelBuilder.Entity<BlockJobItem>(entity =>
-            {
-                entity.Property(e => e.Id).HasComment("資料編號");
-
-                entity.Property(e => e.JobCode)
-                    .HasMaxLength(200)
-                    .HasComment("職缺編號");
-            });
-
-            modelBuilder.Entity<CrawlSetting>(entity =>
-            {
-                entity.Property(e => e.Id).HasComment("資料編號");
-
-                entity.Property(e => e.ExcludeWords)
-                    .HasMaxLength(500)
-                    .HasComment("排除關鍵字(以逗號區隔)");
-
-                entity.Property(e => e.HasSalary)
-                    .HasMaxLength(500)
-                    .HasComment("是否有寫薪水(意即是否排除面議)");
-
-                entity.Property(e => e.IncludeWords)
-                    .HasMaxLength(500)
-                    .HasComment("包含關鍵字(以逗號區隔)");
-
-                entity.Property(e => e.MaxSalary).HasComment("最高月薪(不得低於)");
-
-                entity.Property(e => e.MinSalary).HasComment("最低月薪(不得低於)");
-
-                entity.Property(e => e.Remark)
-                    .HasMaxLength(500)
-                    .HasComment("設定說明");
-
-                entity.Property(e => e.Seniority)
-                    .HasMaxLength(100)
-                    .HasComment("年資");
-
-                entity.Property(e => e.TargetUrl)
-                    .HasMaxLength(1500)
-                    .HasComment("目標網址");
-            });
-
-            OnModelCreatingPartial(modelBuilder);
-        }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
+
+    public virtual DbSet<BlockCompany> BlockCompany { get; set; }
+
+    public virtual DbSet<BlockForever> BlockForever { get; set; }
+
+    public virtual DbSet<BlockJobItem> BlockJobItem { get; set; }
+
+    public virtual DbSet<CrawlSetting> CrawlSetting { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<BlockCompany>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__BlockCom__3214EC07863081D3");
+
+            entity.Property(e => e.Id).HasComment("資料編號");
+            entity.Property(e => e.BlockReason)
+                .HasMaxLength(200)
+                .HasComment("封鎖理由");
+            entity.Property(e => e.CompanyName)
+                .HasMaxLength(200)
+                .HasComment("公司名稱");
+        });
+
+        modelBuilder.Entity<BlockForever>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__BlockFor__3214EC0711E20E2E");
+
+            entity.Property(e => e.BlockReason).HasMaxLength(100);
+            entity.Property(e => e.CompanyName).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<BlockJobItem>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__BlockJob__3214EC071AD5C915");
+
+            entity.Property(e => e.Id).HasComment("資料編號");
+            entity.Property(e => e.JobCode)
+                .HasMaxLength(200)
+                .HasComment("職缺編號");
+        });
+
+        modelBuilder.Entity<CrawlSetting>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__CrawlSet__3214EC0724F5CF55");
+
+            entity.Property(e => e.Id).HasComment("資料編號");
+            entity.Property(e => e.ExcludeWords)
+                .HasMaxLength(500)
+                .HasComment("排除關鍵字(以逗號區隔)");
+            entity.Property(e => e.HasSalary)
+                .HasMaxLength(500)
+                .HasComment("是否有寫薪水(意即是否排除面議)");
+            entity.Property(e => e.IncludeWords)
+                .HasMaxLength(500)
+                .HasComment("包含關鍵字(以逗號區隔)");
+            entity.Property(e => e.MaxSalary).HasComment("最高月薪(不得低於)");
+            entity.Property(e => e.MinSalary).HasComment("最低月薪(不得低於)");
+            entity.Property(e => e.Remark)
+                .HasMaxLength(500)
+                .HasComment("設定說明");
+            entity.Property(e => e.Seniority)
+                .HasMaxLength(100)
+                .HasComment("年資");
+            entity.Property(e => e.TargetUrl)
+                .HasMaxLength(1500)
+                .HasComment("目標網址");
+        });
+
+        OnModelCreatingPartial(modelBuilder);
+    }
+
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

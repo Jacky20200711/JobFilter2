@@ -3,12 +3,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace JobFilter2.Models.Entities
+namespace JobFilter2.Models.Entities;
+
+public partial class BlockForever
 {
-    public partial class BlockForever
-    {
-        public int Id { get; set; }
-        public string CompanyName { get; set; }
-        public string BlockReason { get; set; }
-    }
+    public int Id { get; set; }
+
+    public string CompanyName { get; set; }
+
+    public string BlockReason { get; set; }
 }

@@ -3,21 +3,22 @@
 using System;
 using System.Collections.Generic;
 
-namespace JobFilter2.Models.Entities
+namespace JobFilter2.Models.Entities;
+
+public partial class BlockCompany
 {
-    public partial class BlockCompany
-    {
-        /// <summary>
-        /// 資料編號
-        /// </summary>
-        public int Id { get; set; }
-        /// <summary>
-        /// 公司名稱
-        /// </summary>
-        public string CompanyName { get; set; }
-        /// <summary>
-        /// 封鎖理由
-        /// </summary>
-        public string BlockReason { get; set; }
-    }
+    /// <summary>
+    /// 資料編號
+    /// </summary>
+    public int Id { get; set; }
+
+    /// <summary>
+    /// 公司名稱
+    /// </summary>
+    public string CompanyName { get; set; }
+
+    /// <summary>
+    /// 封鎖理由
+    /// </summary>
+    public string BlockReason { get; set; }
 }

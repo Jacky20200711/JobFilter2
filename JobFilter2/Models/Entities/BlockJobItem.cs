@@ -3,17 +3,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace JobFilter2.Models.Entities
+namespace JobFilter2.Models.Entities;
+
+public partial class BlockJobItem
 {
-    public partial class BlockJobItem
-    {
-        /// <summary>
-        /// 資料編號
-        /// </summary>
-        public int Id { get; set; }
-        /// <summary>
-        /// 職缺編號
-        /// </summary>
-        public string JobCode { get; set; }
-    }
+    /// <summary>
+    /// 資料編號
+    /// </summary>
+    public int Id { get; set; }
+
+    /// <summary>
+    /// 職缺編號
+    /// </summary>
+    public string JobCode { get; set; }
 }
