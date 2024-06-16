@@ -1,11 +1,5 @@
 # 專案目標  
-針對自己舊專案(網址如下) JobFilter 的爬蟲功能和操作介面進行改版。  
-https://github.com/Jacky20200711/JobFilter  
-&emsp;  
-# 改版重點  
-1.修改操作介面(練習 Bootstrap 套版)  
-2.優化操作流程(將多數的操作改用 AJAX 來避免跳頁)  
-3.優化與調整各種功能  
+簡單的工作過濾器，用來進一步過濾104的工作列表。  
 &emsp;  
 # 使用技術  
 1.使用 HttpClient 爬取網頁  
@@ -17,18 +11,18 @@ https://github.com/Jacky20200711/JobFilter
 7.使用 SweetAlert2 美化彈窗  
 &emsp;  
 # 開發環境  
-Win10(家用版) + Visual Studio 2019/2022 + .NET Core 3.1 MVC + SQL Server 2014 Express  
+Win11 + Visual Studio 2022 + .NET Core MVC + SQL Server 2014 Express  
 &emsp;  
 # 安裝套件  
 dotnet add package Microsoft.AspNetCore.Session --version 2.2.0  
-dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.7  
-dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.7  
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.2  
+dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.2  
 dotnet add package AngleSharp --version 0.16.0  
 dotnet add package CsvHelper --version 27.1.1  
 dotnet add package NLog --version 4.7.10  
 dotnet add package NLog.Web.AspNetCore --version 4.13.0-readme-preview  
 &emsp;  
-# 網站首頁(爬蟲列表)  
+# 網站首頁(爬蟲設定列表)  
 ![image](https://github.com/Jacky20200711/JobFilter2/blob/master/DEMO_01.png?raw=true)  
 &emsp;   
 # 新增/修改爬蟲設定  
@@ -44,6 +38,6 @@ dotnet add package NLog.Web.AspNetCore --version 4.13.0-readme-preview
 會自動以公司名稱到天眼通、goodjob、面試趣做搜尋，並開啟對應的分頁。  
 &emsp;  
 # 點選[公司地址的超連結]  
-會開啟 Google map 的分頁，並且自動定位到公司地址。  
+會開啟 Google 地圖的分頁，並定位到公司地址。  
 &emsp;  
 
