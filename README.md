@@ -15,8 +15,8 @@ Win11 + Visual Studio 2022 + .NET Core MVC + SQL Server 2014 Express
 &emsp;  
 # 安裝套件  
 dotnet add package Microsoft.AspNetCore.Session --version 2.2.0  
-dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.2  
-dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.2  
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.6  
+dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.6  
 dotnet add package AngleSharp --version 0.16.0  
 dotnet add package CsvHelper --version 27.1.1  
 dotnet add package NLog --version 4.7.10  
