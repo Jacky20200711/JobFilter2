@@ -124,8 +124,8 @@ namespace JobFilter2.Services
             List<PageData> pageDataList = new List<PageData>();
 
             int firstPage = 1;
-            int lastPage = 15;
-            int loopRemainTimes = 2; // 最多爬 15 * 2 = 30 個頁面就好，不然會拿到 429 錯誤代碼(請求太多)
+            int lastPage = 10;
+            int loopRemainTimes = 2; // 最多爬 10 * 2 = 20 個頁面就好，降低拿到 429 錯誤的機率
 
             while (loopRemainTimes > 0)
             {
