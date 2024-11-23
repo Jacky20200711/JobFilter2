@@ -7,6 +7,8 @@ using System;
 using AngleSharp;
 using JobFilter2.Models.Entities;
 using System.Net.Http;
+using Azure;
+using System.Net.Http.Json;
 
 namespace JobFilter2.Services
 {
@@ -37,19 +39,20 @@ namespace JobFilter2.Services
                 if(salaryType == "Y" || currentPage == 1)
                     _logger.Debug($"minSalary = {minSalary} & 網址 : {targetUrl}");
 
+                // 將網址前綴置換為API網址
+                targetUrl = targetUrl.Replace("https://www.104.com.tw/jobs/search/", "https://www.104.com.tw/jobs/search/api/jobs");
+
+                // 偽造請求來源，避免 403 錯誤 
+                httpClient.DefaultRequestHeaders.Add("Origin", "https://www.104.com.tw");
+
                 // 送出請求
                 var responseMessage = await httpClient.GetAsync(targetUrl);
 
                 // 查看結果
                 if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    // 取得頁面內容
-                    string pageContent = await responseMessage.Content.ReadAsStringAsync();
-
-                    // 將頁面內容轉成 domTree 的形式
-                    var config = Configuration.Default;
-                    var context = BrowsingContext.New(config);
-                    pageData.document = await context.OpenAsync(res => res.Content(pageContent));
+                    // 將 JSON 轉 Class
+                    pageData.JobRoot = await responseMessage.Content.ReadFromJsonAsync<JobRoot>();
                 }
                 else
                 {
@@ -63,36 +66,27 @@ namespace JobFilter2.Services
         }
 
         /// <summary>
-        /// 解析爬下來的 document 並將提取後的工作放入 jobItems
+        /// 提取工作明細
         /// </summary>
-        private void GetTargetJobs(IDocument document, List<JobItem> jobItems, HashSet<string> jobCodeSet)
+        private void GetTargetJobs(JobRoot jobRoot, List<JobItem> jobItems, HashSet<string> jobCodeSet)
         {
-            if (document == null) return;
+            if (jobRoot == null) return;
 
-            // 取出夾帶工作訊息的標籤(每一個工作項目都被包含在一對 article 的標籤)
-            var itemsCssSelector = document.QuerySelectorAll("article");
-
-            // 走訪每一對標籤，萃取出各自夾帶的工作內容
-            foreach (var item in itemsCssSelector)
+            try
             {
-                // 若遇到頁面下方的推薦工作，則忽略並停止萃取
-                if(item.GetAttribute("class").Contains("recommend"))
+                // 檢查工作明細
+                foreach (var item in jobRoot.Data)
                 {
-                    break;
-                }
-
-                IElement JobLink = item.QuerySelector("div h2 a");
-                IElement JobAddress = item.QuerySelector("div ul li a");
-                IElement JobSalary = item.QuerySelector(".b-tag--default");
-
-                if (JobLink != null && JobAddress != null && JobSalary != null)
-                {
-                    string Code = item.GetAttribute("data-job-no");
-                    string Link = "https:" + JobLink.GetAttribute("href");
-                    string Title = JobLink.TextContent;
-                    string Company = JobAddress.TextContent.Trim();
-                    string Address = JobAddress.GetAttribute("title").Split("公司住址：")[1];
-                    string Salary = JobSalary.TextContent;
+                    string Code = item.JobNo;
+                    string Link = item.Link.Job.Replace("\\", "");
+                    string Title = $"{item.JobName}".Trim();
+                    string Company = $"{item.CustName}".Trim();
+                    string Address = $"{item.JobAddrNoDesc}{item.JobAddress}".Trim();
+                    int salaryLow = item.SalaryLow == 0 ? 40000 : item.SalaryLow;
+                    int salaryHigh = item.SalaryHigh == 0 ? 40000 : item.SalaryHigh;
+                    string Salary = $"{salaryLow}~{salaryHigh}";
+                    if (item.SalaryLow == 0 && item.SalaryHigh == 0)
+                        Salary = "待遇面議";
 
                     // 檢查工作代碼是否曾經出現過，若沒有則添加，否則忽略這筆資料
                     // 根據測試，兩個相同職缺的 jobCode 會一樣，但 jobLink 卻可能不一樣，所以必須用 jobCode 來判斷是否重複
@@ -112,6 +106,10 @@ namespace JobFilter2.Services
                         Salary = Salary
                     });
                 }
+            }
+            catch (Exception ex) 
+            {
+                _logger.Error($"{ex.Message}\n{ex.StackTrace}");
             }
         }
 
@@ -164,7 +162,7 @@ namespace JobFilter2.Services
             List<JobItem> jobItems = new List<JobItem>();
             foreach(var pageData in pageDataList)
             {
-                GetTargetJobs(pageData.document, jobItems, jobCodeSet);
+                GetTargetJobs(pageData.JobRoot, jobItems, jobCodeSet);
             }
 
             return jobItems;
