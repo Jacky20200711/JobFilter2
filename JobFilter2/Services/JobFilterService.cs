@@ -283,5 +283,31 @@ namespace JobFilter2.Services
 
             return new_jobItems;
         }
+
+        /// <summary>
+        /// 過濾掉偏遠地區的工作(之所以需要這段，是因為有時104會返回「地區不在搜尋條件裡面」的工作)
+        /// </summary>
+        /// <returns>過濾後的工作列表</returns>
+        public List<JobItem> FilterAddress(List<JobItem> jobItems)
+        {
+            List<JobItem> new_jobs = new List<JobItem>();
+
+            foreach (var job in jobItems)
+            {
+                if( $"{job.Address}".Contains("內湖區") ||
+                    $"{job.Address}".Contains("南港區") ||
+                    $"{job.Address}".Contains("北投區") ||
+                    $"{job.Address}".Contains("士林區"))
+                {
+                    continue;
+                }
+                else
+                {
+                    new_jobs.Add(job);
+                }
+            }
+
+            return new_jobs;
+        }
     }
 }
